@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "my_shoot_control.h": "c",
+        "vision_control.h": "c"
+    }
+}
