@@ -46,9 +46,9 @@
 //0  1  0     {-1.0f, 0.0f, 0.0f},                     \
 
 #define BMI088_BOARD_INSTALL_SPIN_MATRIX    \
-    {0.0f, -1.0f, 0.0f},                     \
-    {1.0f, 0.0f, 0.0f},                     \
-    {0.0f, 0.0f, -1.0f}                      \
+    {0.0f, 1.0f, 0.0f},                     \
+    {-1.0f, 0.0f, 0.0f},                     \
+    {0.0f, 0.0f, 1.0f}                      \
 
 	
 	#if use_new_gimbal==0
@@ -58,11 +58,11 @@ float text_BOARD_INSTALL[3][3]= {   {0.0f, 1.0f, 0.0f},
 
 	#endif
 #if use_new_gimbal==1
-	/*
+/*	
 float text_BOARD_INSTALL[3][3]= {   {0.0f, -1.0f, 0.0f},                    
     {1.0f, 0.0f, 0.0f},                     
     {0.0f, 0.0f, -1.0f}  };
-	*/
+*/	
 float text_BOARD_INSTALL[3][3]= {   {0.0f, 1.0f, 0.0f},                    
     {-1.0f, 0.0f, 0.0f},                     
     {0.0f, 0.0f, 1.0f}  };	
@@ -338,8 +338,8 @@ static void imu_cali_slove(fp32 gyro[3], fp32 accel[3], fp32 mag[3], bmi088_real
 {
     for (uint8_t i = 0; i < 3; i++)
     {
-//        gyro[i] = bmi088->gyro[0] * gyro_scale_factor[i][0] + bmi088->gyro[1] * gyro_scale_factor[i][1] + bmi088->gyro[2] * gyro_scale_factor[i][2] + gyro_offset[i];
-        gyro[i] = bmi088->gyro[0] * text_BOARD_INSTALL[i][0] + bmi088->gyro[1] * text_BOARD_INSTALL[i][1] + bmi088->gyro[2] * text_BOARD_INSTALL[i][2] + gyro_offset[i];
+        gyro[i] = bmi088->gyro[0] * gyro_scale_factor[i][0] + bmi088->gyro[1] * gyro_scale_factor[i][1] + bmi088->gyro[2] * gyro_scale_factor[i][2] + gyro_offset[i];
+//        gyro[i] = bmi088->gyro[0] * text_BOARD_INSTALL[i][0] + bmi088->gyro[1] * text_BOARD_INSTALL[i][1] + bmi088->gyro[2] * text_BOARD_INSTALL[i][2] + gyro_offset[i];
 
         accel[i] = bmi088->accel[0] * accel_scale_factor[i][0] + bmi088->accel[1] * accel_scale_factor[i][1] + bmi088->accel[2] * accel_scale_factor[i][2] + accel_offset[i];
         mag[i] = ist8310->mag[0] * mag_scale_factor[i][0] + ist8310->mag[1] * mag_scale_factor[i][1] + ist8310->mag[2] * mag_scale_factor[i][2] + mag_offset[i];
@@ -676,8 +676,8 @@ void Updata_Hand_Euler_Gyro_Data(void)
 		DJIC_IMU.Row	 = (float)INS_angle[2] * Angle_turn_Radian ; //(-180° ~ 180°)+ 180.0f
  DJIC_IMU.pitch= (float)INS_angle[1] * Angle_turn_Radian ;		//将弧度转为度
  */
- 	DJIC_IMU.pitch = (float)INS_angle[1] * Angle_turn_Radian ; //(-180° ~ 180°)+ 180.0f
-		DJIC_IMU.Row = (float)INS_angle[2] * Angle_turn_Radian ;		//将弧度转为度
+ 	DJIC_IMU.pitch = (float)INS_angle[2] * Angle_turn_Radian ; //(-180° ~ 180°)+ 180.0f
+		DJIC_IMU.Row = (float)INS_angle[1] * Angle_turn_Radian ;		//将弧度转为度
 	#endif	
 	
 //	Vision_Cloud.VisionSend_t.YawAngle_Error=DJIC_IMU.yaw;
@@ -695,7 +695,7 @@ void Updata_Hand_Euler_Gyro_Data(void)
 	DJIC_IMU.Gyro_y = INS_gyro[0] * Angle_turn_Radian;//这是pitch轴的
 	*/
 		DJIC_IMU.Gyro_z = INS_gyro[2] * Angle_turn_Radian*-1.0f;//这是yaw轴的
-	DJIC_IMU.Gyro_y = INS_gyro[1] * Angle_turn_Radian;//这是pitch轴的
+	DJIC_IMU.Gyro_y = INS_gyro[0] * Angle_turn_Radian;//这是pitch轴的
 #endif	
 //	Vision_Cloud.VisionSend_t.YawAngle_Error=DJIC_IMU.Gyro_z;
 //	Vision_Cloud.VisionSend_t.PitchAngle_Error=DJIC_IMU.Gyro_y;

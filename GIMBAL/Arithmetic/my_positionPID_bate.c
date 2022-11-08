@@ -32,6 +32,16 @@ P_PID_t CHASSIS_MOTOR_SPEED_pid;
 P_PID_t Driver_ANGLE_pid;//≤¶≈ÃPID
 P_PID_t Driver_SPEED_pid;
 
+
+P_PID_t TIRE_R_ANGLE_pid;//¬÷Ã•PID
+P_PID_t TIRE_R_SPEED_pid;
+
+P_PID_t TIRE_L_ANGLE_pid;//¬÷Ã•PID
+P_PID_t TIRE_L_SPEED_pid;
+
+P_PID_t BALANCE_P;
+P_PID_t BALANCE_I;
+
 int PID_YES=0;
 
 

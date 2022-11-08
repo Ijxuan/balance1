@@ -104,3 +104,4 @@ ins_task\freertos.o: ..\Drivers\CMSIS\DSP\Include\arm_math.h
 ins_task\freertos.o: ../Drivers/CMSIS/Include/core_cm4.h
 ins_task\freertos.o: ..\Arithmetic\User_math.h
 ins_task\freertos.o: ..\Arithmetic\User_typedef.h
+ins_task\freertos.o: ..\APP\MY_balance_CONTROL.h

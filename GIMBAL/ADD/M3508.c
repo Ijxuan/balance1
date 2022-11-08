@@ -23,8 +23,8 @@ void M3508_setCurrent(int16_t Iid1,int16_t Iid2,int16_t Iid3,int16_t Iid4)
 void M3508_getInfo(CAN_Rx_TypeDef CAN_Rx_Structure)
 {
 	
-	if(CAN_Rx_Structure.CAN_RxMessage.StdId != M3508_READID_START+3)
-		return;
+//	if(CAN_Rx_Structure.CAN_RxMessage.StdId != M3508_READID_START+3)
+//		return;
 	
 	uint32_t EMID;				
 	EMID = (uint32_t)(CAN_Rx_Structure.CAN_RxMessage.StdId - M3508_READID_START);				

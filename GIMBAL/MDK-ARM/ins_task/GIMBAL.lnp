@@ -2,6 +2,7 @@
 "ins_task\my_chassis_control.o"
 "ins_task\my_cloud_control.o"
 "ins_task\my_shoot_control.o"
+"ins_task\my_balance_control.o"
 "ins_task\my_incrementpid_bate.o"
 "ins_task\my_positionpid_bate.o"
 "ins_task\crc.o"

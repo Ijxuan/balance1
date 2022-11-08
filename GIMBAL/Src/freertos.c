@@ -55,6 +55,7 @@
 #include "Vision_Control.h"
 #include "MY_CLOUD_CONTROL.h"
 //#include "usbd_cdc_if.h"
+#include "MY_balance_CONTROL.h"
 
 /* USER CODE END Includes */
 
@@ -304,7 +305,37 @@ void MX_FREERTOS_Init(void) {
 						 500, -500); // Yaw_IMU_Angle_pid   15    500 -500
 
 #endif
-Vision_Control_Init();//卡尔曼参数初始化
+
+	P_PID_Parameter_Init(&TIRE_L_SPEED_pid
+	,20 //15  //0.7  12
+	,2,
+	40,
+						 300,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 10000, -10000,
+						 16000, -16000); // Yaw_IMU_Angle_pid   15    500 -500
+	
+	P_PID_Parameter_Init(&TIRE_R_SPEED_pid
+	,20 //15  //0.7  12
+	,2,
+	40,
+						 300,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 10000, -10000,
+						 16000, -16000); // Yaw_IMU_Angle_pid   15    500 -500
+	P_PID_Parameter_Init(&BALANCE_P,0,0,0,0,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 200, -200,
+						 4500, -4500); // 平衡PID
+	P_PID_Parameter_Init(&BALANCE_I,0,2,0,20,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 500, -500,
+						 2000, -2000); // 平衡PID						 
+Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
   /* USER CODE END Init */
 
@@ -494,7 +525,7 @@ CAN1           	0		<1%
 		debug_times++;	
 Get_FPS(&FPS_ALL.DEBUG.WorldTimes,&FPS_ALL.DEBUG.FPS);
 		
-				if(debug_times%10==0)//上位机发送频率
+				if(debug_times%5==0)//上位机发送频率
 						{
 							NM_swj();
 
@@ -646,43 +677,10 @@ void IMU_Send(void const * argument)
 	for (;;)
 	{
 #if send_way == 0
-		//欧拉角
-//		if (cali_sensor[0].cali_done == CALIED_FLAG && cali_sensor[0].cali_cmd == 0)
-//		{
-//			Euler_Send.yaw = INS_angle[0];
-//			Euler_Send.pitch = INS_angle[1];
-//			Euler_Send_Fun(Euler_Send);
-//			//角速度
-//			Gyro_Send.Gyro_z = INS_gyro[2];
-//			Gyro_Send.Gyro_y = INS_gyro[1];
-//			Gyro_Send_Fun(Gyro_Send);
-//		}
-//			DR16_T.DR16_CH0=DR16.rc.ch0=-100;
-//			DR16_T.DR16_CH1=DR16.rc.ch1=-200;
-//			DR16_T.DR16_CH2=DR16.rc.ch2=-300;
-//			DR16_T.DR16_CH3=DR16.rc.ch3=-400;
-//		DR16_Send_Fun(DR16_T);
+
 
 #endif
-Update_Vision_SendData();
-		VISION_Disconnect_test++;
-		if(VISION_Disconnect_test==1000)//一秒检测一次
-		{
-			if(VisionData.Offline_Detec>10)//一秒接受10次不过分吧
-				VisionData.Offline_Detec=0;
-			else
-			{
-				VisionData.Offline_Detec=0;
-				VisionData.DataUpdate_Flag=0;//标志位置零
-				VisionData.RawData.Beat=0;//击打置零
-				VisionData.RawData.Armour=0;//识别置零
-				VisionData.RawData.Pitch_Angle=0;
-				VisionData.RawData.Yaw_Angle=0;
-			}
-			VISION_Disconnect_test=0;
-		}
-		
-		
+
 		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 	}
   /* USER CODE END IMU_Send */
@@ -721,243 +719,8 @@ int i=0;
 				//解包
 				IMU_Cal_Status_Reivece(CAN2_Rx_Structure);
 			}
-			
-						if (CAN2_Rx_Structure.CAN_RxMessage.StdId == ENCODER_ID)
-			{//编码器位置信息解包
-				
-								for(i=0;i<8;i++)
-				{
-				Chassis_Encoder_new.data.dataBuff[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				Chassis_Encoder_new.infoUpdateFlag++;
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == PLACE_SEND_ID)
-			{//底盘位置信息解包
-				
-				place_complete_update_TIMES++;
-								for(i=0;i<8;i++)
-				{
-				CHASSIS_place[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				
-				if(CHASSIS_place[0]==1||CHASSIS_place[7]==1)
-				{
-					in_END=1;
-				}
-				if(CHASSIS_place[0]==0&&CHASSIS_place[7]==0)
-				{
-					in_END=0;
-				}
-				
-				if(CHASSIS_place[0]==1)
-				{
-					in_END_L=1;
-
-				}
-				else
-				{
-					in_END_L=0;					
-				}
-				
-				if(CHASSIS_place[7]==1)
-				{
-					in_END_R=1;
-
-				}
-				else
-				{
-					in_END_R=0;
-				}
-				
 
 
-				if(CHASSIS_place[3]==1||CHASSIS_place[4]==1)
-				{
-					in_MID=1;
-				}
-				if(CHASSIS_place[3]==0||CHASSIS_place[4]==0)
-				{
-					in_MID=0;
-				}
-					Get_FPS(&FPS_ALL.CHASSIS_PLACE.WorldTimes,   &FPS_ALL.CHASSIS_PLACE.FPS);
-
-			}
-			
-						if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HP_ID_ONE)
-			{
-				//HP数据解包1
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_HP.data.dataBuff[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				STATUS_PART_ONE_TIMES++;
-
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HP_ID_TWO)
-			{
-				//HP数据解包2
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_HP.data.dataBuff[i+8]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-
-				}
-				STATUS_PART_TWO_TIMES++;
-
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HP_ID_THREE)
-			{
-				//HP数据解包3
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_HP.data.dataBuff[i+16]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				STATUS_PART_THREE_TIMES++;
-			}	
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HP_ID_FOUR)
-			{
-				//HP数据解包4
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_HP.data.dataBuff[i+24]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-HP_complete_update_TIMES++;
-				}	
-			
-				if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HGAME_STATE_ID_ONE)
-			{
-				//热量数据解包1
-				for(i=0;i<8;i++)
-				{
-				ext_game_status.data.dataBuff[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HGAME_STATE_ID_TWO)
-			{
-				//热量数据解包2
-				for(i=0;i<8;i++)
-				{
-				ext_game_status.data.dataBuff[i+8]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				GAME_STATE_update_TIMES++;
-			}		
-			
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HEAT_ID_ONE)
-			{
-				//热量数据解包1
-				for(i=0;i<8;i++)
-				{
-				ext_power_heat_data.data.dataBuff[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_HEAT_ID_TWO)
-			{
-				//热量数据解包2
-				for(i=0;i<8;i++)
-				{
-				ext_power_heat_data.data.dataBuff[i+8]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				HEAT_complete_update_TIMES++;
-			}
-			
-			
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_RC_SHOOT_ID)
-			{
-				//解包1
-				for(i=0;i<8;i++)
-				{
-				ext_shoot_data.data.dataBuff[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				JS_RC_TIMES++;
-//run_JS_jiema=1;
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_RC_HURT_ID)
-			{
-				//解包
-				ext_robot_hurt.data.dataBuff[0]=CAN2_Rx_Structure.CAN_RxMessageData[0];
-				ext_robot_hurt.InfoUpdataFlag++;
-			}		
-			
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_STATUS_ID_ONE)
-			{
-				//状态数据解包1
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_state.data.dataBuff[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				STATUS_PART_ONE_TIMES++;
-
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_STATUS_ID_TWO)
-			{
-				//状态数据解包2
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_state.data.dataBuff[i+8]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-
-				}
-				STATUS_PART_TWO_TIMES++;
-
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_STATUS_ID_THREE)
-			{
-				//状态数据解包3
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_state.data.dataBuff[i+16]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				STATUS_PART_THREE_TIMES++;
-			}	
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == JS_SEND_STATUS_ID_FOUR)
-			{
-				//状态数据解包4
-				for(i=0;i<8;i++)
-				{
-				ext_game_robot_state.data.dataBuff[i+24]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				STATUS_PART_FOUR_TIMES++;
-STATUS_complete_update_TIMES++;
-				}			
-			
-			
-			
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == DR16_R_PART_ONE)
-			{
-				//解包1
-				for(i=0;i<8;i++)
-				{
-				DR16Buffer[i]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				DDR16_PART_ONE_TIMES++;
-
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == DR16_R_PART_TWO)
-			{
-				//解包2
-				for(i=0;i<8;i++)
-				{
-				DR16Buffer[i+8]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-
-				}
-				DDR16_PART_TWO_TIMES++;
-
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == DR16_R_PART_THREE)
-			{
-				//解包3
-				for(i=0;i<8;i++)
-				{
-				DR16Buffer[i+16]=CAN2_Rx_Structure.CAN_RxMessageData[i];
-				}
-				DDR16_PART_THREE_TIMES++;
-				run_DR16_jiema=1;
-			}
-			
-		if(run_DR16_jiema==1)
-		{
-							DR16.DR16_Process(DR16Buffer);
-
-			run_DR16_jiema=0;
-		}
 			
 		}
 	}
@@ -992,12 +755,12 @@ void CAN1_R(void const * argument)
 			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (M3508_READID_START + 3))
 			{
 				//左摩擦轮的    ID1
-				M3508s1_getInfo(CAN1_Rx_Structure); //
+				M3508_getInfo(CAN1_Rx_Structure); //
 			}
 			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (M3508_READID_START + 2))
 			{
 				//右摩擦轮的	ID2
-				M3508s1_getInfo(CAN1_Rx_Structure); //
+				M3508_getInfo(CAN1_Rx_Structure); //
 			}
 			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (M3508_READID_START + 1))
 			{
@@ -1044,191 +807,32 @@ void Robot_Control(void const *argument)
 	/* USER CODE BEGIN RobotControl */
 	portTickType xLastWakeTime;
 	xLastWakeTime = xTaskGetTickCount();
-	const TickType_t TimeIncrement = pdMS_TO_TICKS(1); //每2毫秒强制进入总控制
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-//    vTaskDelay(1000);
-    vTaskDelay(1000);
-    vTaskDelay(1000);
-	yaw_trage_angle=DJIC_IMU.total_yaw;
-	PITCH_trage_angle = DJIC_IMU.total_pitch;
-M2006_targe_angle=M3508s[1].totalAngle;//清除拨盘目标角度累计
+	const TickType_t TimeIncrement = pdMS_TO_TICKS(1); //每1毫秒强制进入总控制
 
     vTaskDelay(1000);
     vTaskDelay(1000);
 
-	GM6020s[3].turnCount=0;
-yaw_trage_angle=DJIC_IMU.total_yaw;
-	PITCH_trage_angle = DJIC_IMU.total_pitch;
-YAW_MOTION_STATE=1;//开启小陀螺检测
-PITCH_trage_angle_motor=GM6020s[3].totalAngle;
-//key_message.game_state_progress=4;
-//ext_game_status.data.game_progress=4;
-//key_message.our_outpost_is_live=1;
+    vTaskDelay(1000);
+    vTaskDelay(1000);
+
 	/* Infinite loop */
 	for (;;)
 	{
-			#if SHOOT_HIGH_HEAT_TEXT
-		vision_shoot_times=100;
-VisionData.RawData.Armour=1;
-				if(controul_times%200==0)
-		{
-	VisionData.RawData.Beat=1;		
-		}
-		else
-		{
-				VisionData.RawData.Beat=0;		
-	}
-//VisionData.RawData.Beat=1;
-	Vision_RawData_Pitch_Angle=0;
-	Vision_RawData_Yaw_Angle=0;
-#endif
-
-						Vision_Control_Cloud();
-
-		
-								if (DR16.rc.s_left == 2&&DR16.rc.ch3<-600) //失能保护
-				{
-					disable_for_test_CHASSIS=1;
-				}
-				if (DR16.rc.s_left == 2&&DR16.rc.ch3>600) //失能保护
-				{
-					disable_for_test_CHASSIS=0;
-				}	
-		if(controul_times%1000==0)
-		{	
-			yaw_trage_angle_add_1s=yaw_trage_angle-yaw_trage_angle_1s_ago;
-			yaw_trage_angle_1s_ago=yaw_trage_angle;	
-		}
-		if(controul_times%10==0)
-		{
-			 if(DR16.rc.s_left==3&&DR16.rc.s_right==3)
-			 {
-//		yaw_trage_angle=simulation_target_yaw;
-			 }
-		}
-				if (DR16.rc.s_left == 2&&DR16.rc.ch1<-600) //失能保护
-				{
-					disable_for_test=1;
-				}
-				if (DR16.rc.s_left == 2&&DR16.rc.ch1>600) //失能保护
-				{
-					disable_for_test=0;
-				}					
-
-		
-
-
-				if(VisionData.RawData.Armour==0)//
-				{
-		Armour_lose_time++;
-				}
-			else if(VisionData.RawData.Armour==1)//
-				{
-		Armour_lose_time=0;
-				}
-				
-				
-				
-				
-				controul_times++;
-				S_T_examine();
-		cloud_control();
-
-				
-#if use_new_gimbal==0
-		if (GM6020s[3].totalAngle <= 3860 && send_to_pitch < 0)//3860
-			send_to_pitch = 0;
-		if (GM6020s[3].totalAngle >= 5130 && send_to_pitch > 0)
-			send_to_pitch = 0;			
-#endif
-				#if use_new_gimbal==1
-
-		if (GM6020s[3].totalAngle <= 5150 && send_to_pitch < 0)//3860
-			send_to_pitch = 0;
-		if (GM6020s[3].totalAngle >= 6550 && send_to_pitch > 0)
-			send_to_pitch = 0;
-#endif
-			
-		//云台的pitch轴正直是往上的
-		////8017-7044
-//			send_to_yaw = 0;
-
-
-		if (DR16.rc.s_left == 2 || DR16.rc.s_left == 0) //失能保护
-		{	
-			send_to_pitch = 0;
-			send_to_yaw = 0;
-
-			PITCH_trage_angle=DJIC_IMU.total_pitch;
-			yaw_trage_angle=DJIC_IMU.total_yaw;
-			PITCH_trage_angle_motor=GM6020s[3].totalAngle;
-			//还不够，使能瞬间会抖一下，应该还要清楚I的累加，以后有时间再写
-		}
-		if(disable_for_test==1)
-		{
-
-			send_to_pitch = 0;			
-				send_to_yaw = 0;
-			
-		}
 	
-		GM6020_SetVoltage(send_to_yaw,0 , 0, send_to_pitch); //云台  send_to_pitch
+//		GM6020_SetVoltage(send_to_yaw,0 , 0, send_to_pitch); //云台  send_to_pitch
 //		GM6020_SetVoltage(0,0 , 0, 0); //云台  send_to_pitch
+		
+		balance_control();
+		
+if(DR16.rc.s_left==2)
+{
+send_to_tire_R=0;
+send_to_tire_L=0;
+}
+		M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
 
-		//	if(DR16.rc.s_left==1)//遥控器控制  左上
-		// SHOOT_L_speed=500;
-		//	if(DR16.rc.s_left==3)//遥控器控制  左中
-		//					{
-		////SHOOT_L_speed=(DR16.rc.ch3*1.0/660.0)*(-1)*8000;//遥控器给速度目标值 二选一
-		// if(DR16.rc.ch3<-600)
-		//			SHOOT_L_speed=6700;
-		// else
-		//				SHOOT_L_speed=0;
+//		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大
 
-		//						}
-		//				SHOOT_R_speed=SHOOT_L_speed;
-		//		if(	SHOOT_L_speed>0)
-		//		SHOOT_L_speed=-SHOOT_L_speed;//左摩擦轮速度目标值应该是负值
-		//		if(	SHOOT_R_speed<0)
-		//		SHOOT_R_speed=-SHOOT_R_speed;//右摩擦轮速度目标值应该是正值
-		// send_to_SHOOT_L=I_PID_Regulation(&SHOOT_L_I_PID,SHOOT_R_speed,M3508s[3].realSpeed);
-
-		// send_to_SHOOT_R=I_PID_Regulation(&SHOOT_R_I_PID,SHOOT_L_speed,M3508s[2].realSpeed);
-		//
-
-		shoot_control();
-//	shoot_control_V2();
-		if (DR16.rc.s_left == 2 || DR16.rc.s_left == 0) //失能保护
-		{
-			//						send_to_chassis=0;
-	send_to_SHOOT_L = 0;
-			send_to_SHOOT_R = 0;	
-	GM6020s[3].turnCount=0;
-DJIC_IMU.yaw_turnCounts=0;
-			send_to_2006 = 0;
-			//						send_to_yaw=0;
-			//						M2006_targe_angle=M3508s[1].totalAngle;//摩擦轮误差消除
-		}
-				if(disable_for_test==1)
-		{
-								send_to_SHOOT_L = 0;
-			send_to_SHOOT_R = 0;	
-						send_to_2006 = 0;
-
-		}
-
-
-		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大
-//		M3508s1_setCurrent(0, 0,TEST_Current_R ,TEST_Current_L );  //end_to_SHOOT_R给正降得慢
-        //                                    +                 -
 		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 		
 	}

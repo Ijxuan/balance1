@@ -58,10 +58,10 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-//¿ØÖÆÈÎÎñµÄ²ÎÊı
-//¶ÑÕ»´óĞ¡
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
+//ï¿½ï¿½Õ»ï¿½ï¿½Ğ¡
 #define RobotCtrl_Size 512
-//ÓÅÏÈ¼¶
+//ï¿½ï¿½ï¿½È¼ï¿½
 #define RobotCtrl_Priority osPriorityRealtime
 /* USER CODE END EFP */
 
@@ -108,7 +108,7 @@ void Error_Handler(void);
 
 //#define OLED_RST_Pin GPIO_PIN_10
 //#define OLED_RST_GPIO_Port GPIOB
-#define SHOOT_HIGH_HEAT_TEXT 0// ¸ßÈÈÁ¿ 
+#define SHOOT_HIGH_HEAT_TEXT 0// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 #define use_new_gimbal 1
 
 extern bool ins_ok;
@@ -127,9 +127,15 @@ extern int beep_Val;
 extern	int	send_to_SHOOT_R;
 extern	int	send_to_SHOOT_L;
 
-extern int SHOOT_L_speed;//×óÄ¦²ÁÂÖµÄÄ¿±êËÙ¶È   Ó¦¸ÃÎª¸ºÖµ
-extern int SHOOT_R_speed;//ÓÒÄ¦²ÁÂÖµÄÄ¿±êËÙ¶È
+extern int SHOOT_L_speed;//ï¿½ï¿½Ä¦ï¿½ï¿½ï¿½Öµï¿½Ä¿ï¿½ï¿½ï¿½Ù¶ï¿½   Ó¦ï¿½ï¿½Îªï¿½ï¿½Öµ
+extern int SHOOT_R_speed;//ï¿½ï¿½Ä¦ï¿½ï¿½ï¿½Öµï¿½Ä¿ï¿½ï¿½ï¿½Ù¶ï¿½
 
+extern	int	send_to_tire_R;/*ï¿½ï¿½ï¿½ï¿½*/
+extern	int	send_to_tire_L;/*ï¿½ï¿½ï¿½ï¿½*/
+extern int tire_L_TARGE_speed;//å·¦è½®çš„ç›®æ ‡é€Ÿåº¦   åº”è¯¥ä¸ºè´Ÿå€¼?
+extern int tire_R_TARGE_speed;//å³è½®çš„ç›®æ ‡é€Ÿåº¦
+extern int tire_L_TARGE_speed_FAKE;//å·¦è½®çš„ç›®æ ‡é€Ÿåº¦ (å‡)  åº”è¯¥ä¸ºè´Ÿå€¼?
+extern int tire_R_TARGE_speed_FAKE;//å³è½®çš„ç›®æ ‡é€Ÿåº¦(å‡)
 extern int DW_FREE;
 extern int DW_DOWN;
 extern int SHOOT;
@@ -142,12 +148,12 @@ extern float yaw_trage_angle_add_1s;
 
 
 extern int send_to_yaw;
-extern int send_to_pitch;//·¢ËÍ¸øpitchÖáµÄÊı¾İ
+extern int send_to_pitch;//ï¿½ï¿½ï¿½Í¸ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 extern float PITCH_MAX_angle;
 extern float PITCH_MIN_angle;
-extern float allow_angle;//¿É¶¯Çø¼ä
+extern float allow_angle;//ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½
 
 extern float PITCH_trage_angle;
 extern float PITCH_trage_angle_motor;
@@ -170,11 +176,11 @@ extern int STATUS_PART_TWO_TIMES;
 extern int STATUS_PART_THREE_TIMES;
 extern int STATUS_PART_FOUR_TIMES;
 extern int STATUS_complete_update_TIMES;
-extern int HEAT_complete_update_TIMES;//²ÃÅĞÏµÍ³ÈÈÁ¿ĞÅÏ¢¸üĞÂ³É¹¦´ÎÊı
-extern int place_complete_update_TIMES;//²ÃÅĞÏµÍ³ÈÈÁ¿ĞÅÏ¢¸üĞÂ³É¹¦´ÎÊı
+extern int HEAT_complete_update_TIMES;//ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Â³É¹ï¿½ï¿½ï¿½ï¿½ï¿½
+extern int place_complete_update_TIMES;//ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Â³É¹ï¿½ï¿½ï¿½ï¿½ï¿½
 
-extern int HP_complete_update_TIMES;//²ÃÅĞÏµÍ³×´Ì¬ĞÅÏ¢¸üĞÂ³É¹¦´ÎÊı
-extern int GAME_STATE_update_TIMES;//²ÃÅĞÏµÍ³±ÈÈü×´Ì¬ĞÅÏ¢¸üĞÂ³É¹¦´ÎÊı
+extern int HP_complete_update_TIMES;//ï¿½ï¿½ï¿½ï¿½ÏµÍ³×´Ì¬ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Â³É¹ï¿½ï¿½ï¿½ï¿½ï¿½
+extern int GAME_STATE_update_TIMES;//ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Â³É¹ï¿½ï¿½ï¿½ï¿½ï¿½
 
 extern int DDR16_PART_ONE_TIMES;
 extern int DDR16_PART_TWO_TIMES;
@@ -203,11 +209,11 @@ extern int vision_shoot_times;
 
 extern bool disable_for_test;
 extern int shoot_times_for_limit;
-extern bool whether_shoot_in__this_period;//Õâ¸öÖÜÆÚÊÇ·ñ·¢Éä
-extern bool this_period_has_shoot;//Õâ¸öÖÜÆÚÊÇ·ñ·¢Éä
-extern int this_period_has_shoot_number;//Õâ¸öÖÜÆÚ·¢Éäshu
-extern int every_shoot_number;//Ò»´ÎÈıÊ®·¢
-extern int targe_shoot_number;//Ò»´ÎÈıÊ®·¢
+extern bool whether_shoot_in__this_period;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
+extern bool this_period_has_shoot;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
+extern int this_period_has_shoot_number;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½shu
+extern int every_shoot_number;//Ò»ï¿½ï¿½ï¿½ï¿½Ê®ï¿½ï¿½
+extern int targe_shoot_number;//Ò»ï¿½ï¿½ï¿½ï¿½Ê®ï¿½ï¿½
 extern int shoot_speed_text;
 
 extern int ch4_DW_total;
@@ -222,11 +228,11 @@ extern float simulation_target_yaw;
 extern bool TEMPERATURE_is_OK;
 extern int TEMPERATURE_PID_OUT;
 
-extern bool in_MID;//´¦ÔÚ¹ìµÀÖĞ¼ä¶Î
-extern bool in_END;//´¦ÔÚ¹ìµÀ¾¡Í·
-extern bool in_END_R;//´¦ÔÚÓÒ¹ìµÀ¾¡Í·
-extern bool in_END_L;//´¦ÔÚ×ó¹ìµÀ¾¡Í·
-extern bool in_END_last;//ÉÏÒ»Ê±¿Ì´¦ÔÚ¹ìµÀ¾¡Í·
+extern bool in_MID;//ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½
+extern bool in_END;//ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½Í·
+extern bool in_END_R;//ï¿½ï¿½ï¿½ï¿½ï¿½Ò¹ï¿½ï¿½ï¿½ï¿½Í·
+extern bool in_END_L;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·
+extern bool in_END_last;//ï¿½ï¿½Ò»Ê±ï¿½Ì´ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½Í·
 
 extern bool disable_for_test_CHASSIS;
 extern float my_voltage;
@@ -237,20 +243,20 @@ extern bool send_to_vision_1;
  extern int text_times;
 
  extern int hurt_times_ago;
- extern int laoliu_gjiwo_times_ago;//ÀÏÁù¹¥»÷ÎÒ
+ extern int laoliu_gjiwo_times_ago;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 extern float jia_ZJ_YAW;
 extern float jia_ZJ_PITCH;
  extern bool vision_beats_give_to_jia;
 
-/*¼Ù×°¼×ÒªÓÃµ½GEBIN*/
+/*ï¿½ï¿½×°ï¿½ï¿½Òªï¿½Ãµï¿½GEBIN*/
 extern  int8_t whether_use_fake_armor;
  extern int fake_armor_init_angle_6020;
 extern int fake_armor_init_place_encoder;
  extern int fake_armor_vertical_place_encoder;
 
 extern int fake_armor_init_vision_deepth;/*mm*/
-extern int fake_armor_vertica_distance;/*´¹Ö±¾àÀëmm*/
+extern int fake_armor_vertica_distance;/*ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½mm*/
 extern float fake_armor_now_angle_IMU;
 extern float YAW_TRAGET_ANGLE_TEMP_FAKE_MOTO;
 extern float YAW_TRAGET_ANGLE_TEMP_FAKE_IMU;

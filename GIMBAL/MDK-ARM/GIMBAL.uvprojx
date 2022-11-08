@@ -409,6 +409,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\MY_SHOOT_CONTROL.c</FilePath>
             </File>
+            <File>
+              <FileName>MY_balance_CONTROL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\MY_balance_CONTROL.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -990,5 +995,14 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>GIMBAL</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

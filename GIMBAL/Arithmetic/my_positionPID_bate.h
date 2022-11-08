@@ -9,48 +9,48 @@
 #include "INS_task.h"
 
 #define abs(x) ((x)>0?(x):-(x))
-#define PID_MOTOR 0 //ÊÇ·ñ¿ªÆôµç»úµÄPID  0¹Ø±Õ
-#define PID_YAW_IMU 1 //ÊÇ·ñ¿ªÆôÍÓÂÝÒÇµÄPID
-#define VISION_PID_YAW_IMU 1 //ÊÇ·ñ¿ªÆôÊÓ¾õÍÓÂÝÒÇµÄPID
+#define PID_MOTOR 0 //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PID  0ï¿½Ø±ï¿½
+#define PID_YAW_IMU 1 //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½PID
+#define VISION_PID_YAW_IMU 1 //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ó¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½PID
 
-#define PID_PITCH_MOTOR 1 //ÊÇ·ñ¿ªÆôµç»úµÄPITCHÖáPID  0¹Ø±Õ
-#define PID_PITCH_IMU 1 //ÊÇ·ñ¿ªÆôÍÓÂÝÒÇµÄPITCHÖáPID  0¹Ø±Õ
-#define PID_CHASSIS_MOTOR 0//ÊÇ·ñ¿ªÆôµç»úµÄµ×ÅÌPID  0¹Ø±Õ
+#define PID_PITCH_MOTOR 1 //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PITCHï¿½ï¿½PID  0ï¿½Ø±ï¿½
+#define PID_PITCH_IMU 1 //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½PITCHï¿½ï¿½PID  0ï¿½Ø±ï¿½
+#define PID_CHASSIS_MOTOR 0//ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½PID  0ï¿½Ø±ï¿½
 typedef struct
 {
-  float Kp; //±ÈÀýÏµÊý
-  float Ki; //»ý·ÖÏµÊý
-  float Kd; //Î¢·ÖÏµÊý
+  float Kp; //ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
+  float Ki; //ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
+  float Kd; //Î¢ï¿½ï¿½Ïµï¿½ï¿½
 
-  float Target;  //Ä¿±êÖµ
-  float Measure; //²âÁ¿Öµ
+  float Target;  //Ä¿ï¿½ï¿½Öµ
+  float Measure; //ï¿½ï¿½ï¿½ï¿½Öµ
 
-  float Error;     //Æ«²îÖµ
-  float Epsilon;   //Æ«²î¼ì²âãÐÖµ
-  float max_error; //Æ«²îµÄ×î´óÖµ
-  float min_error; //Æ«²îµÄ×îÐ¡Öµ
+  float Error;     //Æ«ï¿½ï¿½Öµ
+  float Epsilon;   //Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+  float max_error; //Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+  float min_error; //Æ«ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Öµ
 
-  float Proportion;   //±ÈÀýÖµ
-  float Integral;     //»ý·ÖÖµ
-  float Differential; //Î¢·ÖÖµ
+  float Proportion;   //ï¿½ï¿½ï¿½ï¿½Öµ
+  float Integral;     //ï¿½ï¿½ï¿½ï¿½Öµ
+  float Differential; //Î¢ï¿½ï¿½Öµ
 
-  //²»ÍêÈ«Î¢·Ö
-  float alpha;         //²»ÍêÈ«Î¢·ÖÏµÊý
-  float D_Output;      //Î¢·ÖÊä³ö
-  float D_Last_Output; //ÉÏÒ»¿ÌµÄÎ¢·ÖÊä³ö
+  //ï¿½ï¿½ï¿½ï¿½È«Î¢ï¿½ï¿½
+  float alpha;         //ï¿½ï¿½ï¿½ï¿½È«Î¢ï¿½ï¿½Ïµï¿½ï¿½
+  float D_Output;      //Î¢ï¿½ï¿½ï¿½ï¿½ï¿½
+  float D_Last_Output; //ï¿½ï¿½Ò»ï¿½Ìµï¿½Î¢ï¿½ï¿½ï¿½ï¿½ï¿½
 
-  float Max_antiwindup;       //¿¹»ý·Ö±¥ºÍµÄÊä³ö×î´óÖµ
-  float Min_antiwindup;       //¿¹»ý·Ö±¥ºÍµÄÊä³ö×îÐ¡Öµ
+  float Max_antiwindup;       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+  float Min_antiwindup;       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Öµ
 
-  float result;     //PID¼ÆËã½á¹¹
-  float Max_result; //result×î´óÖµ
-  float Min_result; //result×îÐ¡Öµ
+  float result;     //PIDï¿½ï¿½ï¿½ï¿½á¹¹
+  float Max_result; //resultï¿½ï¿½ï¿½Öµ
+  float Min_result; //resultï¿½ï¿½Ð¡Öµ
 
-  float LastError; //Ç°Ò»ÅÄÆ«²î
-  float PreError;  //Ç°Á½ÅÄÆ«²î
+  float LastError; //Ç°Ò»ï¿½ï¿½Æ«ï¿½ï¿½
+  float PreError;  //Ç°ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½
   
-  float P_Output;      //±ÈÀýÊä³ö
-  float I_Output;      //»ý·ÖÊä³ö
+  float P_Output;      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  float I_Output;      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 } P_PID_t;
@@ -100,6 +100,13 @@ extern P_PID_t CHASSIS_MOTOR_SPEED_pid;
 extern P_PID_t Driver_ANGLE_pid;
 extern P_PID_t Driver_SPEED_pid;
 
-						  
+extern P_PID_t TIRE_R_ANGLE_pid;//è½®èƒŽPID
+extern P_PID_t TIRE_R_SPEED_pid;
+
+extern P_PID_t TIRE_L_ANGLE_pid;//è½®èƒŽPID
+extern P_PID_t TIRE_L_SPEED_pid;	
+extern P_PID_t BALANCE_P;	
+extern P_PID_t BALANCE_I;
+
 #endif
 

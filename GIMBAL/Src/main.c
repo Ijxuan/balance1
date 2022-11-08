@@ -91,10 +91,18 @@ int beep_Val=0;
 
 	int	send_to_SHOOT_R=0;
 	int	send_to_SHOOT_L=0;
-
+	int	send_to_tire_R=0;/*右轮*/
+	int	send_to_tire_L=0;/*左轮*/
+	
 int SHOOT_L_speed=0;//左摩擦轮的目标速度   应该为负值
 int SHOOT_R_speed=0;//右摩擦轮的目标速度
 
+
+int tire_L_TARGE_speed=0;//左轮的目标速度   应该为负值?
+int tire_R_TARGE_speed=0;//右轮的目标速度
+
+int tire_L_TARGE_speed_FAKE=0;//左轮的目标速度 (假)  应该为负值?
+int tire_R_TARGE_speed_FAKE=0;//右轮的目标速度
 
 int yaw_trage_speed=0;
 float yaw_trage_angle=0;
