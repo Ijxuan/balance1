@@ -325,16 +325,21 @@ void MX_FREERTOS_Init(void) {
 						 //                          float alpha,
 						 10000, -10000,
 						 16000, -16000); // Yaw_IMU_Angle_pid   15    500 -500
-	P_PID_Parameter_Init(&BALANCE_P,0,0,0,0,//60,0.5,-30,0,
+	P_PID_Parameter_Init(&BALANCE_P,280,0,0,4,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
-						 200, -200,
-						 4500, -4500); // 平衡PID
-	P_PID_Parameter_Init(&BALANCE_I,0,2,0,20,//60,0.5,-30,0,
+						 700, -700,
+						 10000, -10000); // 平衡PID
+	P_PID_Parameter_Init(&BALANCE_I,40,0,0,0,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 500, -500,
-						 2000, -2000); // 平衡PID						 
+						 2000, -2000); // 平衡PID
+	P_PID_Parameter_Init(&SPEED_P,-0.8,-0.15,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 6000, -6000); // 平衡PID						 
 Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
   /* USER CODE END Init */
@@ -823,12 +828,23 @@ void Robot_Control(void const *argument)
 //		GM6020_SetVoltage(0,0 , 0, 0); //云台  send_to_pitch
 		
 		balance_control();
-		
+	
+
+if(send_to_tire_L>14000)
+	send_to_tire_L=14000;
+if(send_to_tire_L<-14000)
+	send_to_tire_L=-14000;
+if(send_to_tire_R>14000)
+	send_to_tire_R=14000;
+if(send_to_tire_R<-14000)
+	send_to_tire_R=-14000;
+
 if(DR16.rc.s_left==2)
 {
 send_to_tire_R=0;
 send_to_tire_L=0;
 }
+
 		M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
 
 //		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大

@@ -42,6 +42,7 @@ P_PID_t TIRE_L_SPEED_pid;
 P_PID_t BALANCE_P;
 P_PID_t BALANCE_I;
 
+P_PID_t SPEED_P;//ËÙ¶È»·P
 int PID_YES=0;
 
 

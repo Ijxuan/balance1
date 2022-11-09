@@ -17,6 +17,7 @@
 #include "bmi088driver.h"
 #include "spinning_top_examine.h"
 #include "Vision_Control.h"
+#include "MY_balance_CONTROL.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
@@ -256,10 +257,10 @@ void NM_swj(void)
 
 			//DJIC_IMU.Gyro_y*1000000
 //DJIC_IMU.pitch
-			send_d_32[p++]= tire_L_TARGE_speed_FAKE;//I_OUT 4		4PID_YES
+			send_d_32[p++]= tire_R_TARGE_speed*-1;//I_OUT 4		4PID_YES
 
-			send_d_32[p++]=tire_R_TARGE_speed_FAKE;//P_OUT		5
-			send_d_32[p++]=DJIC_IMU.total_pitch*-10;//I_OUT		6
+			send_d_32[p++]=M3508s[2].realSpeed*-1;//P_OUT		5
+			send_d_32[p++]=send_to_tire_R*-1;//I_OUT		6
 			send_d_32[p++]=DJIC_IMU.total_pitch*-100;//D_OUT  	7
 	p=0;
 			send_d_16[p++]=this_period_has_shoot_number;//输出电压      8
@@ -268,7 +269,7 @@ void NM_swj(void)
 			send_d_16[p++]=cali_sensor[i].cali_cmd*1111;//1在校准 0不在		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
-			#if 1//发送陀螺仪数据  YAW PITCH
+			#if 0//发送  数据  YAW PITCH
 	p=0;
 			send_d_32[p++]=tire_L_TARGE_speed;//当前角度		1
 			send_d_32[p++]=M3508s[3].realSpeed;//最终目标角度		2
@@ -282,6 +283,52 @@ void NM_swj(void)
 
 			send_d_32[p++]=tire_R_TARGE_speed_FAKE;//P_OUT		5
 			send_d_32[p++]=DJIC_IMU.total_pitch*-10;//I_OUT		6
+			send_d_32[p++]=DJIC_IMU.total_pitch*-100;//D_OUT  	7
+	p=0;
+			send_d_16[p++]=this_period_has_shoot_number;//输出电压      8
+
+			send_d_16[p++]=yaw_trage_speed*100000;//目标角度       	9
+			send_d_16[p++]=cali_sensor[i].cali_cmd*1111;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+			#if 0//发送陀螺仪数据  YAW PITCH
+	p=0;
+			send_d_32[p++]=INS_angle[0]*10000;//当前角度		1
+			send_d_32[p++]=INS_angle[1]*10000;//最终目标角度		2
+
+			send_d_32[p++]=-INS_angle[2]*10000;//视觉数据		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= INS_gyro[0]*10000;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=INS_gyro[1]*10000;//P_OUT		5
+			send_d_32[p++]=INS_gyro[2]*10000;//I_OUT		6
+			send_d_32[p++]=DJIC_IMU.total_pitch*-100;//D_OUT  	7
+	p=0;
+			send_d_16[p++]=this_period_has_shoot_number;//输出电压      8
+
+			send_d_16[p++]=yaw_trage_speed*100000;//目标角度       	9
+			send_d_16[p++]=cali_sensor[i].cali_cmd*1111;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+
+
+			#if 0//发送陀螺仪数据  YAW PITCH
+	p=0;
+			send_d_32[p++]=total_pitch_change*1000000;//当前角度		1
+			send_d_32[p++]=DJIC_IMU.Gyro_z*10000;//最终目标角度		2
+
+			send_d_32[p++]=-INS_angle[2]*10000;//视觉数据		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= INS_gyro[0]*10000;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=INS_gyro[1]*10000;//P_OUT		5
+			send_d_32[p++]=INS_gyro[2]*10000;//I_OUT		6
 			send_d_32[p++]=DJIC_IMU.total_pitch*-100;//D_OUT  	7
 	p=0;
 			send_d_16[p++]=this_period_has_shoot_number;//输出电压      8
@@ -318,9 +365,9 @@ addcheck += sumcheck; //每一字节的求和操作，进行一次sumcheck的累加
 	testdatatosend[_cnt++]=sumcheck;	
 	testdatatosend[_cnt++]=addcheck;	
 
-//	HAL_UART_Transmit_DMA(&huart1,&testdatatosend[0],_cnt);//4pin
+	HAL_UART_Transmit_DMA(&huart1,&testdatatosend[0],_cnt);//4pin
 
-	CDC_Transmit_FS(&testdatatosend[0],_cnt);
+//	CDC_Transmit_FS(&testdatatosend[0],_cnt);
 
 //		for (uint8_t i = 0; i < _cnt; i++)
 //	{

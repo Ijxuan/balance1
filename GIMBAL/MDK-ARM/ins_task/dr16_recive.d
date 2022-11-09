@@ -89,3 +89,4 @@ ins_task\dr16_recive.o: ../Drivers/CMSIS/Include/core_cm4.h
 ins_task\dr16_recive.o: ..\Arithmetic\User_math.h
 ins_task\dr16_recive.o: ..\Arithmetic\User_typedef.h
 ins_task\dr16_recive.o: ..\Arithmetic\FPS_Calculate.h
+ins_task\dr16_recive.o: ..\APP\MY_balance_CONTROL.h

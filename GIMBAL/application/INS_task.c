@@ -174,11 +174,16 @@ static fp32 accel_fliter_3[3] = {0.0f, 0.0f, 0.0f};
 static const fp32 fliter_num[3] = {1.929454039488895f, -0.93178349823448126f, 0.002329458745586203f};
 
 //static fp32 INS_gyro[3] = {0.0f, 0.0f, 0.0f};
-static fp32 INS_accel[3] = {0.0f, 0.0f, 0.0f};
+//static fp32 INS_accel[3] = {0.0f, 0.0f, 0.0f};
+
 static fp32 INS_mag[3] = {0.0f, 0.0f, 0.0f};
 static fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 fp32 INS_angle[3] = {0.0f, 0.0f, 0.0f};      //euler angle, unit rad.欧拉角 单位 rad
 fp32 INS_gyro[3] = {0.0f, 0.0f, 0.0f};
+//0是短边抬起的速度  1是长边抬起的速度  2是平放在桌面的旋转速度
+fp32 INS_accel[3] = {0.0f, 0.0f, 0.0f};
+//0是短边方向的加速度 1是长边方向的加速度  2是垂直与R标平面的加速度
+
 
 DJIC_IMU_t DJIC_IMU;
 //数据处理结构体

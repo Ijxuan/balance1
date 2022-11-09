@@ -108,5 +108,7 @@ extern P_PID_t TIRE_L_SPEED_pid;
 extern P_PID_t BALANCE_P;	
 extern P_PID_t BALANCE_I;
 
+extern P_PID_t SPEED_P;//速度环P
+
 #endif
 
