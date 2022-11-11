@@ -2,9 +2,14 @@
 #include "DR16_RECIVE.h"
 #include "M3508.h"
 #include "my_positionPID_bate.h"
+#include "LPF.h"
+
+int M3508_speed_new;
 float L_R_XS=-1.0f;
 float total_pitch_last=0;
 float total_pitch_change=0;
+int L_speed_new;
+int R_speed_new;
 
 void balance_control(void)
 {
@@ -12,6 +17,10 @@ void balance_control(void)
 	total_pitch_change=DJIC_IMU.total_pitch-total_pitch_last;
 	
 	total_pitch_last=DJIC_IMU.total_pitch;
+	
+//	M3508_speed_new=LPF_V1(M3508s[3].realSpeed);
+	
+	
 if(DR16.rc.s_left==3)
 {
     if(DR16.rc.s_right==2)
@@ -28,10 +37,10 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 
     if(DR16.rc.s_right==3)
 {
-
-
+L_speed_new=LPF_V1(M3508s[3].realSpeed);
+R_speed_new=LPF_V1(M3508s[2].realSpeed);
 send_to_tire_L=
-	P_PID_bate(&SPEED_P,0,M3508s[3].realSpeed-M3508s[2].realSpeed)
+	P_PID_bate(&SPEED_P,0,L_speed_new-R_speed_new)
 
 	+P_PID_bate(&BALANCE_P,0,DJIC_IMU.total_pitch)
 	+P_PID_bate(&BALANCE_I,0,DJIC_IMU.Gyro_y);

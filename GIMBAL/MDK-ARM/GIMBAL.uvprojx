@@ -459,6 +459,11 @@
               <FileType>1</FileType>
               <FilePath>..\Arithmetic\User_math.c</FilePath>
             </File>
+            <File>
+              <FileName>LPF.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\LPF.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

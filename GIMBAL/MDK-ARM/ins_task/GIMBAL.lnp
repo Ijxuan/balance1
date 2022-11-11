@@ -11,6 +11,7 @@
 "ins_task\kalman.o"
 "ins_task\vision_control.o"
 "ins_task\user_math.o"
+"ins_task\lpf.o"
 "ins_task\m3508.o"
 "ins_task\m2006.o"
 "ins_task\dr16_recive.o"

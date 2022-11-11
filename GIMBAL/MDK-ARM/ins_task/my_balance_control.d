@@ -59,3 +59,4 @@ ins_task\my_balance_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/includ
 ins_task\my_balance_control.o: ..\Arithmetic\my_positionPID_bate.h
 ins_task\my_balance_control.o: ..\application\INS_task.h
 ins_task\my_balance_control.o: ..\application\struct_typedef.h
+ins_task\my_balance_control.o: ..\ADD\LPF.h

@@ -247,7 +247,7 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-			#if 0//发送陀螺仪数据  YAW PITCH
+			#if 1//发送陀螺仪数据  YAW PITCH
 	p=0;
 			send_d_32[p++]=tire_L_TARGE_speed;//当前角度		1
 			send_d_32[p++]=M3508s[3].realSpeed;//最终目标角度		2
@@ -261,9 +261,9 @@ void NM_swj(void)
 
 			send_d_32[p++]=M3508s[2].realSpeed*-1;//P_OUT		5
 			send_d_32[p++]=send_to_tire_R*-1;//I_OUT		6
-			send_d_32[p++]=DJIC_IMU.total_pitch*-100;//D_OUT  	7
+			send_d_32[p++]=L_speed_new;//D_OUT  	7
 	p=0;
-			send_d_16[p++]=this_period_has_shoot_number;//输出电压      8
+			send_d_16[p++]=R_speed_new;//输出电压      8
 
 			send_d_16[p++]=yaw_trage_speed*100000;//目标角度       	9
 			send_d_16[p++]=cali_sensor[i].cali_cmd*1111;//1在校准 0不在		10

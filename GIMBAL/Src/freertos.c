@@ -329,12 +329,12 @@ void MX_FREERTOS_Init(void) {
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 700, -700,
-						 10000, -10000); // 平衡PID
+						 14000, -14000); // 平衡PID
 	P_PID_Parameter_Init(&BALANCE_I,40,0,0,0,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 500, -500,
-						 2000, -2000); // 平衡PID
+						 14000, -14000); // 平衡PID
 	P_PID_Parameter_Init(&SPEED_P,-0.8,-0.15,0,7300,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
@@ -830,14 +830,14 @@ void Robot_Control(void const *argument)
 		balance_control();
 	
 
-if(send_to_tire_L>14000)
-	send_to_tire_L=14000;
-if(send_to_tire_L<-14000)
-	send_to_tire_L=-14000;
-if(send_to_tire_R>14000)
-	send_to_tire_R=14000;
-if(send_to_tire_R<-14000)
-	send_to_tire_R=-14000;
+if(send_to_tire_L>15000)
+	send_to_tire_L=15000;
+if(send_to_tire_L<-15000)
+	send_to_tire_L=-15000;
+if(send_to_tire_R>15000)
+	send_to_tire_R=15000;
+if(send_to_tire_R<-15000)
+	send_to_tire_R=-15000;
 
 if(DR16.rc.s_left==2)
 {
