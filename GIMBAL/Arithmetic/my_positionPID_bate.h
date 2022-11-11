@@ -110,5 +110,9 @@ extern P_PID_t BALANCE_I;
 
 extern P_PID_t SPEED_P;//速度环P
 
+
+extern P_PID_t change_direction_speed;//转向环->速度环
+extern P_PID_t change_direction_angle;//转向环->角度环
+
 #endif
 

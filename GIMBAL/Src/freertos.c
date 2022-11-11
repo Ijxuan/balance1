@@ -339,7 +339,18 @@ void MX_FREERTOS_Init(void) {
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 2000, -2000,
-						 6000, -6000); // 平衡PID						 
+						 6000, -6000); // 平衡PID
+						 
+	P_PID_Parameter_Init(&change_direction_angle,6,0,0,0,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 300, -300); // 平衡PID
+	P_PID_Parameter_Init(&change_direction_speed,90,0,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 6000, -6000); // 平衡PID
 Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
   /* USER CODE END Init */

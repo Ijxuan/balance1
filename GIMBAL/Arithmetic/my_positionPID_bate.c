@@ -43,6 +43,10 @@ P_PID_t BALANCE_P;
 P_PID_t BALANCE_I;
 
 P_PID_t SPEED_P;//速度环P
+
+P_PID_t change_direction_speed;//转向环->速度环
+P_PID_t change_direction_angle;//转向环->角度环
+
 int PID_YES=0;
 
 
