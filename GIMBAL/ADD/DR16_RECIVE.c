@@ -209,7 +209,7 @@ int32_t data4=4;
 uint8_t i=0;
 uint8_t p=0; 
 int32_t send_d_32[8];
-int16_t send_d_16[3];
+int16_t send_d_16[3];//+-32767
 
 int32_t send_data1=1;
 int32_t send_data2=2;
@@ -247,7 +247,98 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-			#if 1//发送陀螺仪数据  YAW PITCH
+				#if 0//寻找机械零点
+		
+	p=0;
+			send_d_32[p++]=DJIC_IMU.total_pitch*100000;//目标位置		1
+			send_d_32[p++]=BALANCE_P.Target*100000;//当前位置		2
+
+			send_d_32[p++]=BALANCE_P.Measure*100000;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= DR16.rc.ch1*660;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=DJIC_IMU.total_pitch*1000;//P_OUT		5
+			send_d_32[p++]=0;//I_OUT		6
+			send_d_32[p++]=0;//D_OUT  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=SPEED_P_v2.I_Output;//目标角度       	9
+			send_d_16[p++]=SPEED_P_v2.Integral;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+						#if 1//速度环输出
+		
+	p=0;
+			send_d_32[p++]=BALANCE_P.result+BALANCE_I.result;//目标位置		1
+			send_d_32[p++]=SPEED_P_v2.result;//当前位置		2
+
+			send_d_32[p++]=send_to_tire_L;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= DR16.rc.ch1*660;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=DJIC_IMU.total_pitch*1000;//P_OUT		5
+			send_d_32[p++]=0;//I_OUT		6
+			send_d_32[p++]=0;//D_OUT  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=SPEED_P_v2.I_Output;//目标角度       	9
+			send_d_16[p++]=SPEED_P_v2.Integral;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+		
+				#if 0//目标位置控制
+	p=0;
+			send_d_32[p++]=TARGET_position;//目标位置		1
+			send_d_32[p++]=M3508s[3].totalAngle-M3508s[2].totalAngle;//当前位置		2
+
+			send_d_32[p++]=TARGET_angle_PITCH;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= tire_R_TARGE_speed*-1;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=M3508s[2].realSpeed*-1;//P_OUT		5
+			send_d_32[p++]=TARGET_angle_PITCH*1000;//I_OUT		6
+			send_d_32[p++]=DJIC_IMU.total_pitch*1000;//D_OUT  	7
+	p=0;
+			send_d_16[p++]=R_speed_new;//输出电压      8
+
+			send_d_16[p++]=yaw_trage_speed*100000;//目标角度       	9
+			send_d_16[p++]=cali_sensor[i].cali_cmd*1111;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif		
+				#if 0//探究角度与速度的关系
+	p=0;
+			send_d_32[p++]=tire_L_TARGE_speed;//当前角度		1
+			send_d_32[p++]=M3508s[3].realSpeed;//最终目标角度		2
+
+			send_d_32[p++]=send_to_tire_L;//视觉数据		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= tire_R_TARGE_speed*-1;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=M3508s[2].realSpeed*-1;//P_OUT		5
+			send_d_32[p++]=TARGET_angle_PITCH*1000;//I_OUT		6
+			send_d_32[p++]=DJIC_IMU.total_pitch*1000;//D_OUT  	7
+	p=0;
+			send_d_16[p++]=R_speed_new;//输出电压      8
+
+			send_d_16[p++]=yaw_trage_speed*100000;//目标角度       	9
+			send_d_16[p++]=cali_sensor[i].cali_cmd*1111;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+#if 0//发送陀螺仪数据  YAW PITCH
 	p=0;
 			send_d_32[p++]=tire_L_TARGE_speed;//当前角度		1
 			send_d_32[p++]=M3508s[3].realSpeed;//最终目标角度		2
@@ -317,18 +408,18 @@ void NM_swj(void)
 
 			#if 0//发送陀螺仪数据  YAW PITCH
 	p=0;
-			send_d_32[p++]=total_pitch_change*1000000;//当前角度		1
-			send_d_32[p++]=DJIC_IMU.Gyro_z*10000;//最终目标角度		2
+			send_d_32[p++]=INS_accel[1]*1000000;//当前角度		1
+			send_d_32[p++]=accel_fliter_3[0]*1000000;//最终目标角度		2
 
-			send_d_32[p++]=-INS_angle[2]*10000;//视觉数据		3 
+			send_d_32[p++]=accel_fliter_3[1]*1000000;//视觉数据		3 
 //				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
 
 			//DJIC_IMU.Gyro_y*1000000
 //DJIC_IMU.pitch
-			send_d_32[p++]= INS_gyro[0]*10000;//I_OUT 4		4PID_YES
+			send_d_32[p++]= accel_fliter_3[2]*1000000;//I_OUT 4		4PID_YES
 
-			send_d_32[p++]=INS_gyro[1]*10000;//P_OUT		5
-			send_d_32[p++]=INS_gyro[2]*10000;//I_OUT		6
+			send_d_32[p++]=DJIC_IMU.add_speed_C*1000000;//P_OUT		5
+			send_d_32[p++]=DJIC_IMU.add_speed_Q*1000000;//I_OUT		6
 			send_d_32[p++]=DJIC_IMU.total_pitch*-100;//D_OUT  	7
 	p=0;
 			send_d_16[p++]=this_period_has_shoot_number;//输出电压      8

@@ -306,6 +306,7 @@ void MX_FREERTOS_Init(void) {
 
 #endif
 
+
 	P_PID_Parameter_Init(&TIRE_L_SPEED_pid
 	,20 //15  //0.7  12
 	,2,
@@ -325,6 +326,8 @@ void MX_FREERTOS_Init(void) {
 						 //                          float alpha,
 						 10000, -10000,
 						 16000, -16000); // Yaw_IMU_Angle_pid   15    500 -500
+						 
+#if 0//第一代参数
 	P_PID_Parameter_Init(&BALANCE_P,280,0,0,4,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
@@ -339,18 +342,93 @@ void MX_FREERTOS_Init(void) {
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 2000, -2000,
-						 6000, -6000); // 平衡PID
+						 6000, -6000); // 速度PID
 						 
 	P_PID_Parameter_Init(&change_direction_angle,6,0,0,0,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 0, -0,
-						 300, -300); // 平衡PID
+						 300, -300); // 转向环角度PID	
 	P_PID_Parameter_Init(&change_direction_speed,90,0,0,7300,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 2000, -2000,
-						 6000, -6000); // 平衡PID
+						 6000, -6000); // 转向环速度PID						 
+#endif
+#if 0//第2代参数
+	P_PID_Parameter_Init(&BALANCE_P,280,0,0,4,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 700, -700,
+						 14000, -14000); // 平衡PID
+	P_PID_Parameter_Init(&BALANCE_I,40,0,0,0,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 500, -500,
+						 14000, -14000); // 平衡PID
+	P_PID_Parameter_Init(&SPEED_P,-0.5,-0.15,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 6000, -6000); // 速度PID
+						 
+	P_PID_Parameter_Init(&change_direction_angle,6,0,0,0,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 300, -300); // 转向环角度PID	
+	P_PID_Parameter_Init(&change_direction_speed,90,0,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 6000, -6000); // 转向环速度PID						 
+#endif
+#if 1//第3代参数
+	P_PID_Parameter_Init(&BALANCE_P,500,0,0,4,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 700, -700,
+						 14000, -14000); // 平衡PID
+	P_PID_Parameter_Init(&BALANCE_I,40,0,0,0,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 500, -500,
+						 14000, -14000); // 平衡PID
+	P_PID_Parameter_Init(&SPEED_P,-1.5,-0.3,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 3500, -3500,
+						 10000, -10000); // 速度PID
+		SPEED_P.max_error=30;
+		SPEED_P.min_error=-30;
+
+
+P_PID_V2_Init(&SPEED_P_v2,-2,-0.5,1.5,7300,//-0.5  -0.15软
+						3000,-3000, //						  float max_error, float min_error,
+						20,-20, //                          float alpha,
+						 1500, -1500,
+						 10000, -10000); // 速度PIDV2
+
+	P_PID_Parameter_Init(&change_direction_angle,6,0,0,0,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 300, -300); // 转向环角度PID	
+	P_PID_Parameter_Init(&change_direction_speed,90,0,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 6000, -6000); // 转向环速度PID						 
+#endif
+
+
+						 
+	P_PID_Parameter_Init(&POSITION,0,0,0,0,//-0.00001
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 12, -12); // //位置环（输入目标位置,得到倾斜角度）						 
+						 
 Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
   /* USER CODE END Init */
@@ -541,11 +619,11 @@ CAN1           	0		<1%
 		debug_times++;	
 Get_FPS(&FPS_ALL.DEBUG.WorldTimes,&FPS_ALL.DEBUG.FPS);
 		
-				if(debug_times%5==0)//上位机发送频率
+				if(debug_times%1==0)//上位机发送频率
 						{
 							NM_swj();
 
-							//10ms一次
+							//2ms一次
 //			printf("好");
 						}
 		if (DR16.rc.s_right != 2&&DR16.rc.s_right != 0) //是否上位机

@@ -170,7 +170,7 @@ static const float timing_time = 0.001f;   //tast run time , unit s.任务运行的时
 //加速度计低通滤波
 static fp32 accel_fliter_1[3] = {0.0f, 0.0f, 0.0f};
 static fp32 accel_fliter_2[3] = {0.0f, 0.0f, 0.0f};
-static fp32 accel_fliter_3[3] = {0.0f, 0.0f, 0.0f};
+ fp32 accel_fliter_3[3] = {0.0f, 0.0f, 0.0f};
 static const fp32 fliter_num[3] = {1.929454039488895f, -0.93178349823448126f, 0.002329458745586203f};
 
 //static fp32 INS_gyro[3] = {0.0f, 0.0f, 0.0f};
@@ -743,6 +743,10 @@ void Updata_Hand_Euler_Gyro_Data(void)
 	
 		Vision_Cloud.VisionSend_t.YawAngle_Error=DJIC_IMU.total_yaw;
 	Vision_Cloud.VisionSend_t.PitchAngle_Error=DJIC_IMU.pitch;
+	
+	DJIC_IMU.add_speed_C=accel_fliter_3[1];//长边加速度
+	DJIC_IMU.add_speed_G=accel_fliter_3[2];//重力加速度
+	DJIC_IMU.add_speed_Q=DJIC_IMU.add_speed_C*cos(INS_angle[2]);
 }
 
 

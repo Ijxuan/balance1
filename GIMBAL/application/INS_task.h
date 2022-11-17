@@ -95,6 +95,11 @@ typedef struct
 	float Gyro_z;
 	float Gyro_y;
 
+	float add_speed_C;//长边加速度
+	float add_speed_K;//宽边加速度
+	float add_speed_G;//重力加速度
+	float add_speed_Q;//重力加速度
+
 //	P_PID_t yaw_pid;
 //	P_PID_t gyro_z_pid;
 //	P_PID_t pitch_pid;
@@ -107,7 +112,7 @@ extern DJIC_IMU_t DJIC_IMU;
 extern fp32 INS_angle[3];
 extern fp32 INS_gyro[3];
 extern fp32 INS_accel[3];
-
+extern fp32 accel_fliter_3[3] ;
 void Updata_Hand_Euler_Gyro_Data(void);
 
 extern float text_BOARD_INSTALL[3][3];

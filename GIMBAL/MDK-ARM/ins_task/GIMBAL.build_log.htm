@@ -27,10 +27,26 @@ Project File Date:  11/10/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'GIMBAL'
+compiling freertos.c...
+..\ADD\DR16_RECIVE.h(212): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct
+..\ADD\DR16_RECIVE.h(245): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
+      __SIMD32_TYPE *vstate;
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
+      vstate = __SIMD32_CONST(S->state);
+../Src/freertos.c(567): warning:  #177-D: variable "error_e"  was declared but never referenced
+  	char error_e[5]="error";
+../Src/freertos.c(799): warning:  #177-D: variable "i"  was declared but never referenced
+  int i=0;
+../Src/freertos.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=89152 RO-data=4120 RW-data=2192 ZI-data=57384  
+Program Size: Code=92988 RO-data=4408 RW-data=2208 ZI-data=57600  
 FromELF: creating hex file...
-"ins_task\GIMBAL.axf" - 0 Error(s), 0 Warning(s).
+"ins_task\GIMBAL.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -53,7 +69,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
