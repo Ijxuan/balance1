@@ -1,8 +1,32 @@
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'GIMBAL'
 compiling MY_balance_CONTROL.c...
+compiling DR16_RECIVE.c...
+..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
+      __SIMD32_TYPE *vstate;
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
+      vstate = __SIMD32_CONST(S->state);
+..\ADD\DR16_RECIVE.c: 3 warnings, 0 errors
+compiling freertos.c...
+..\ADD\DR16_RECIVE.h(212): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct
+..\ADD\DR16_RECIVE.h(245): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
+      __SIMD32_TYPE *vstate;
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
+      vstate = __SIMD32_CONST(S->state);
+../Src/freertos.c(567): warning:  #177-D: variable "error_e"  was declared but never referenced
+  	char error_e[5]="error";
+../Src/freertos.c(799): warning:  #177-D: variable "i"  was declared but never referenced
+  int i=0;
+../Src/freertos.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=87556 RO-data=4120 RW-data=2120 ZI-data=56904  
+Program Size: Code=93072 RO-data=4412 RW-data=2216 ZI-data=57600  
 FromELF: creating hex file...
-"ins_task\GIMBAL.axf" - 0 Error(s), 0 Warning(s).
+"ins_task\GIMBAL.axf" - 0 Error(s), 10 Warning(s).
 Build Time Elapsed:  00:00:04

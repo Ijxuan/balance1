@@ -284,8 +284,8 @@ void NM_swj(void)
 			send_d_32[p++]= DR16.rc.ch1*660;//I_OUT 4		4PID_YES
 
 			send_d_32[p++]=DJIC_IMU.total_pitch*1000;//P_OUT		5
-			send_d_32[p++]=0;//I_OUT		6
-			send_d_32[p++]=0;//D_OUT  	7
+			send_d_32[p++]=milemeter_test.total_mile_by_turnCount;//里程计测试		6
+			send_d_32[p++]=milemeter_test.total_mile_by_angle;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
 

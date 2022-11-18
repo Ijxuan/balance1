@@ -24,7 +24,7 @@ int TARGET_position_k=1;//遥控器控制系数
 
 void balance_control(void)
 {
-	
+	milemeter();
 	total_pitch_change=DJIC_IMU.total_pitch-total_pitch_last;
 	
 	total_pitch_last=DJIC_IMU.total_pitch;
@@ -111,8 +111,13 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 
 }
 
+milemeter_t milemeter_test;
+void milemeter(void)//里程计函数
+{
+milemeter_test.total_mile_by_turnCount=M3508s[3].turnCount-M3508s[2].turnCount;
 
-
+milemeter_test.total_mile_by_turnCount=M3508s[3].totalAngle/100-M3508s[2].totalAngle/100;
+}
 
 
 
