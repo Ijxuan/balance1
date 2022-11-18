@@ -60,3 +60,4 @@ ins_task\my_balance_control.o: ..\Arithmetic\my_positionPID_bate.h
 ins_task\my_balance_control.o: ..\application\INS_task.h
 ins_task\my_balance_control.o: ..\application\struct_typedef.h
 ins_task\my_balance_control.o: ..\ADD\LPF.h
+ins_task\my_balance_control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

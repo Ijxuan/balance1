@@ -12,6 +12,7 @@ typedef struct
 
 void balance_control(void);
 void milemeter(void);//里程计函数
+void PIRCH_XR(void);//PITCH轴削弱
 
 extern float L_R_XS;
 extern float total_pitch_change;
@@ -24,6 +25,8 @@ extern int TARGET_position_k;
 extern int TARGET_position;
 extern float TARGET_angle_PITCH_BC;//��еƽ��ǶȲ���
 extern milemeter_t milemeter_test;
+extern float PITCH_ZDJD;//最低角度
+extern float PITCH_XR_K;//PITCH轴削弱系数
 
 #endif
 

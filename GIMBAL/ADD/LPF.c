@@ -1,7 +1,7 @@
 #include "LPF.h"
 
 
-float LPF_a=0.5f;//0.85运动会丝滑,抖动会减少,但是没那么精准.灵敏
+float LPF_a=0.8f;//0.85运动会丝滑,抖动会减少,但是没那么精准.灵敏
 	
 int LPF_V1(int value_wait_lpf)
 {
