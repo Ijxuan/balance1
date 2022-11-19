@@ -53,7 +53,7 @@ if(DR16.rc.s_left==3)
 SPEED_P_v2.Integral=0;
 SPEED_P_v2.result=0;		
 
-TARGET_position_V2=milemeter_test.total_mile_by_turnCount;
+TARGET_position_V2=milemeter_test.total_mile_truly_use;
 		
 	}
 
@@ -77,8 +77,14 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 //	TARGET_angle_PITCH=DR16.rc.ch1/-6.6*TARGET_angle_PITCH_MAX;//遥控器直接控制倾斜角度
 //	TARGET_position+=DR16.rc.ch1/-6.6*TARGET_position_k;//遥控器控制目标位置
 //	TARGET_angle_PITCH=P_PID_bate(&POSITION,TARGET_position,M3508s[3].totalAngle-M3508s[2].totalAngle);
-TARGET_position_V2=milemeter_test.total_mile_by_turnCount+DR16.rc.ch1;
+	if(DR16.rc.ch1!=0)
+	{
+TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*80;
+	}
+	if(DR16.rc.ch0!=0)
+	{
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/9.0;
+	}	
 L_speed_new=LPF_V1(M3508s[3].realSpeed);
 R_speed_new=LPF_V1(M3508s[2].realSpeed);
 
@@ -98,12 +104,12 @@ SPEED_P_v2.result=0;
 	}
 		if(DR16.rc.ch1==0&&DR16_rc_ch1_last!=0)
 		{
-		TARGET_position_V2=milemeter_test.total_mile_by_turnCount;
+		TARGET_position_V2=milemeter_test.total_mile_truly_use;//记录松手瞬间的位置
 		}
 DR16_rc_ch1_last=DR16.rc.ch1;
 	send_to_tire_L+=SPEED_P_v2.result;
 	
-	P_PID_bate_V2(&POSITION_v2,TARGET_position_V2,milemeter_test.total_mile_by_turnCount);
+	P_PID_bate_V2(&POSITION_v2,TARGET_position_V2,milemeter_test.total_mile_truly_use);
 	send_to_tire_L+=POSITION_v2.result*PITCH_XR_K;
 
 	
@@ -132,15 +138,23 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 }
 
 milemeter_t milemeter_test;
-void milemeter(void)//里程计函数
+void milemeter(void)//里程计函数  不但要丝滑,还要足够的精度,不然容易超调
 {
 milemeter_test.total_mile_by_turnCount=M3508s[3].turnCount-M3508s[2].turnCount;
 
 milemeter_test.total_mile_by_angle=M3508s[3].totalAngle/100-M3508s[2].totalAngle/100;
+	
+milemeter_test.total_mile_by_angle_1000=M3508s[3].totalAngle/1000-M3508s[2].totalAngle/1000;
+	
+milemeter_test.total_mile_by_angle_4000=M3508s[3].totalAngle/4000-M3508s[2].totalAngle/4000;
+	
+milemeter_test.total_mile_by_angle_8191=M3508s[3].totalAngle/8191-M3508s[2].totalAngle/8191;
+	
+milemeter_test.total_mile_truly_use=milemeter_test.total_mile_by_angle_1000;	
 }
 
 
-float PITCH_ZDJD=22.0f;//最低角度
+float PITCH_ZDJD=55.0f;//最低角度
 void PIRCH_XR(void)//PITCH轴削弱
 {
 

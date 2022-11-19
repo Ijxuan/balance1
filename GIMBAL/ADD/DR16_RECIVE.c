@@ -247,6 +247,30 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
+	#if 1//里程计测试
+		
+	p=0;
+			send_d_32[p++]=milemeter_test.total_mile_by_angle;//目标位置		1
+			send_d_32[p++]=milemeter_test.total_mile_by_angle_1000;//当前位置		2
+
+			send_d_32[p++]=milemeter_test.total_mile_by_angle_4000;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= milemeter_test.total_mile_by_angle_8191;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=milemeter_test.total_mile_by_turnCount;//P_OUT		5
+		
+			send_d_32[p++]=milemeter_test.total_mile_by_turnCount;//里程计测试		6
+			send_d_32[p++]=milemeter_test.total_mile_by_angle;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=SPEED_P_v2.I_Output;//目标角度       	9
+			send_d_16[p++]=SPEED_P_v2.Integral;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
 				#if 0//寻找机械零点
 		
 	p=0;
@@ -270,7 +294,7 @@ void NM_swj(void)
 			send_d_16[p++]=SPEED_P_v2.Integral;//1在校准 0不在		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
-						#if 1//速度环输出
+				#if 0//速度环输出
 		
 	p=0;
 			send_d_32[p++]=BALANCE_P.result+BALANCE_I.result;//目标位置		1

@@ -445,7 +445,7 @@ P_PID_V2_Init(&SPEED_P_v2,-1.5,-0.1,1,7300,//-0.5  -0.15»Ì
 						10,-10, //                          float alpha,
 						 1500, -1500,
 						 10000, -10000); // ÀŸ∂»PIDV2
-P_PID_V2_Init(&POSITION_v2,-100,0,40,7300,//-0.5  -0.15»Ì
+P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15»Ì
 						999,-999, //						  float max_error, float min_error,
 						10,-10, //                          float alpha,
 						 1500, -1500,
