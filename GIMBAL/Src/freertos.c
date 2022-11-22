@@ -56,6 +56,7 @@
 #include "MY_CLOUD_CONTROL.h"
 //#include "usbd_cdc_if.h"
 #include "MY_balance_CONTROL.h"
+#include "LPF.h"
 
 /* USER CODE END Includes */
 
@@ -420,7 +421,7 @@ P_PID_V2_Init(&SPEED_P_v2,-2,-0.5,1.5,7300,//-0.5  -0.15软
 						 2000, -2000,
 						 6000, -6000); // 转向环速度PID						 
 #endif
-#if 1//第4代参数 软
+#if 0//第4代参数 软
 	P_PID_Parameter_Init(&BALANCE_P,500,0,0,4,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
@@ -462,9 +463,53 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 						 2000, -2000,
 						 6000, -6000); // 转向环速度PID						 
 #endif
+#if 1//第5代参数 软
+	P_PID_Parameter_Init(&BALANCE_P,500,0,0,4,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 700, -700,
+						 14000, -14000); // 平衡PID
+	P_PID_Parameter_Init(&BALANCE_I,40,0,0,0,//60,0.5,-30,0,
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 500, -500,
+						 14000, -14000); // 平衡PID
+	P_PID_Parameter_Init(&SPEED_P,-1.5,0,1.5,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 3500, -3500,
+						 10000, -10000); // 速度PID
+		SPEED_P.max_error=30;
+		SPEED_P.min_error=-30;
 
 
-						 
+P_PID_V2_Init(&SPEED_P_v2,-1.5,0,1.5,7300,//-0.5  -0.15软
+						3000,-3000, //						  float max_error, float min_error,
+						10,-10, //                          float alpha,
+						 1500, -1500,
+						 10000, -10000); // 速度PIDV2
+P_PID_V2_Init(&POSITION_v2,-0.5,0,0,7300,//-0.5  -0.15软
+						999,-999, //						  float max_error, float min_error,
+						10,-10, //                          float alpha,
+						 1500, -1500,
+						 6666, -6666); // 速度PIDV2
+
+	P_PID_Parameter_Init(&change_direction_angle,6,0,0,0,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 555, -555); // 转向环角度PID	
+	P_PID_Parameter_Init(&change_direction_speed,90,0,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 6000, -6000); // 转向环速度PID						 
+#endif
+SPEED_L.LPF_K=0.85;
+SPEED_R.LPF_K=0.85;
+milemeter_A.LPF_K=0.6;
+
+
 	P_PID_Parameter_Init(&POSITION,0,0,0,0,//-0.00001
 						 //						  float max_error, float min_error,
 						 //                          float alpha,

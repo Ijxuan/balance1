@@ -247,7 +247,31 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-	#if 1//里程计测试
+			#if 1//滤波测试
+		
+	p=0;
+			send_d_32[p++]=M3508s[3].realSpeed;//目标位置		1
+			send_d_32[p++]=L_speed_new;//当前位置		2
+
+			send_d_32[p++]=M3508s[2].realSpeed;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= R_speed_new;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=milemeter_test.total_mile_by_turnCount;//P_OUT		5
+		
+			send_d_32[p++]=milemeter_test.total_mile_truly_use;//里程计测试		6
+			send_d_32[p++]=milemeter_test.total_mile_by_angle;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=SPEED_P_v2.I_Output;//目标角度       	9
+			send_d_16[p++]=SPEED_P_v2.Integral;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+	#if 0//里程计测试
 		
 	p=0;
 			send_d_32[p++]=milemeter_test.total_mile_by_angle;//目标位置		1
@@ -262,7 +286,7 @@ void NM_swj(void)
 
 			send_d_32[p++]=milemeter_test.total_mile_by_turnCount;//P_OUT		5
 		
-			send_d_32[p++]=milemeter_test.total_mile_by_turnCount;//里程计测试		6
+			send_d_32[p++]=milemeter_test.total_mile_truly_use;//里程计测试		6
 			send_d_32[p++]=milemeter_test.total_mile_by_angle;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8

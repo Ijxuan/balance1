@@ -36,6 +36,11 @@ PIRCH_XR();
 	
 	total_pitch_last=DJIC_IMU.total_pitch;
 	
+//L_speed_new=LPF_V1(M3508s[3].realSpeed,LPF_a);
+//R_speed_new=LPF_V1(M3508s[2].realSpeed,LPF_a);
+	
+	L_speed_new=LPF_V2(&SPEED_L,M3508s[3].realSpeed);
+	R_speed_new=LPF_V2(&SPEED_R,M3508s[2].realSpeed);	
 //	M3508_speed_new=LPF_V1(M3508s[3].realSpeed);
 	
 //	if(DR16.rc.s_right==3&&last_time_rc_right_mode==2)//从3到2......
@@ -85,9 +90,10 @@ TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*80;
 	{
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/9.0;
 	}	
-L_speed_new=LPF_V1(M3508s[3].realSpeed);
-R_speed_new=LPF_V1(M3508s[2].realSpeed);
 
+
+
+	
 		send_to_tire_L=
 //	P_PID_bate_V2(&SPEED_P,0,L_speed_new-R_speed_new)
 //	P_PID_bate(&SPEED_P,0,L_speed_new-R_speed_new)
@@ -142,7 +148,9 @@ void milemeter(void)//里程计函数  不但要丝滑,还要足够的精度,不然容易超调
 {
 milemeter_test.total_mile_by_turnCount=M3508s[3].turnCount-M3508s[2].turnCount;
 
-milemeter_test.total_mile_by_angle=M3508s[3].totalAngle/100-M3508s[2].totalAngle/100;
+milemeter_test.total_mile_by_angle=M3508s[3].totalAngle-M3508s[2].totalAngle;
+	
+milemeter_test.total_mile_by_angle_100=M3508s[3].totalAngle/100-M3508s[2].totalAngle/100;
 	
 milemeter_test.total_mile_by_angle_1000=M3508s[3].totalAngle/1000-M3508s[2].totalAngle/1000;
 	
@@ -150,7 +158,9 @@ milemeter_test.total_mile_by_angle_4000=M3508s[3].totalAngle/4000-M3508s[2].tota
 	
 milemeter_test.total_mile_by_angle_8191=M3508s[3].totalAngle/8191-M3508s[2].totalAngle/8191;
 	
-milemeter_test.total_mile_truly_use=milemeter_test.total_mile_by_angle_1000;	
+//milemeter_test.total_mile_truly_use=milemeter_test.total_mile_by_angle;	
+	
+	milemeter_test.total_mile_truly_use=LPF_V2( &milemeter_A,milemeter_test.total_mile_by_angle_100);
 }
 
 
