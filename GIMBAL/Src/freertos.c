@@ -488,7 +488,7 @@ P_PID_V2_Init(&SPEED_P_v2,-1.5,0,1.5,7300,//-0.5  -0.15软
 						10,-10, //                          float alpha,
 						 1500, -1500,
 						 10000, -10000); // 速度PIDV2
-P_PID_V2_Init(&POSITION_v2,-0.5,0,0,7300,//-0.5  -0.15软
+P_PID_V2_Init(&POSITION_v2,-1,0,0,7300,//-0.5  -0.15软
 						999,-999, //						  float max_error, float min_error,
 						10,-10, //                          float alpha,
 						 1500, -1500,
@@ -498,17 +498,18 @@ P_PID_V2_Init(&POSITION_v2,-0.5,0,0,7300,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 0, -0,
-						 555, -555); // 转向环角度PID	
-	P_PID_Parameter_Init(&change_direction_speed,90,0,0,7300,//-0.5  -0.15软
+						 700, -7700); // 转向环角度PID	
+	P_PID_Parameter_Init(&change_direction_speed,40,0,0,7300,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 2000, -2000,
-						 6000, -6000); // 转向环速度PID						 
+						 15000, -15000); // 转向环速度PID						 
 #endif
 SPEED_L.LPF_K=0.85;
 SPEED_R.LPF_K=0.85;
 milemeter_A.LPF_K=0.6;
-
+ZX.Rate=1;
+ZX.Absolute_Max=660;
 
 	P_PID_Parameter_Init(&POSITION,0,0,0,0,//-0.00001
 						 //						  float max_error, float min_error,

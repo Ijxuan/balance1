@@ -1,7 +1,9 @@
 #ifndef BALANCE_H
 #define BALANCE_H
 #include "main.h"
+#include "User_math.h"
 
+#define YAW_TEXT 0//启用YAW轴调试
 
 typedef struct
 {
@@ -31,6 +33,11 @@ extern float TARGET_angle_PITCH_BC;//��еƽ��ǶȲ���
 extern milemeter_t milemeter_test;
 extern float PITCH_ZDJD;//最低角度
 extern float PITCH_XR_K;//PITCH轴削弱系数
+
+extern float TARGET_angle_YAW;
+extern float TARGET_angle_speed_YAW;
+extern Ramp_Struct ZX;//自旋斜坡
+extern int DW_FOR_ZX;
 
 #endif
 

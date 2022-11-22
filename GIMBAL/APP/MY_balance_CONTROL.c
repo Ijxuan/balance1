@@ -27,10 +27,22 @@ int TARGET_position_V2=0;
 float PITCH_XR_K=0.1;//PITCH轴削弱函数
 
 int DR16_rc_ch1_last;
+int DW_FOR_ZX=0;
+
+Ramp_Struct ZX;//自旋斜坡
+
+int TARGET_speed_RC=0;//遥控速度
 
 void balance_control(void)
 {
+//    DW_FOR_ZX=DR16.rc.ch4_DW;
+	
+	ZX.Current_Value=DW_FOR_ZX;					
+ZX.Target_Value=DR16.rc.ch4_DW;
+DW_FOR_ZX=Ramp_Function(&ZX);
+	
 	milemeter();
+	
 PIRCH_XR();	
 	total_pitch_change=DJIC_IMU.total_pitch-total_pitch_last;
 	
@@ -84,46 +96,77 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 //	TARGET_angle_PITCH=P_PID_bate(&POSITION,TARGET_position,M3508s[3].totalAngle-M3508s[2].totalAngle);
 	if(DR16.rc.ch1!=0)
 	{
-TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*80;
+TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*240;
 	}
-	if(DR16.rc.ch0!=0)
-	{
-	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/9.0;
-	}	
 
 
 
-	
+#if YAW_TEXT==0 //当启用YAW轴调试时,批量注释直立环 速度环 位置
 		send_to_tire_L=
 //	P_PID_bate_V2(&SPEED_P,0,L_speed_new-R_speed_new)
 //	P_PID_bate(&SPEED_P,0,L_speed_new-R_speed_new)
 	
 	P_PID_bate(&BALANCE_P,0+TARGET_angle_PITCH_BC,DJIC_IMU.total_pitch)
 	+P_PID_bate(&BALANCE_I,0,DJIC_IMU.Gyro_y);
+			P_PID_bate_V2(&SPEED_P_v2,0,L_speed_new-R_speed_new);
 	
-		P_PID_bate_V2(&SPEED_P_v2,0,L_speed_new-R_speed_new);
-	if(DR16.rc.ch1!=0)
+	if(DR16.rc.ch1!=0)//前进时关闭速度环
 	{
+		if( (DR16.rc.ch1>0&&L_speed_new-R_speed_new>0) || (DR16.rc.ch1<0&&L_speed_new-R_speed_new<0) )
+			//当前速度与目标速度同向  关闭速度环
+		{
 	P_PID_Parameter_Clear(&SPEED_P);
 SPEED_P_v2.Integral=0;
 SPEED_P_v2.result=0;		
+		}
 	}
+	
 		if(DR16.rc.ch1==0&&DR16_rc_ch1_last!=0)
 		{
 		TARGET_position_V2=milemeter_test.total_mile_truly_use;//记录松手瞬间的位置
 		}
+
 DR16_rc_ch1_last=DR16.rc.ch1;
+				if(DR16.rc.ch0!=0)//自旋时关闭速度环
+	{
+	SPEED_P_v2.result=0;
+	}	
+		if(DW_FOR_ZX!=0)//小陀螺关闭速度环
+	{
+	SPEED_P_v2.result=0;
+	}
 	send_to_tire_L+=SPEED_P_v2.result;
 	
 	P_PID_bate_V2(&POSITION_v2,TARGET_position_V2,milemeter_test.total_mile_truly_use);
+//			if(DR16.rc.ch0!=0)//自旋时关闭位置环
+//	{
+//	POSITION_v2.result=0;
+//	}	
 	send_to_tire_L+=POSITION_v2.result*PITCH_XR_K;
 
 	
 	
 	
 send_to_tire_R=	-send_to_tire_L;
+#endif //启用YAW轴调试
+
 	
+#if YAW_TEXT==1
+send_to_tire_R=0;//清楚上一次计算结果
+send_to_tire_L=0;
+#endif
+	
+
+	if(DR16.rc.ch0!=0)
+	{
+	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/15.0;
+	}		
 	TARGET_angle_speed_YAW=P_PID_bate(&change_direction_angle,TARGET_angle_YAW,DJIC_IMU.total_yaw);
+	if(DW_FOR_ZX!=0)//拨轮控制,控制速度
+	{
+	TARGET_angle_speed_YAW=DW_FOR_ZX;
+	TARGET_angle_YAW	=DJIC_IMU.total_yaw;
+	}
 send_to_tire_L+=P_PID_bate(&change_direction_speed,TARGET_angle_speed_YAW,DJIC_IMU.Gyro_z);
 send_to_tire_R+=P_PID_bate(&change_direction_speed,TARGET_angle_speed_YAW,DJIC_IMU.Gyro_z);
 //	-P_PID_bate(&SPEED_P,0,M3508s[2].realSpeed)

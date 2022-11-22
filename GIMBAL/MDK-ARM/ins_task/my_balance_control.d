@@ -51,6 +51,7 @@ ins_task\my_balance_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/includ
 ins_task\my_balance_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 ins_task\my_balance_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 ins_task\my_balance_control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+ins_task\my_balance_control.o: ..\Arithmetic\User_math.h
 ins_task\my_balance_control.o: ..\ADD\DR16_RECIVE.h
 ins_task\my_balance_control.o: ..\ADD\M3508.h
 ins_task\my_balance_control.o: ..\bsp\boards\user_can.h

@@ -302,6 +302,26 @@
           <WinNumber>2</WinNumber>
           <ItemText>milemeter_test.total_mile_by_angle,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>28</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>change_direction_angle</ItemText>
+        </Ww>
+        <Ww>
+          <count>29</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>change_direction_speed</ItemText>
+        </Ww>
+        <Ww>
+          <count>30</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>DR16,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>31</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>ZX</ItemText>
+        </Ww>
       </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>
