@@ -57,6 +57,8 @@
 //#include "usbd_cdc_if.h"
 #include "MY_balance_CONTROL.h"
 #include "LPF.h"
+#include "CAN2_SEND.h"
+#include "MIT.h"
 
 /* USER CODE END Includes */
 
@@ -488,7 +490,7 @@ P_PID_V2_Init(&SPEED_P_v2,-1.5,0,1.5,7300,//-0.5  -0.15软
 						10,-10, //                          float alpha,
 						 1500, -1500,
 						 10000, -10000); // 速度PIDV2
-P_PID_V2_Init(&POSITION_v2,-1,0,0,7300,//-0.5  -0.15软
+P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 						999,-999, //						  float max_error, float min_error,
 						10,-10, //                          float alpha,
 						 1500, -1500,
@@ -510,6 +512,12 @@ SPEED_R.LPF_K=0.85;
 milemeter_A.LPF_K=0.6;
 ZX.Rate=1;
 ZX.Absolute_Max=660;
+	P_PID_Parameter_Init(&RC_SPEED_TO_POSITION,0.8,0,0,0,//-0.00001
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 160000, -160000); // //位置环（输入目标位置,得到倾斜角度）						 
+
 
 	P_PID_Parameter_Init(&POSITION,0,0,0,0,//-0.00001
 						 //						  float max_error, float min_error,
@@ -709,7 +717,7 @@ Get_FPS(&FPS_ALL.DEBUG.WorldTimes,&FPS_ALL.DEBUG.FPS);
 		
 				if(debug_times%1==0)//上位机发送频率
 						{
-							NM_swj();
+//							NM_swj();
 
 							//2ms一次
 //			printf("好");
@@ -896,12 +904,24 @@ int i=0;
 			CAN2_rc_times++;
 			can2_DR16_TIMES++;
 			//陀螺仪校准指令
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == IMU_CAL_REIID)
-			{
-				//解包
-				IMU_Cal_Status_Reivece(CAN2_Rx_Structure);
-			}
-
+//			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == IMU_CAL_REIID)
+//			{
+//				//解包
+//				IMU_Cal_Status_Reivece(CAN2_Rx_Structure);
+//			}
+    if(CAN2_Rx_Structure.CAN_RxMessage.StdId == TEST_MIT_MASTER_ID)
+	{
+	MIT_RC_TIMES++;
+	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== TEST_MIT_SLAVE_ID)
+		{
+text_moto.position=(CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
+			
+text_moto.velocity=(CAN2_Rx_Structure.CAN_RxMessageData[4]>>4 | CAN2_Rx_Structure.CAN_RxMessageData[3] << 4);
+			
+text_moto.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4]&0xF) << 8);
+		MIT_RC_Process_TIMES++;
+		}
+	}
 
 			
 		}
@@ -1023,9 +1043,9 @@ send_to_tire_L=0;
 }
 
 		M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
-
+//CAN2_SEND_TO_MIT();
 //		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大
-
+//MIT_MODE(MIT_MODE_TEXT);
 		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 		
 	}

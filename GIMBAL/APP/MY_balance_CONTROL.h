@@ -38,7 +38,7 @@ extern float TARGET_angle_YAW;
 extern float TARGET_angle_speed_YAW;
 extern Ramp_Struct ZX;//自旋斜坡
 extern int DW_FOR_ZX;
-
+extern int TARGET_speed_RC;
 #endif
 
 

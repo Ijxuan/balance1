@@ -58,7 +58,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-//��������Ĳ���
+//��������Ĳ���?
 //��ջ��С
 #define RobotCtrl_Size 512
 //���ȼ�
@@ -132,10 +132,10 @@ extern int SHOOT_R_speed;//��Ħ���ֵ�Ŀ���ٶ�
 
 extern	int	send_to_tire_R;/*����*/
 extern	int	send_to_tire_L;/*����*/
-extern int tire_L_TARGE_speed;//左轮的目标速度   应该为负值?
-extern int tire_R_TARGE_speed;//右轮的目标速度
-extern int tire_L_TARGE_speed_FAKE;//左轮的目标速度 (假)  应该为负值?
-extern int tire_R_TARGE_speed_FAKE;//右轮的目标速度(假)
+extern int tire_L_TARGE_speed;//左轮的目标�?�度   应该为负�??
+extern int tire_R_TARGE_speed;//右轮的目标�?�度
+extern int tire_L_TARGE_speed_FAKE;//左轮的目标�?�度 (�?)  应该为负�??
+extern int tire_R_TARGE_speed_FAKE;//右轮的目标�?�度(�?)
 extern int DW_FREE;
 extern int DW_DOWN;
 extern int SHOOT;
@@ -148,7 +148,7 @@ extern float yaw_trage_angle_add_1s;
 
 
 extern int send_to_yaw;
-extern int send_to_pitch;//���͸�pitch�������
+extern int send_to_pitch;//���͸�pitch�������?
 
 
 extern float PITCH_MAX_angle;
@@ -209,8 +209,8 @@ extern int vision_shoot_times;
 
 extern bool disable_for_test;
 extern int shoot_times_for_limit;
-extern bool whether_shoot_in__this_period;//��������Ƿ���
-extern bool this_period_has_shoot;//��������Ƿ���
+extern bool whether_shoot_in__this_period;//��������Ƿ���?
+extern bool this_period_has_shoot;//��������Ƿ���?
 extern int this_period_has_shoot_number;//������ڷ���shu
 extern int every_shoot_number;//һ����ʮ��
 extern int targe_shoot_number;//һ����ʮ��
@@ -229,10 +229,10 @@ extern bool TEMPERATURE_is_OK;
 extern int TEMPERATURE_PID_OUT;
 
 extern bool in_MID;//���ڹ���м��
-extern bool in_END;//���ڹ����ͷ
-extern bool in_END_R;//�����ҹ����ͷ
+extern bool in_END;//���ڹ�����?
+extern bool in_END_R;//�����ҹ�����?
 extern bool in_END_L;//����������ͷ
-extern bool in_END_last;//��һʱ�̴��ڹ����ͷ
+extern bool in_END_last;//��һʱ�̴��ڹ�����?
 
 extern bool disable_for_test_CHASSIS;
 extern float my_voltage;
@@ -262,6 +262,10 @@ extern float YAW_TRAGET_ANGLE_TEMP_FAKE_MOTO;
 extern float YAW_TRAGET_ANGLE_TEMP_FAKE_IMU;
 
 extern float send_to_pitch_before;
+
+
+extern int MIT_RC_TIMES;
+extern int MIT_RC_Process_TIMES;
 
 /* USER CODE END Private defines */
 

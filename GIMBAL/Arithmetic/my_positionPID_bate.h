@@ -174,5 +174,8 @@ extern P_PID_t change_direction_angle;//转向环->角度环
 extern P_PID_t POSITION;//位置环（输入目标位置,得到倾斜角度）
 extern P_PID_t_V2 POSITION_v2;//位置环（输入目标位置,直接输出给电机）
 
+extern P_PID_t RC_SPEED_TO_POSITION;//遥控器给定速度,转换成位置
+
+
 #endif
 

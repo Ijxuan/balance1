@@ -233,6 +233,9 @@ float YAW_TRAGET_ANGLE_TEMP_FAKE_IMU;
 float send_to_pitch_before=0;
 /*假装甲要用到END*/
 
+int MIT_RC_TIMES=0;
+int MIT_RC_Process_TIMES=0;
+
 /* USER CODE END 0 */
 
 /**
@@ -248,8 +251,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 

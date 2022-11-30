@@ -40,7 +40,7 @@ void balance_control(void)
 	ZX.Current_Value=DW_FOR_ZX;					
 ZX.Target_Value=DR16.rc.ch4_DW;
 DW_FOR_ZX=Ramp_Function(&ZX);
-	
+TARGET_speed_RC=	DR16.rc.ch1*15;
 	milemeter();
 	
 PIRCH_XR();	
@@ -96,7 +96,9 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 //	TARGET_angle_PITCH=P_PID_bate(&POSITION,TARGET_position,M3508s[3].totalAngle-M3508s[2].totalAngle);
 	if(DR16.rc.ch1!=0)
 	{
-TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*240;
+//TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*240;//遥控器给定目标位置
+		
+TARGET_position_V2=milemeter_test.total_mile_truly_use+P_PID_bate(&RC_SPEED_TO_POSITION,TARGET_speed_RC,L_speed_new-R_speed_new);//遥控器给定目标速度,转换成速度		
 	}
 
 

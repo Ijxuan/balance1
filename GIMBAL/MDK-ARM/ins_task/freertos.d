@@ -106,3 +106,5 @@ ins_task\freertos.o: ..\Arithmetic\User_math.h
 ins_task\freertos.o: ..\Arithmetic\User_typedef.h
 ins_task\freertos.o: ..\APP\MY_balance_CONTROL.h
 ins_task\freertos.o: ..\ADD\LPF.h
+ins_task\freertos.o: ..\ADD\CAN2_SEND.h
+ins_task\freertos.o: ..\ADD\MIT.h
