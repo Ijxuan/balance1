@@ -524,8 +524,14 @@ ZX.Absolute_Max=660;
 						 //                          float alpha,
 						 0, -0,
 						 12, -12); // //位置环（输入目标位置,得到倾斜角度）						 
-						 
-Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
+
+	P_PID_Parameter_Init(&MIT_TEXT,25,0.3,0,4,//-0.00001
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 10, -10,
+						 35, -35); // //MIT电机  角度环得到速度
+
+//Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
   /* USER CODE END Init */
 
@@ -715,9 +721,9 @@ CAN1           	0		<1%
 		debug_times++;	
 Get_FPS(&FPS_ALL.DEBUG.WorldTimes,&FPS_ALL.DEBUG.FPS);
 		
-				if(debug_times%1==0)//上位机发送频率
+				if(debug_times%2==0)//上位机发送频率
 						{
-//							NM_swj();
+							NM_swj();
 
 							//2ms一次
 //			printf("好");
@@ -914,12 +920,30 @@ int i=0;
 	MIT_RC_TIMES++;
 	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== TEST_MIT_SLAVE_ID)
 		{
+			
+			for(int x=0;x<6;x++)
+			{
+		text_moto.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
+			}
 text_moto.position=(CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
 			
-text_moto.velocity=(CAN2_Rx_Structure.CAN_RxMessageData[4]>>4 | CAN2_Rx_Structure.CAN_RxMessageData[3] << 4);
+text_moto.velocity=
+(((CAN2_Rx_Structure.CAN_RxMessageData[4])>>4 )| 
+(CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
 			
 text_moto.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4]&0xF) << 8);
-		MIT_RC_Process_TIMES++;
+
+			text_moto.position_end=uint_to_float(text_moto.position,P_MIN,P_MAX,16);
+			text_moto.ANGLE_JD=text_moto.position_end* Angle_turn_Radian;
+			
+			text_moto.velocity_end=uint_to_float(text_moto.velocity,V_MIN,V_MAX,12);
+			text_moto.SPEED_JD=text_moto.velocity_end* Angle_turn_Radian;
+			
+			text_moto.current_end=uint_to_float(text_moto.current,T_MIN,T_MAX,12);
+			
+			
+		
+			MIT_RC_Process_TIMES++;
 		}
 	}
 
@@ -1042,11 +1066,48 @@ send_to_tire_R=0;
 send_to_tire_L=0;
 }
 
-		M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
+//		M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
 //CAN2_SEND_TO_MIT();
 //		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大
-//MIT_MODE(MIT_MODE_TEXT);
-		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+
+if(DR16.rc.s_left==2)
+{
+MIT_MODE_TEXT=2;//电机失能
+MIT_MODE(MIT_MODE_TEXT);
+
+	position_text_TEMP=-90;//重置目标位置
+position_text=-90;//重置目标位置
+
+}
+else if(DR16.rc.s_left==3)
+{
+	if(MIT_MODE_TEXT!=1)
+	{
+MIT_MODE_TEXT=1;
+		MIT_MODE(MIT_MODE_TEXT);//使能电机
+	}
+	else
+	{
+	MIT_controul();
+	
+	}
+	
+
+}
+else if(DR16.rc.s_left==1)
+{
+	if(sendto_MIT_TEXT==1)
+			{
+		MIT_MODE(MIT_MODE_TEXT);
+			sendto_MIT_TEXT=0;
+		}
+
+}
+
+
+
+
+vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 		
 	}
 

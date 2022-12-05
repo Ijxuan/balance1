@@ -54,3 +54,8 @@ ins_task\mit.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 ins_task\mit.o: ..\bsp\boards\user_can.h
 ins_task\mit.o: ../Inc/can.h
 ins_task\mit.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+ins_task\mit.o: ..\Arithmetic\User_math.h
+ins_task\mit.o: ..\ADD\DR16_RECIVE.h
+ins_task\mit.o: ..\Arithmetic\my_positionPID_bate.h
+ins_task\mit.o: ..\application\INS_task.h
+ins_task\mit.o: ..\application\struct_typedef.h

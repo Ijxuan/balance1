@@ -18,6 +18,7 @@
 #include "spinning_top_examine.h"
 #include "Vision_Control.h"
 #include "MY_balance_CONTROL.h"
+#include "MIT.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
@@ -247,7 +248,73 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-							#if 1//前进的遥控器调试
+											#if 1//MIT 速度环 
+		
+	p=0;
+			send_d_32[p++]=position_HD_text*10000;//弧度值目标位置		1
+			send_d_32[p++]=text_moto.position_end*10000;//弧度值当前位置		2
+			send_d_32[p++]=position_text*10000;//角度制 目标位置		3 
+			send_d_32[p++]= text_moto.ANGLE_JD*10000;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=speed_HD_text*100;////目标速度-弧度制		5
+			send_d_32[p++]=text_moto.velocity_end*100;//当前速度-弧度制	6		
+			send_d_32[p++]=speed_text*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=M3508s[3].realSpeed;//目标角度       	9
+			send_d_16[p++]=send_to_tire_L;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif		
+		#if 0//MIT调参测试
+		
+	p=0;
+			send_d_32[p++]=text_moto.ANGLE_JD*10000;//目标位置		1
+			send_d_32[p++]=text_moto.SPEED_JD*100;//当前位置		2
+
+			send_d_32[p++]=position_text*10000;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= text_moto.velocity_end*100;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=RC_SPEED_TO_POSITION.result;//P_OUT		5
+		
+			send_d_32[p++]=DR16.rc.ch1;//里程计测试		6
+			send_d_32[p++]=speed_text*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=M3508s[3].realSpeed;//目标角度       	9
+			send_d_16[p++]=send_to_tire_L;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+		
+									#if 0//MIT通信接收测试
+		
+	p=0;
+			send_d_32[p++]=text_moto.ANGLE_JD*10000;//目标位置		1
+			send_d_32[p++]=text_moto.SPEED_JD*100;//当前位置		2
+
+			send_d_32[p++]=text_moto.velocity;//目标姿态角度		3 
+//				send_d_32[p++]=PID_YES*1000;//P_OUT		3 
+
+			//DJIC_IMU.Gyro_y*1000000
+//DJIC_IMU.pitch
+			send_d_32[p++]= text_moto.velocity_end*100;//I_OUT 4		4PID_YES
+
+			send_d_32[p++]=RC_SPEED_TO_POSITION.result;//P_OUT		5
+		
+			send_d_32[p++]=DR16.rc.ch1;//里程计测试		6
+			send_d_32[p++]=L_speed_new;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=SPEED_P_v2.Proportion;//输出电压      8
+
+			send_d_16[p++]=M3508s[3].realSpeed;//目标角度       	9
+			send_d_16[p++]=send_to_tire_L;//1在校准 0不在		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+							#if 0//前进的遥控器调试
 		
 	p=0;
 			send_d_32[p++]=POSITION_v2.Error;//目标位置		1

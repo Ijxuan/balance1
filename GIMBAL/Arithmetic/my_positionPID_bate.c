@@ -53,6 +53,7 @@ P_PID_t_V2 POSITION_v2;//位置环（输入目标位置,直接输出给电机）
 
 P_PID_t RC_SPEED_TO_POSITION;//遥控器给定速度,转换成位置
 
+P_PID_t MIT_TEXT;//MIT
 
 int PID_YES=0;
 
