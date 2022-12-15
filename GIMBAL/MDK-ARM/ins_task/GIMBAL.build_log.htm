@@ -27,14 +27,18 @@ Project File Date:  11/29/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'GIMBAL'
-compiling MIT.c...
-..\ADD\MIT.c(11): warning:  #177-D: function "CanTransmit"  was declared but never referenced
-  static void CanTransmit(uint8_t *buf, uint8_t len,uint32_t id)
-..\ADD\MIT.c: 1 warning, 0 errors
+compiling DR16_RECIVE.c...
+..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
+      __SIMD32_TYPE *vstate;
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
+      vstate = __SIMD32_CONST(S->state);
+..\ADD\DR16_RECIVE.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=94104 RO-data=4412 RW-data=1800 ZI-data=56512  
+Program Size: Code=94456 RO-data=4412 RW-data=1848 ZI-data=56624  
 FromELF: creating hex file...
-"ins_task\GIMBAL.axf" - 0 Error(s), 1 Warning(s).
+"ins_task\GIMBAL.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -57,7 +61,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

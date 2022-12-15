@@ -1,11 +1,24 @@
 #include "MIT.h"
 #include "DR16_RECIVE.h"
 #include "my_positionPID_bate.h"
+#include "math.h"
 
 int MIT_MODE_TEXT=1;
 MIT_t text_moto;
 int16_t sendto_MIT_TEXT=1;
+float send_to_MIT_text=0;//发送给电机的值
+/**/
+int MIT_ANGLE_JD_LAST;//上一时刻电机角度
+int MIT_ANGLE_JD_LAST_LAST;//上一时刻电机角度
 
+int MIT_ANGLE_JD_CHANGE;//两个时刻电机角度的变化值
+
+int MIT_SPEED_BY_ANGLE;//根据两次角度之差算出的速度
+int MIT_SPEED_BY_ANGLE_TEMP;//根据两次角度之差算出的速度 临时
+
+int MIT_SPEED_NEW;//临时
+
+	int i_for_speed=1;//多久计算一次速度
 
 /* 把buf中的内容通过CAN接口发送出去 */
 static void CanTransmit(uint8_t *buf, uint8_t len,uint32_t id)
@@ -81,7 +94,6 @@ static uint16_t float_to_uint(float x, float x_min, float x_max, uint8_t bits)
   * @brief  Can总线发送控制参数
   * @param
   * @retval 
-    float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
 
   */
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t)
@@ -129,8 +141,8 @@ float position_HD_text=0;//目标角度-弧度制
 float speed_text=0;//目标速度
 float speed_HD_text=0;//目标速度-弧度制
 
-float kp_text=3;//角度系数 5
-float kv_text=1;//速度系数 1
+float kp_text=0;//角度系数 5  3
+float kv_text=0;//速度系数 1  1
 float NJ_text=0;//目标扭矩
 
 
@@ -158,10 +170,46 @@ if(position_text<-90)position_text=-90;
 	speed_HD_text=P_PID_bate(&MIT_TEXT,position_HD_text,text_moto.position_end);//用弧度制做PID闭环
 
 	speed_text=speed_HD_text*Angle_turn_Radian;//目标速度转角度方便观测
-CanComm_SendControlPara(position_HD_text,speed_HD_text,kp_text,kv_text,0);
 	
+	speed_text_v();
+if(text_moto.ANGLE_JD>-2)send_to_MIT_text=0;
+	
+if(text_moto.ANGLE_JD<-89)send_to_MIT_text=0;	
+	
+CanComm_SendControlPara(position_HD_text,speed_HD_text,kp_text,kv_text,send_to_MIT_text);
+//CanComm_SendControlPara(position_HD_text,speed_HD_text,0,0,0);
 
+	
+/*
+float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
+*/
 	
 }
 
+int speed_add_or_fall;//速度是增大还是减小; 1是增加 2是减小
+float target_speed_text=0;//测试用目标速度
+float target_speed_text_value=140;//测试用目标速度数值,必须为正值
 
+void speed_text_v(void)
+{
+if(text_moto.ANGLE_JD>-10)//
+{
+speed_add_or_fall=2;//开始减小
+}
+if(text_moto.ANGLE_JD<-80)//
+{
+speed_add_or_fall=1;//开始增大
+}
+target_speed_text_value=fabs(target_speed_text_value);
+if(speed_add_or_fall==1)
+{
+target_speed_text=target_speed_text_value;//正速度
+}
+if(speed_add_or_fall==2)
+{
+target_speed_text=-target_speed_text_value;//负速度
+}
+
+send_to_MIT_text=P_PID_bate(&MIT_SPEED_TEXT,target_speed_text,text_moto.SPEED_JD);
+
+}

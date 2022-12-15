@@ -15,6 +15,7 @@ int value_RESUIT;//Êä³öÖµ
 extern LPF_t SPEED_L;
 extern LPF_t SPEED_R;
 extern LPF_t milemeter_A;
+extern LPF_t SPEED_MIT;
 
 
 extern float LPF_a;//

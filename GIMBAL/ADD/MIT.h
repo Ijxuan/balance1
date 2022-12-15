@@ -76,11 +76,25 @@ extern float kv_text;//速度系数
 extern float NJ_text;//目标扭矩
 extern Ramp_Struct MIT_P;//目标位置斜坡
 extern float position_text_TEMP;//目标角度
+extern float target_speed_text_value;//测试用目标速度数值,必须为正值
+extern float send_to_MIT_text;//发送给电机的值
+extern float target_speed_text;//测试用目标速度
+
+extern int MIT_ANGLE_JD_LAST;//上一时刻电机角度
+extern int MIT_SPEED_BY_ANGLE;//根据两次角度之差算出的速度
+extern	int i_for_speed;//多久计算一次速度
+extern int MIT_ANGLE_JD_CHANGE;//两个时刻电机角度的变化值
+extern int MIT_SPEED_BY_ANGLE_TEMP;//根据两次角度之差算出的速度 临时
+extern int MIT_ANGLE_JD_LAST_LAST;//上一时刻电机角度
+extern int MIT_SPEED_NEW;//临时
+
+
 
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t);
 //static uint16_t float_to_uint(float x, float x_min, float x_max, uint8_t bits);
 void MIT_controul(void);
+void speed_text_v(void);
 
 #endif

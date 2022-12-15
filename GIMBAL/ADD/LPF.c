@@ -22,6 +22,8 @@ return value_new;
 LPF_t SPEED_L;
 LPF_t SPEED_R;
 LPF_t milemeter_A;
+LPF_t SPEED_MIT;
+
 int LPF_V2(LPF_t *LPF_VOID,int value_new_void)
 {
 	LPF_VOID->value_new=value_new_void;

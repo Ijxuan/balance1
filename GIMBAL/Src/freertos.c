@@ -530,7 +530,12 @@ ZX.Absolute_Max=660;
 						 //                          float alpha,
 						 10, -10,
 						 35, -35); // //MIT电机  角度环得到速度
-
+		P_PID_Parameter_Init(&MIT_SPEED_TEXT,0.03,0.03,0,4,//-0.00001
+	 //						  float max_error, float min_error,
+	 //                          float alpha,
+	 555, -555,
+	 5, -5); // //MIT电机 速度环
+SPEED_MIT.LPF_K=0.04;
 //Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
   /* USER CODE END Init */
@@ -899,6 +904,8 @@ void Can2_Reivece(void const * argument)
 	//出队的状态变量
 	BaseType_t ExitQueue_Status;
 int i=0;
+int speed_i=0;
+
 	/* Infinite loop */
 	for (;;)
 	{
@@ -935,8 +942,20 @@ text_moto.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.C
 
 			text_moto.position_end=uint_to_float(text_moto.position,P_MIN,P_MAX,16);
 			text_moto.ANGLE_JD=text_moto.position_end* Angle_turn_Radian;
-			
-			text_moto.velocity_end=uint_to_float(text_moto.velocity,V_MIN,V_MAX,12);
+//speed_i++;
+//MIT_SPEED_BY_ANGLE_TEMP+=(text_moto.position-MIT_ANGLE_JD_LAST);
+//			MIT_ANGLE_JD_LAST_LAST=MIT_ANGLE_JD_LAST;
+//MIT_ANGLE_JD_LAST=	text_moto.position;
+//			
+//			if(speed_i>i_for_speed)
+//			{
+//				MIT_SPEED_BY_ANGLE=MIT_SPEED_BY_ANGLE_TEMP;
+//				MIT_SPEED_BY_ANGLE_TEMP=0;
+//				speed_i=0;
+//			}
+				MIT_SPEED_NEW=LPF_V2(&SPEED_MIT,text_moto.velocity)+5;
+
+			text_moto.velocity_end=uint_to_float(MIT_SPEED_NEW,V_MIN,V_MAX,12);
 			text_moto.SPEED_JD=text_moto.velocity_end* Angle_turn_Radian;
 			
 			text_moto.current_end=uint_to_float(text_moto.current,T_MIN,T_MAX,12);
@@ -1075,8 +1094,8 @@ if(DR16.rc.s_left==2)
 MIT_MODE_TEXT=2;//电机失能
 MIT_MODE(MIT_MODE_TEXT);
 
-	position_text_TEMP=-90;//重置目标位置
-position_text=-90;//重置目标位置
+	position_text_TEMP=-1;//重置目标位置
+position_text=-1;//重置目标位置
 
 }
 else if(DR16.rc.s_left==3)

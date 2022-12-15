@@ -59,3 +59,4 @@ ins_task\mit.o: ..\ADD\DR16_RECIVE.h
 ins_task\mit.o: ..\Arithmetic\my_positionPID_bate.h
 ins_task\mit.o: ..\application\INS_task.h
 ins_task\mit.o: ..\application\struct_typedef.h
+ins_task\mit.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

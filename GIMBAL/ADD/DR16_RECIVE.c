@@ -248,7 +248,41 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-											#if 1//MIT 速度环 
+					#if 0//MIT 寻找能用的速度值 
+		
+	p=0;
+			send_d_32[p++]=MIT_SPEED_NEW;//弧度值目标位置		1
+			send_d_32[p++]=text_moto.velocity;//弧度值当前位置		2
+			send_d_32[p++]=2045;//角度制 目标位置		3 
+			send_d_32[p++]= text_moto.SPEED_JD*1000;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MIT_SPEED_BY_ANGLE;////目标速度-弧度制		5
+			send_d_32[p++]=text_moto.velocity;//当前速度-弧度制	6		
+			send_d_32[p++]=MIT_SPEED_NEW;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=0;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=0;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+			#if 1//MIT 单独速度环 
+		
+	p=0;
+			send_d_32[p++]=send_to_MIT_text*100000;//弧度值目标位置		1
+			send_d_32[p++]=MIT_SPEED_BY_ANGLE;//弧度值当前位置		2
+			send_d_32[p++]=position_text*1000;//角度制 目标位置		3 
+			send_d_32[p++]= MIT_SPEED_TEXT.I_Output*100000;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MIT_SPEED_TEXT.P_Output*100000;////目标速度-弧度制		5
+			send_d_32[p++]=text_moto.SPEED_JD*1000;//当前速度-弧度制	6		
+			send_d_32[p++]=target_speed_text*1000;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=0;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=target_speed_text*1000;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+											#if 0//MIT 速度环 
 		
 	p=0;
 			send_d_32[p++]=position_HD_text*10000;//弧度值目标位置		1
