@@ -149,6 +149,28 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
+      <WatchWindow1>
+        <Ww>
+          <count>0</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_B_SPEED.Max_result</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_A_SPEED.Max_result</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_C_SPEED.Max_result</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_D_SPEED.Max_result</ItemText>
+        </Ww>
+      </WatchWindow1>
       <WatchWindow2>
         <Ww>
           <count>0</count>
@@ -184,6 +206,106 @@
           <count>6</count>
           <WinNumber>2</WinNumber>
           <ItemText>target_speed_text_value</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>text_moto,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>target_speed_text_value</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>target_position_text_PID</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_POSITION_TEXT</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>sendto_MIT_TEXT</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_MODE_TEXT</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_RC_TIMES</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>DR16,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_B</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_C,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_C_SPEED</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_OUT</ItemText>
+        </Ww>
+        <Ww>
+          <count>19</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_D_SPEED</ItemText>
+        </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_D_SPEED</ItemText>
+        </Ww>
+        <Ww>
+          <count>21</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_C_SPEED</ItemText>
+        </Ww>
+        <Ww>
+          <count>22</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_A_SPEED</ItemText>
+        </Ww>
+        <Ww>
+          <count>23</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_B_SPEED</ItemText>
+        </Ww>
+        <Ww>
+          <count>24</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>calibration_times,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>25</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_A,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>26</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>MIT_D,0x0A</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>

@@ -525,16 +525,29 @@ ZX.Absolute_Max=660;
 						 0, -0,
 						 12, -12); // //位置环（输入目标位置,得到倾斜角度）						 
 
-	P_PID_Parameter_Init(&MIT_TEXT,25,0.3,0,4,//-0.00001
+	P_PID_Parameter_Init(&MIT_TEXT,25,0.3,0,100,//-0.00001
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 10, -10,
 						 35, -35); // //MIT电机  角度环得到速度
-		P_PID_Parameter_Init(&MIT_SPEED_TEXT,0.03,0.03,0,4,//-0.00001
+		P_PID_Parameter_Init(&MIT_SPEED_TEXT,0.8,0.03,-0.6,4,//-0.00001
 	 //						  float max_error, float min_error,
 	 //                          float alpha,
 	 555, -555,
-	 5, -5); // //MIT电机 速度环
+	 80, -80); // //MIT电机 速度环
+		P_PID_Parameter_Init(&MIT_POSITION_TEXT,1,0.1,0,100,//-0.00001
+	 //						  float max_error, float min_error,
+	 //                          float alpha,
+	 500, -500,
+	 80, -80); // //MIT电机 位置环	 
+	 
+	MIT_PID_INIT(); 
+	 SPEED_MIT_A.LPF_K=0.04;
+	 SPEED_MIT_B.LPF_K=0.04;
+	 SPEED_MIT_C.LPF_K=0.04;
+	 SPEED_MIT_D.LPF_K=0.04;
+	 
+	 
 SPEED_MIT.LPF_K=0.04;
 //Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
@@ -881,7 +894,27 @@ void IMU_Send(void const * argument)
 
 
 #endif
+		if(DR16.rc.s_left==2)
+		{
+if(DR16.rc.ch0<-600&&DR16.rc.ch1<-600&&DR16.rc.ch3<-600&&DR16.rc.ch2>600)
+{
+calibration_times++;
 
+}
+else
+{
+calibration_times=0;
+
+}
+if(calibration_times>500)
+{
+MIT_calibration();
+calibration_times=-10000;
+	Buzzer.mode = One_times;
+}
+		}
+		
+		
 		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 	}
   /* USER CODE END IMU_Send */
@@ -965,8 +998,137 @@ text_moto.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.C
 			MIT_RC_Process_TIMES++;
 		}
 	}
-
+    if(CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_A_MASTER_ID)
+	{
+	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_A_SLAVE_ID)
+		{
 			
+			for(int x=0;x<6;x++)
+			{
+		MIT_A.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
+			}
+MIT_A.position=(CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
+			
+MIT_A.velocity=
+(((CAN2_Rx_Structure.CAN_RxMessageData[4])>>4 )| 
+(CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
+			
+MIT_A.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4]&0xF) << 8);
+
+			MIT_A.position_end=uint_to_float(MIT_A.position,P_MIN,P_MAX,16);
+			MIT_A.ANGLE_JD=MIT_A.position_end* Angle_turn_Radian;
+
+				MIT_A.MIT_SPEED_TEMP=LPF_V2(&SPEED_MIT_A,MIT_A.velocity)+5;
+
+			MIT_A.velocity_end=uint_to_float(MIT_A.MIT_SPEED_TEMP,V_MIN,V_MAX,12);
+			MIT_A.SPEED_JD=MIT_A.velocity_end* Angle_turn_Radian;
+			
+			MIT_A.current_end=uint_to_float(MIT_A.current,T_MIN,T_MAX,12);
+			
+			
+		
+		}
+		MIT_A.RC_TIMES++;
+	}
+
+    if(CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_B_MASTER_ID)
+	{
+	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_B_SLAVE_ID)
+		{
+			
+			for(int x=0;x<6;x++)
+			{
+		MIT_B.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
+			}
+MIT_B.position=(CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
+			
+MIT_B.velocity=
+(((CAN2_Rx_Structure.CAN_RxMessageData[4])>>4 )| 
+(CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
+			
+MIT_B.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4]&0xF) << 8);
+
+			MIT_B.position_end=uint_to_float(MIT_B.position,P_MIN,P_MAX,16);
+			MIT_B.ANGLE_JD=MIT_B.position_end* Angle_turn_Radian;
+
+				MIT_B.MIT_SPEED_TEMP=LPF_V2(&SPEED_MIT_B,MIT_B.velocity)+5;
+
+			MIT_B.velocity_end=uint_to_float(MIT_B.MIT_SPEED_TEMP,V_MIN,V_MAX,12);
+			MIT_B.SPEED_JD=MIT_B.velocity_end* Angle_turn_Radian;
+			
+			MIT_B.current_end=uint_to_float(MIT_B.current,T_MIN,T_MAX,12);
+			
+			
+		
+		}
+		MIT_B.RC_TIMES++;
+	}
+
+    if(CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_C_MASTER_ID)
+	{
+	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_C_SLAVE_ID)
+		{
+			
+			for(int x=0;x<6;x++)
+			{
+		MIT_C.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
+			}
+MIT_C.position=(CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
+			
+MIT_C.velocity=
+(((CAN2_Rx_Structure.CAN_RxMessageData[4])>>4 )| 
+(CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
+			
+MIT_C.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4]&0xF) << 8);
+
+			MIT_C.position_end=uint_to_float(MIT_C.position,P_MIN,P_MAX,16);
+			MIT_C.ANGLE_JD=MIT_C.position_end* Angle_turn_Radian;
+
+				MIT_C.MIT_SPEED_TEMP=LPF_V2(&SPEED_MIT_C,MIT_C.velocity)+5;
+
+			MIT_C.velocity_end=uint_to_float(MIT_C.MIT_SPEED_TEMP,V_MIN,V_MAX,12);
+			MIT_C.SPEED_JD=MIT_C.velocity_end* Angle_turn_Radian;
+			
+			MIT_C.current_end=uint_to_float(MIT_C.current,T_MIN,T_MAX,12);
+			
+			
+		
+		}
+		MIT_C.RC_TIMES++;
+	}
+    if(CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_D_MASTER_ID)
+	{
+	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_D_SLAVE_ID)
+		{
+			
+			for(int x=0;x<6;x++)
+			{
+		MIT_D.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
+			}
+MIT_D.position=(CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
+			
+MIT_D.velocity=
+(((CAN2_Rx_Structure.CAN_RxMessageData[4])>>4 )| 
+(CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
+			
+MIT_D.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4]&0xF) << 8);
+
+			MIT_D.position_end=uint_to_float(MIT_D.position,P_MIN,P_MAX,16);
+			MIT_D.ANGLE_JD=MIT_D.position_end* Angle_turn_Radian;
+
+				MIT_D.MIT_SPEED_TEMP=LPF_V2(&SPEED_MIT_D,MIT_D.velocity)+5;
+
+			MIT_D.velocity_end=uint_to_float(MIT_D.MIT_SPEED_TEMP,V_MIN,V_MAX,12);
+			MIT_D.SPEED_JD=MIT_D.velocity_end* Angle_turn_Radian;
+			
+			MIT_D.current_end=uint_to_float(MIT_D.current,T_MIN,T_MAX,12);
+			
+			
+		
+		}
+		MIT_D.RC_TIMES++;
+	}
+	
 		}
 	}
 	//    osDelay(1);
@@ -1092,18 +1254,27 @@ send_to_tire_L=0;
 if(DR16.rc.s_left==2)
 {
 MIT_MODE_TEXT=2;//电机失能
-MIT_MODE(MIT_MODE_TEXT);
-
+//MIT_MODE(MIT_MODE_TEXT);
+	
+DISABLE_ALL_MIT();//失能所有电机
+	MIT_A_SPEED.Min_result=MIT_A_SPEED.Max_result=0;
+	MIT_B_SPEED.Min_result=MIT_B_SPEED.Max_result=0;
+	MIT_C_SPEED.Min_result=MIT_C_SPEED.Max_result=0;
+	MIT_D_SPEED.Min_result=MIT_D_SPEED.Max_result=0;
+	MIT_OUT.Current_Value=0;
+	if(MIT_B.ANGLE_JD<30)liftoff_R=75;
+	else liftoff_R=75;
 	position_text_TEMP=-1;//重置目标位置
 position_text=-1;//重置目标位置
-
+target_position_text_PID=text_moto.ANGLE_JD;
 }
 else if(DR16.rc.s_left==3)
 {
 	if(MIT_MODE_TEXT!=1)
 	{
 MIT_MODE_TEXT=1;
-		MIT_MODE(MIT_MODE_TEXT);//使能电机
+//		MIT_MODE(MIT_MODE_TEXT);//使能电机
+		ALL_MIT_ENTER_MOTO_MODE();//使能所有电机
 	}
 	else
 	{

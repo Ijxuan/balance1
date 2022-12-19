@@ -23,6 +23,10 @@ LPF_t SPEED_L;
 LPF_t SPEED_R;
 LPF_t milemeter_A;
 LPF_t SPEED_MIT;
+LPF_t SPEED_MIT_A;
+LPF_t SPEED_MIT_B;
+LPF_t SPEED_MIT_C;
+LPF_t SPEED_MIT_D;
 
 int LPF_V2(LPF_t *LPF_VOID,int value_new_void)
 {

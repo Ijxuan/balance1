@@ -16,7 +16,10 @@ extern LPF_t SPEED_L;
 extern LPF_t SPEED_R;
 extern LPF_t milemeter_A;
 extern LPF_t SPEED_MIT;
-
+extern LPF_t SPEED_MIT_A;
+extern LPF_t SPEED_MIT_B;
+extern LPF_t SPEED_MIT_C;
+extern LPF_t SPEED_MIT_D;
 
 extern float LPF_a;//
 extern float LPF_b;//

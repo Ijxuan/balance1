@@ -236,6 +236,7 @@ float send_to_pitch_before=0;
 int MIT_RC_TIMES=0;
 int MIT_RC_Process_TIMES=0;
 
+int calibration_times=0;//校准累计计时
 /* USER CODE END 0 */
 
 /**

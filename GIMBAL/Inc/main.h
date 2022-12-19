@@ -266,6 +266,7 @@ extern float send_to_pitch_before;
 
 extern int MIT_RC_TIMES;
 extern int MIT_RC_Process_TIMES;
+extern int calibration_times;
 
 /* USER CODE END Private defines */
 
