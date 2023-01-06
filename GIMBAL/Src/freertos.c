@@ -911,6 +911,14 @@ if(calibration_times>500)
 MIT_calibration();
 calibration_times=-10000;
 	Buzzer.mode = One_times;
+	
+						if(MIT_MODE_TEXT!=2)//还没有失能电机//校准时还有强制失能的作用
+				{
+		DISABLE_ALL_MIT();//失能所有电机
+				MIT_MODE_TEXT=2;//电机失能
+				}
+	
+	
 }
 		}
 		
@@ -960,7 +968,6 @@ int speed_i=0;
 	MIT_RC_TIMES++;
 	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== TEST_MIT_SLAVE_ID)
 		{
-			
 			for(int x=0;x<6;x++)
 			{
 		text_moto.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
@@ -1002,7 +1009,8 @@ text_moto.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.C
 	{
 	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_A_SLAVE_ID)
 		{
-			
+					Get_FPS(&FPS_ALL.MIT_A.WorldTimes,   &FPS_ALL.MIT_A.FPS);
+
 			for(int x=0;x<6;x++)
 			{
 		MIT_A.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
@@ -1035,7 +1043,8 @@ MIT_A.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_R
 	{
 	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_B_SLAVE_ID)
 		{
-			
+							Get_FPS(&FPS_ALL.MIT_B.WorldTimes,   &FPS_ALL.MIT_B.FPS);
+	
 			for(int x=0;x<6;x++)
 			{
 		MIT_B.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
@@ -1068,7 +1077,8 @@ MIT_B.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_R
 	{
 	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_C_SLAVE_ID)
 		{
-			
+			Get_FPS(&FPS_ALL.MIT_C.WorldTimes,   &FPS_ALL.MIT_C.FPS);
+
 			for(int x=0;x<6;x++)
 			{
 		MIT_C.MIT_RAW_DATA[x]=	CAN2_Rx_Structure.CAN_RxMessageData[x];
@@ -1100,6 +1110,7 @@ MIT_C.current=(CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_R
 	{
 	    if(CAN2_Rx_Structure.CAN_RxMessageData[0]== MIT_D_SLAVE_ID)
 		{
+					Get_FPS(&FPS_ALL.MIT_D.WorldTimes,   &FPS_ALL.MIT_D.FPS);
 			
 			for(int x=0;x<6;x++)
 			{
@@ -1253,38 +1264,65 @@ send_to_tire_L=0;
 
 if(DR16.rc.s_left==2)
 {
-MIT_MODE_TEXT=2;//电机失能
 //MIT_MODE(MIT_MODE_TEXT);
-	
-DISABLE_ALL_MIT();//失能所有电机
-	MIT_A_SPEED.Min_result=MIT_A_SPEED.Max_result=0;
-	MIT_B_SPEED.Min_result=MIT_B_SPEED.Max_result=0;
-	MIT_C_SPEED.Min_result=MIT_C_SPEED.Max_result=0;
-	MIT_D_SPEED.Min_result=MIT_D_SPEED.Max_result=0;
-	MIT_OUT.Current_Value=0;
-	if(MIT_B.ANGLE_JD<30)liftoff_R=75;
-	else liftoff_R=75;
+//	MIT_A_SPEED.Min_result=MIT_A_SPEED.Max_result=0;
+//	MIT_B_SPEED.Min_result=MIT_B_SPEED.Max_result=0;
+//	MIT_C_SPEED.Min_result=MIT_C_SPEED.Max_result=0;
+//	MIT_D_SPEED.Min_result=MIT_D_SPEED.Max_result=0;
+			if(send_to_MIT_damping<0.1f)
+			{
+					if(MIT_MODE_TEXT!=2)//还没有失能电机
+					{
+					MIT_MODE_TEXT=2;//电机失能
+					}
+					DISABLE_ALL_MIT();//失能所有电机
+					
+			}
+			else
+				{
+			send_to_MIT_damping-=0.0005;	//两秒失能
+//			SEND_TO_MIT_MAX.Target_Value=0;
+//			MAX_OUT=Ramp_Function(&SEND_TO_MIT_MAX);
+			}
+//	if(MIT_B.ANGLE_JD<30)liftoff_R=75;
+//	else
+		liftoff_R=5;
 	position_text_TEMP=-1;//重置目标位置
 position_text=-1;//重置目标位置
 target_position_text_PID=text_moto.ANGLE_JD;
+			MIT_DISABLE_TIMES	++;
+
+			
 }
-else if(DR16.rc.s_left==3)
+ if(DR16.rc.s_left==3)
 {
+//	SEND_TO_MIT_MAX.Target_Value=70;
+//	MAX_OUT=Ramp_Function(&SEND_TO_MIT_MAX);
+			if(send_to_MIT_damping<1.0f)
+			{
+send_to_MIT_damping+=0.0005;	//两秒启动
+			}
+
 	if(MIT_MODE_TEXT!=1)
 	{
-MIT_MODE_TEXT=1;
 //		MIT_MODE(MIT_MODE_TEXT);//使能电机
+		{
 		ALL_MIT_ENTER_MOTO_MODE();//使能所有电机
+		run_MIT_ENTER_MOTO_MODE_times++;
+			if(run_MIT_ENTER_MOTO_MODE_times>4)
+			{
+			run_MIT_ENTER_MOTO_MODE_times=0;
+MIT_MODE_TEXT=1;
+			}
+	}
 	}
 	else
-	{
+	{	
 	MIT_controul();
-	
 	}
-	
-
+MIT_ENABLE_TIMES=MIT_ENABLE_TIMES+1;
 }
-else if(DR16.rc.s_left==1)
+if(DR16.rc.s_left==1)
 {
 	if(sendto_MIT_TEXT==1)
 			{
@@ -1293,8 +1331,6 @@ else if(DR16.rc.s_left==1)
 		}
 
 }
-
-
 
 
 vTaskDelayUntil(&xLastWakeTime, TimeIncrement);

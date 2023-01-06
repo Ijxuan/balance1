@@ -248,6 +248,47 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
+							#if 1//MIT ABCD 发射接收丢帧监测
+		
+	p=0;
+			send_d_32[p++]=MIT_A.RC_TIMES;//弧度值目标位置		1
+			send_d_32[p++]=MIT_A.TX_TIMES;//弧度值当前位置		2
+		
+			send_d_32[p++]=MIT_B.RC_TIMES;//角度制 目标位置		3 
+		
+			send_d_32[p++]= MIT_B.TX_TIMES;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MIT_C.RC_TIMES;////目标速度-弧度制		5
+		
+			send_d_32[p++]=MIT_C.TX_TIMES;//当前速度-弧度制	6		
+			send_d_32[p++]=MIT_D.RC_TIMES;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_D.TX_TIMES;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=MIT_B.MIT_TSZ*10;//实际       	9
+			send_d_16[p++]=liftoff_R*10;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+		
+							#if 0//斜坡函数怎么了?
+		
+	p=0;
+			send_d_32[p++]=SEND_TO_MIT_MAX.Current_Value*10;//弧度值目标位置		1
+			send_d_32[p++]=SEND_TO_MIT_MAX.Target_Value*10;//弧度值当前位置		2
+		
+			send_d_32[p++]=SEND_TO_MIT_MAX.Rate*1000;//角度制 目标位置		3 
+		
+			send_d_32[p++]= SEND_TO_MIT_MAX.Absolute_Max*10;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MAX_OUT*10;////目标速度-弧度制		5
+		
+			send_d_32[p++]=MAX_OUT;//当前速度-弧度制	6		
+			send_d_32[p++]=send_to_MIT_damping*10000;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_DISABLE_TIMES	;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=MIT_ENABLE_TIMES;//实际       	9
+			send_d_16[p++]=liftoff_R*10;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
 											#if 0//MIT C和D 运行监测
 		
 	p=0;
@@ -350,7 +391,7 @@ void NM_swj(void)
 			send_d_16[p++]=liftoff_R;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif	
-					#if 1//MIT B 运行监测
+					#if 0//MIT B 运行监测
 		
 	p=0;
 			send_d_32[p++]=MIT_B.ANGLE_JD*10;//弧度值目标位置		1
@@ -361,7 +402,7 @@ void NM_swj(void)
 			send_d_32[p++]= MIT_B_SPEED.Target*1000;//角度制 当前位置 4		4PID_YES
 			send_d_32[p++]=MIT_B.SPEED_JD*1000;////目标速度-弧度制		5
 		
-			send_d_32[p++]=text_moto.SPEED_JD*1000;//当前速度-弧度制	6		
+			send_d_32[p++]=MAX_OUT;//当前速度-弧度制	6		
 			send_d_32[p++]=MIT_B_SPEED.Max_result;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B.MIT_TZG*10;//测试用目标速度数值,必须为正值;//输出电压      8

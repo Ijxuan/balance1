@@ -29,7 +29,11 @@ typedef struct
 	FPS_type CHASSIS_PLACE;
 	FPS_type DEBUG;
 
-	
+	FPS_type MIT_A;
+	FPS_type MIT_B;
+	FPS_type MIT_C;
+	FPS_type MIT_D;
+
 }FPS_ALL_type;
 
 extern FPS_ALL_type FPS_ALL;

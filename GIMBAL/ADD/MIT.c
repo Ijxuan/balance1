@@ -54,10 +54,8 @@ void MIT_PID_INIT(void)
 	 500, -500,
 	 80, -80); // //MIT电机 位置环	 
 	
-	MIT_OUT.Absolute_Max=80;
-	MIT_OUT.Rate=0.001;
-	
-
+	SEND_TO_MIT_MAX.Rate=0.15;
+	SEND_TO_MIT_MAX.Absolute_Max=80;
 }
 
 
@@ -88,6 +86,12 @@ int MIT_SPEED_NEW;//临时
 	int i_for_speed=1;//多久计算一次速度
 
 int L_OR_R=0;
+
+float send_to_MIT_damping=0;//发送给电机的值的衰减
+
+int MIT_DISABLE_TIMES=0;//电机失能时间累计
+int MIT_ENABLE_TIMES=0;//电机使能时间累计
+
 /* 把buf中的内容通过CAN接口发送出去 */
 static void CanTransmit(uint8_t *buf, uint8_t len,uint32_t id)
 {
@@ -213,9 +217,13 @@ float kp_text=0;//角度系数 5  3
 float kv_text=0;//速度系数 1  1
 float NJ_text=0;//目标扭矩
 
+float MAX_OUT=0;//最大输出
 
 Ramp_Struct MIT_P;//目标位置斜坡
-Ramp_Struct MIT_OUT;
+
+Ramp_Struct SEND_TO_MIT_MAX;//
+
+
 void MIT_controul(void)
 {
 	
@@ -230,18 +238,18 @@ void MIT_controul(void)
 //MIT_P.Target_Value=position_text_TEMP;//斜坡目标值
 //	MIT_P.Current_Value=position_text;//斜坡当前值
 //	position_text=Ramp_Function(&MIT_P);
-	MIT_OUT.Target_Value=60;
-	MIT_P.Current_Value=MIT_B_SPEED.Max_result;
-	MIT_B_SPEED.Max_result=Ramp_Function(&MIT_OUT);
-	MIT_B_SPEED.Min_result=-MIT_B_SPEED.Max_result;
+
 	
-	MIT_A_SPEED.Max_result=MIT_B_SPEED.Max_result;
-	MIT_C_SPEED.Max_result=MIT_B_SPEED.Max_result;
-	MIT_D_SPEED.Max_result=MIT_B_SPEED.Max_result;
+//	MIT_B_SPEED.Max_result=MAX_OUT;
+//	MIT_A_SPEED.Max_result=MAX_OUT;
+//	MIT_C_SPEED.Max_result=MAX_OUT;
+//	MIT_D_SPEED.Max_result=MAX_OUT;
+//	
+//	MIT_B_SPEED.Min_result=-MAX_OUT;
+//	MIT_A_SPEED.Min_result=-MAX_OUT;
+//	MIT_C_SPEED.Min_result=-MAX_OUT;
+//	MIT_D_SPEED.Min_result=-MAX_OUT;
 	
-	MIT_A_SPEED.Min_result=MIT_B_SPEED.Min_result;
-	MIT_C_SPEED.Min_result=MIT_B_SPEED.Min_result;
-	MIT_D_SPEED.Min_result=MIT_B_SPEED.Min_result;	
 //if(position_text>-1)position_text=-1;
 //	
 //if(position_text<-90)position_text=-90;
@@ -273,12 +281,12 @@ if(target_position_text_PID<-1)target_position_text_PID=-1;
 L_OR_R++;
 if(L_OR_R%2==0)
 {
-MIT_B_controul();
-MIT_A_controul();	
+//MIT_B_controul();
+//MIT_A_controul();	
 }
 else{
-MIT_C_controul();
-MIT_D_controul();
+//MIT_C_controul();
+//MIT_D_controul();
 }
 /*
 float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
@@ -353,7 +361,7 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
 if(liftoff_R>90)liftoff_R=90;
 	
-if(liftoff_R<10)liftoff_R=10;	
+if(liftoff_R<5)liftoff_R=5;	
 	liftoff_L=liftoff_R;
 	MIT_B.target_position=MIT_B.MIT_TZG-liftoff_R;//腿伸直是-125.9度 增加一个正值(liftoff_R)
 	
@@ -368,7 +376,7 @@ MIT_B_SPEED.Target=P_PID_bate(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_
 	
 
 	
-MIT_B.send_to_MIT=P_PID_bate(&MIT_B_SPEED,MIT_B_SPEED.Target,MIT_B.SPEED_JD)/10.0f;
+MIT_B.send_to_MIT=P_PID_bate(&MIT_B_SPEED,MIT_B_SPEED.Target,MIT_B.SPEED_JD)/10.0f*send_to_MIT_damping;
 
 if(MIT_B.ANGLE_JD>MIT_B.MIT_TZG+1)MIT_B.send_to_MIT=0;
 	
@@ -417,7 +425,7 @@ MIT_A_SPEED.Target=P_PID_bate(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_
 	
 
 	
-MIT_A.send_to_MIT=P_PID_bate(&MIT_A_SPEED,MIT_A_SPEED.Target,MIT_A.SPEED_JD)/10.0f;
+MIT_A.send_to_MIT=P_PID_bate(&MIT_A_SPEED,MIT_A_SPEED.Target,MIT_A.SPEED_JD)/10.0f*send_to_MIT_damping;
 
 if(MIT_A.ANGLE_JD>MIT_A.MIT_TSZ+1)MIT_A.send_to_MIT=0;
 	
@@ -446,7 +454,7 @@ MIT_C_SPEED.Target=P_PID_bate(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_
 	
 
 	
-MIT_C.send_to_MIT=P_PID_bate(&MIT_C_SPEED,MIT_C_SPEED.Target,MIT_C.SPEED_JD)/10.0f;
+MIT_C.send_to_MIT=P_PID_bate(&MIT_C_SPEED,MIT_C_SPEED.Target,MIT_C.SPEED_JD)/10.0f*send_to_MIT_damping;
 
 if(MIT_C.ANGLE_JD>MIT_C.MIT_TSZ+1)MIT_C.send_to_MIT=0;
 	
@@ -478,7 +486,7 @@ MIT_D_SPEED.Target=P_PID_bate(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_
 	
 
 	
-MIT_D.send_to_MIT=P_PID_bate(&MIT_D_SPEED,MIT_D_SPEED.Target,MIT_D.SPEED_JD)/10.0f;
+MIT_D.send_to_MIT=P_PID_bate(&MIT_D_SPEED,MIT_D_SPEED.Target,MIT_D.SPEED_JD)/10.0f*send_to_MIT_damping;
 
 if(MIT_D.ANGLE_JD>MIT_D.MIT_TZG+1)MIT_D.send_to_MIT=0;
 	
@@ -490,32 +498,51 @@ if(MIT_D.ANGLE_JD<MIT_D.MIT_TSZ-1)MIT_D.send_to_MIT=0;
 
 
 }
-
+int send_to_MIT_L_or_R=0;
+int run_MIT_ENTER_MOTO_MODE_times=0;
 void ALL_MIT_ENTER_MOTO_MODE(void)
 {
     uint8_t buf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC};
+	send_to_MIT_L_or_R++;
+	if(send_to_MIT_L_or_R%2==0)
+	{
 CAN_SendData(&hcan2,CAN_ID_STD,MIT_B_SLAVE_ID,buf);
-	vTaskDelay(1);
+//	vTaskDelay(1);
 CAN_SendData(&hcan2,CAN_ID_STD,MIT_A_SLAVE_ID,buf);
-	vTaskDelay(1);
+//	vTaskDelay(1);
+	}
+	else
+	{
 CAN_SendData(&hcan2,CAN_ID_STD,MIT_C_SLAVE_ID,buf);
-		vTaskDelay(1);
-
+//		vTaskDelay(1);
 CAN_SendData(&hcan2,CAN_ID_STD,MIT_D_SLAVE_ID,buf);
-
+	}
 
 }
 void DISABLE_ALL_MIT(void)//失能所有电机
 {
-    uint8_t buf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFD};
-CAN_SendData(&hcan2,CAN_ID_STD,MIT_B_SLAVE_ID,buf);
-		vTaskDelay(1);
-CAN_SendData(&hcan2,CAN_ID_STD,MIT_A_SLAVE_ID,buf);
-	vTaskDelay(1);
-CAN_SendData(&hcan2,CAN_ID_STD,MIT_C_SLAVE_ID,buf);
-		vTaskDelay(1);
-CAN_SendData(&hcan2,CAN_ID_STD,MIT_D_SLAVE_ID,buf);
-	
+    uint8_t buf_1[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFD};
+	send_to_MIT_L_or_R++;
+	if(send_to_MIT_L_or_R%2==0)
+	{
+CAN_SendData(&hcan2,CAN_ID_STD,MIT_B_SLAVE_ID,buf_1);
+		MIT_A.TX_TIMES++;
+//		vTaskDelay(1);
+CAN_SendData(&hcan2,CAN_ID_STD,MIT_A_SLAVE_ID,buf_1);
+				MIT_B.TX_TIMES++;
+
+//	vTaskDelay(1);
+	}
+	else
+	{
+CAN_SendData(&hcan2,CAN_ID_STD,MIT_C_SLAVE_ID,buf_1);
+						MIT_C.TX_TIMES++;
+
+//		vTaskDelay(1);
+CAN_SendData(&hcan2,CAN_ID_STD,MIT_D_SLAVE_ID,buf_1);
+								MIT_D.TX_TIMES++;
+
+	}
 MIT_B.target_position=MIT_B.ANGLE_JD;
 MIT_A.target_position=MIT_A.ANGLE_JD;
 MIT_C.target_position=MIT_C.ANGLE_JD;

@@ -68,7 +68,9 @@ typedef struct
 		float ANGLE_JD; //角度 
 			float SPEED_JD; //角度 
 
-int RC_TIMES;	
+int RC_TIMES;//接收次数
+int TX_TIMES;//发送次数
+	
 float send_to_MIT;//发送给电机的值
 float	target_position;//目标角度
 uint8_t MIT_RAW_DATA[8];//接收到的电机发来的原始数据
@@ -113,7 +115,14 @@ extern float target_position_text_PID;//PID测试用目标位置
 extern float liftoff_R;//右边离地高度
 extern float liftoff_L;//左边离地高度
 
-extern Ramp_Struct MIT_OUT;
+extern float MAX_OUT;//最大输出
+extern Ramp_Struct SEND_TO_MIT_MAX;//
+extern float send_to_MIT_damping;//发送给电机的值的衰减
+
+extern int MIT_DISABLE_TIMES;//电机失能时间累计
+extern int MIT_ENABLE_TIMES;//电机使能时间累计
+
+extern int run_MIT_ENTER_MOTO_MODE_times;
 
 
 void MIT_MODE(uint8_t MODE);
