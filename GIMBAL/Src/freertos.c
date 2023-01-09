@@ -59,6 +59,7 @@
 #include "LPF.h"
 #include "CAN2_SEND.h"
 #include "MIT.h"
+#include "MIT_INIT.h"
 
 /* USER CODE END Includes */
 
@@ -904,11 +905,31 @@ calibration_times++;
 else
 {
 calibration_times=0;
+}
+
+if(DR16.rc.ch0>600&&DR16.rc.ch1>600&&DR16.rc.ch3>600&&DR16.rc.ch2<-600)
+{
+flash_read_times++;
 
 }
+else
+{
+flash_read_times=0;
+}
+
+if(flash_read_times>500)
+{
+flash_read_times=-10000;
+	MIT_init_angle_read_from_flash();
+	Buzzer.mode = One_times;
+
+}
+
 if(calibration_times>500)
 {
-MIT_calibration();
+//MIT_calibration();
+//	MIT_init_angle_read_from_flash();
+	MIT_init_angle_WRITE_to_flash();
 calibration_times=-10000;
 	Buzzer.mode = One_times;
 	
@@ -1232,6 +1253,8 @@ void Robot_Control(void const *argument)
 
     vTaskDelay(1000);
     vTaskDelay(1000);
+	MIT_init_angle_read_from_flash();
+	Buzzer.mode = Three_times;
 
 	/* Infinite loop */
 	for (;;)

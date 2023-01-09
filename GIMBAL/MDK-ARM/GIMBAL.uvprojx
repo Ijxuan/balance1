@@ -529,6 +529,11 @@
               <FileType>1</FileType>
               <FilePath>..\ADD\MIT.c</FilePath>
             </File>
+            <File>
+              <FileName>MIT_INIT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\MIT_INIT.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

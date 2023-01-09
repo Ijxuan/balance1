@@ -42,8 +42,8 @@ typedef enum
 {
     CALI_GYRO = 0,
     //add more...
-    CALI_LIST_LENGHT,
-} cali_id_e;
+    CALI_LIST_LENGHT,//1
+} cali_id_e;/*枚举类型的值默认是连续的自然数 */
 #pragma anon_unions
 typedef  struct
 {

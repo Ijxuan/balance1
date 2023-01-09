@@ -49,6 +49,8 @@
 //弧度转角度要用到
 #define LIMIT_MIN_MAX(x,min,max) (x) = (((x)<=(min))?(min):(((x)>=(max))?(max):(x)))
 
+
+
 //#define Angle_turn_Radian_MIT 57.295779513082320876798154814105f
 
 typedef struct
@@ -78,6 +80,10 @@ uint8_t MIT_RAW_DATA[8];//接收到的电机发来的原始数据
 	float MIT_TZG;//抬最高
 	float MIT_TSZ;//腿伸直
 } MIT_t;
+
+
+
+
 extern MIT_t text_moto;
 extern MIT_t MIT_A;
 extern MIT_t MIT_B;

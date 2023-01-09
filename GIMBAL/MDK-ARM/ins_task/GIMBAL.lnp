@@ -24,6 +24,7 @@
 "ins_task\vision.o"
 "ins_task\oled.o"
 "ins_task\mit.o"
+"ins_task\mit_init.o"
 "ins_task\main.o"
 "ins_task\gpio.o"
 "ins_task\freertos.o"

@@ -245,9 +245,12 @@ static void cali_data_read(void)
     {
 
         //read the data in flash, 
-				//由于他是以32位（即4个字节）进行读取的，所以cali_sensor[i].flash_len的初始化那里通过sizeof()算出来的长度（字节数）需要 /4
+				//由于他是以32位（即4个字节）进行读取的，
+		//所以cali_sensor[i].flash_len的初始化那里通过sizeof()算出来的长度（字节数）需要 /4
         cali_flash_read(FLASH_USER_ADDR + offset, cali_sensor[i].flash_buf, cali_sensor[i].flash_len);
-        //而内存的存储以字节为单位，所以它是读取cali_sensor[i].flash_len长度的32位（即4个字节）的数据，那么实际上读取的字节数：cali_sensor[i].flash_len * 4 所以地址也应该增加这么多
+        //而内存的存储以字节为单位，
+		//所以它是读取cali_sensor[i].flash_len长度的32位（即4个字节）的数据，
+		//那么实际上读取的字节数：cali_sensor[i].flash_len * 4 所以地址也应该增加这么多
         offset += cali_sensor[i].flash_len * 4;
 
         //read the name and cali flag,
