@@ -10,23 +10,26 @@ void MIT_PID_INIT(void)
 	 //                          float alpha,
 	 555, -555,
 	 60, -60); // //MIT电机 速度环
-		P_PID_Parameter_Init(&MIT_A_POSITION,1,0.1,0,100,//-0.00001
+		P_PID_V2_Init(&MIT_A_POSITION,4,0.25,0,100,//-0.00001
 	 //						  float max_error, float min_error,
 	 //                          float alpha,
-	 500, -500,
-	 80, -80); // //MIT电机 位置环	 
-	
+	 50, -50,
+	 0.8,-0.8,
+	 350,-350,
+	 100, -100); // //MIT电机 位置环	
 	
 			P_PID_Parameter_Init(&MIT_B_SPEED,0.8,0.03,-0.6,4,//-0.00001
 	 //						  float max_error, float min_error,
 	 //                          float alpha,
 	 555, -555,
 	 60, -60); // //MIT电机 速度环
-		P_PID_Parameter_Init(&MIT_B_POSITION,1,0.1,0,100,//-0.00001
+		P_PID_V2_Init(&MIT_B_POSITION,4,0.25,0,100,//-0.00001
 	 //						  float max_error, float min_error,
 	 //                          float alpha,
-	 500, -500,
-	 80, -80); // //MIT电机 位置环	 
+	 50, -50,
+	 0.8,-0.8,
+	 350,-350,
+	 100, -100); // //MIT电机 位置环	 
 	 
 	 
 	 
@@ -35,12 +38,13 @@ void MIT_PID_INIT(void)
 	 //                          float alpha,
 	 555, -555,
 	 60, -60); // //MIT电机 速度环
-		P_PID_Parameter_Init(&MIT_C_POSITION,1,0.1,0,100,//-0.00001
+		P_PID_V2_Init(&MIT_C_POSITION,4,0.25,0,100,//-0.00001
 	 //						  float max_error, float min_error,
 	 //                          float alpha,
-	 500, -500,
-	 80, -80); // //MIT电机 位置环	 
-	 
+	 50, -50,
+	 0.8,-0.8,
+	 350,-350,
+	 100, -100); // //MIT电机 位置环	 
 	 
 	 
 	 		P_PID_Parameter_Init(&MIT_D_SPEED,0.8,0.03,-0.6,4,//-0.00001
@@ -48,14 +52,27 @@ void MIT_PID_INIT(void)
 	 //                          float alpha,
 	 555, -555,
 	 60, -60); // //MIT电机 速度环
-		P_PID_Parameter_Init(&MIT_D_POSITION,1,0.1,0,100,//-0.00001
+	 		P_PID_V2_Init(&MIT_D_POSITION,4,0.25,0,100,//-0.00001
 	 //						  float max_error, float min_error,
 	 //                          float alpha,
-	 500, -500,
-	 80, -80); // //MIT电机 位置环	 
+	 50, -50,
+	 0.8,-0.8,
+	 350,-350,
+	 100, -100); // //MIT电机 位置环
 	
 	SEND_TO_MIT_MAX.Rate=0.15;
 	SEND_TO_MIT_MAX.Absolute_Max=80;
+	MIT_A.kp_temp=3;
+	MIT_A.kv_temp=0;
+	
+	MIT_B.kp_temp=6;
+	MIT_B.kv_temp=2.2;
+	
+	MIT_C.kp_temp=6;
+	MIT_C.kv_temp=2.2;
+	
+	MIT_D.kp_temp=6;
+	MIT_D.kv_temp=2.2;
 }
 
 
@@ -281,8 +298,13 @@ if(target_position_text_PID<-1)target_position_text_PID=-1;
 L_OR_R++;
 if(L_OR_R%2==0)
 {
+	liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
+if(liftoff_R>90)liftoff_R=90;
+if(liftoff_R<1)liftoff_R=1;	
+	liftoff_L=liftoff_R;
+	
 //MIT_B_controul();
-//MIT_A_controul();	
+MIT_A_controul();	
 }
 else{
 //MIT_C_controul();
@@ -358,32 +380,39 @@ if(MIT_B.ANGLE_JD<-126.2)MIT_B.send_to_MIT=0;
 //-25.6  -125.9
 CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 */
-liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
-if(liftoff_R>90)liftoff_R=90;
-	
-if(liftoff_R<5)liftoff_R=5;	
-	liftoff_L=liftoff_R;
+
 	MIT_B.target_position=MIT_B.MIT_TZG-liftoff_R;//腿伸直是-125.9度 增加一个正值(liftoff_R)
 	
 //	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
 
-if(MIT_B.target_position>MIT_B.MIT_TSZ+5)MIT_B.target_position=MIT_B.MIT_TSZ+5;
+if(MIT_B.target_position<MIT_B.MIT_TSZ-1)MIT_B.target_position=MIT_B.MIT_TSZ-1;
 	
-if(MIT_B.target_position<MIT_B.MIT_TZG-5)MIT_B.target_position=MIT_B.MIT_TZG-5;	
+if(MIT_B.target_position>MIT_B.MIT_TZG+1)MIT_B.target_position=MIT_B.MIT_TZG+1;	
 	
 	
-MIT_B_SPEED.Target=P_PID_bate(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
-	
+//MIT_B_SPEED.Target=P_PID_bate(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
+//	
+MIT_B.target_speed=P_PID_bate_V2(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
 
-	
-MIT_B.send_to_MIT=P_PID_bate(&MIT_B_SPEED,MIT_B_SPEED.Target,MIT_B.SPEED_JD)/10.0f*send_to_MIT_damping;
+//	
+//MIT_B.send_to_MIT=P_PID_bate(&MIT_B_SPEED,MIT_B_SPEED.Target,MIT_B.SPEED_JD)/10.0f*send_to_MIT_damping;
 
-if(MIT_B.ANGLE_JD>MIT_B.MIT_TZG+1)MIT_B.send_to_MIT=0;
-	
-if(MIT_B.ANGLE_JD<MIT_B.MIT_TSZ-1)MIT_B.send_to_MIT=0;
+//if(MIT_B.ANGLE_JD>MIT_B.MIT_TZG+1)MIT_B.send_to_MIT=0;
+//	
+//if(MIT_B.ANGLE_JD<MIT_B.MIT_TSZ-1)MIT_B.send_to_MIT=0;
 //变形超过0.3度失能
 //94.2  -6
-CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
+//MIT_B.send_to_MIT=0;
+MIT_B.kp=MIT_B.kp_temp*send_to_MIT_damping;
+MIT_B.kv=MIT_B.kv_temp*send_to_MIT_damping;
+
+//	position_HD_text=position_text/Angle_turn_Radian;
+MIT_B.send_to_MIT_position=MIT_B.target_position/Angle_turn_Radian;
+MIT_B.send_to_MIT_speed=MIT_B.target_speed/Angle_turn_Radian;
+//CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
+
+CanComm_SendControlPara(MIT_B.send_to_MIT_position,MIT_B.send_to_MIT_speed,MIT_B.kp,MIT_B.kv,0,MIT_B_SLAVE_ID);
+//CanComm_SendControlPara(position_HD_text,speed_HD_text,kp_text,kv_text,send_to_MIT_text);
 
 }
 
@@ -416,23 +445,28 @@ CanComm_SendControlPara(0,0,0,0,MIT_A.send_to_MIT,MIT_A_SLAVE_ID);
 */
 	MIT_A.target_position=MIT_A.MIT_TZG+liftoff_R;//腿伸直是-1度 减去一个正值(liftoff_R)
 	
-if(MIT_A.target_position>(MIT_A.MIT_TSZ-5))MIT_A.target_position=MIT_A.MIT_TSZ-5;
+if(MIT_A.target_position>(MIT_A.MIT_TSZ-1))MIT_A.target_position=MIT_A.MIT_TSZ-5;
 	
-if(MIT_A.target_position<(MIT_A.MIT_TZG+5))MIT_A.target_position=MIT_A.MIT_TZG+5;	
+if(MIT_A.target_position<(MIT_A.MIT_TZG+1))MIT_A.target_position=MIT_A.MIT_TZG+5;	
 	
 	
-MIT_A_SPEED.Target=P_PID_bate(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_JD);
-	
+//MIT_A_SPEED.Target=P_PID_bate(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_JD);
+MIT_A.target_speed=P_PID_bate_V2(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_JD);	
 
 	
-MIT_A.send_to_MIT=P_PID_bate(&MIT_A_SPEED,MIT_A_SPEED.Target,MIT_A.SPEED_JD)/10.0f*send_to_MIT_damping;
-
-if(MIT_A.ANGLE_JD>MIT_A.MIT_TSZ+1)MIT_A.send_to_MIT=0;
-	
-if(MIT_A.ANGLE_JD<MIT_A.MIT_TZG-1)MIT_A.send_to_MIT=0;
-
+//MIT_A.send_to_MIT=P_PID_bate(&MIT_A_SPEED,MIT_A_SPEED.Target,MIT_A.SPEED_JD)/10.0f*send_to_MIT_damping;
+//if(MIT_A.ANGLE_JD>MIT_A.MIT_TSZ+1)MIT_A.send_to_MIT=0;
+//if(MIT_A.ANGLE_JD<MIT_A.MIT_TZG-1)MIT_A.send_to_MIT=0;
 //抬最高是-100.2 -1
 //CanComm_SendControlPara(0,0,0,0,MIT_A.send_to_MIT,MIT_A_SLAVE_ID);
+
+MIT_A.kp=MIT_A.kp_temp*send_to_MIT_damping;
+MIT_A.kv=MIT_A.kv_temp*send_to_MIT_damping;
+
+MIT_A.send_to_MIT_position=MIT_A.target_position/Angle_turn_Radian;
+MIT_A.send_to_MIT_speed=MIT_A.target_speed/Angle_turn_Radian;
+
+CanComm_SendControlPara(MIT_A.send_to_MIT_position,MIT_A.send_to_MIT_speed,MIT_A.kp,MIT_A.kv,0,MIT_A_SLAVE_ID);
 
 }
 void MIT_C_controul(void)
@@ -450,11 +484,12 @@ if(MIT_C.target_position>MIT_C.MIT_TSZ-5)MIT_C.target_position=MIT_C.MIT_TSZ-5;
 if(MIT_C.target_position<MIT_C.MIT_TZG+5)MIT_C.target_position=MIT_C.MIT_TZG+5;	
 	
 	
-MIT_C_SPEED.Target=P_PID_bate(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
-	
+//MIT_C_SPEED.Target=P_PID_bate(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
+	MIT_C_SPEED.Target=P_PID_bate_V2(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
+
 
 	
-MIT_C.send_to_MIT=P_PID_bate(&MIT_C_SPEED,MIT_C_SPEED.Target,MIT_C.SPEED_JD)/10.0f*send_to_MIT_damping;
+//MIT_C.send_to_MIT=P_PID_bate(&MIT_C_SPEED,MIT_C_SPEED.Target,MIT_C.SPEED_JD)/10.0f*send_to_MIT_damping;
 
 if(MIT_C.ANGLE_JD>MIT_C.MIT_TSZ+1)MIT_C.send_to_MIT=0;
 	
@@ -482,11 +517,12 @@ if(MIT_D.target_position<MIT_D.MIT_TZG-5)MIT_D.target_position=MIT_D.MIT_TZG-5;
 
 		
 	
-MIT_D_SPEED.Target=P_PID_bate(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
-	
+//MIT_D_SPEED.Target=P_PID_bate(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
+	MIT_D_SPEED.Target=P_PID_bate_V2(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
+
 
 	
-MIT_D.send_to_MIT=P_PID_bate(&MIT_D_SPEED,MIT_D_SPEED.Target,MIT_D.SPEED_JD)/10.0f*send_to_MIT_damping;
+//MIT_D.send_to_MIT=P_PID_bate(&MIT_D_SPEED,MIT_D_SPEED.Target,MIT_D.SPEED_JD)/10.0f*send_to_MIT_damping;
 
 if(MIT_D.ANGLE_JD>MIT_D.MIT_TZG+1)MIT_D.send_to_MIT=0;
 	

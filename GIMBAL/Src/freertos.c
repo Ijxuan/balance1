@@ -1299,7 +1299,8 @@ if(DR16.rc.s_left==2)
 					MIT_MODE_TEXT=2;//电机失能
 					}
 					DISABLE_ALL_MIT();//失能所有电机
-					
+					liftoff_R=15;
+		
 			}
 			else
 				{
@@ -1309,7 +1310,7 @@ if(DR16.rc.s_left==2)
 			}
 //	if(MIT_B.ANGLE_JD<30)liftoff_R=75;
 //	else
-		liftoff_R=5;
+//		liftoff_R=15;
 	position_text_TEMP=-1;//重置目标位置
 position_text=-1;//重置目标位置
 target_position_text_PID=text_moto.ANGLE_JD;

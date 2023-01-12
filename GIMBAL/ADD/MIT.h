@@ -74,7 +74,17 @@ int RC_TIMES;//接收次数
 int TX_TIMES;//发送次数
 	
 float send_to_MIT;//发送给电机的值
+	float send_to_MIT_position;//发送给电机的位置目标值
+	float send_to_MIT_speed;//发送给电机的位置速度值
+
 float	target_position;//目标角度
+float	target_speed;//目标角度
+
+	float	kp;//角度*kp
+	float	kp_temp;//角度*kp l临时
+	float	kv;//速度*kv
+	float	kv_temp;//速度*kv l临时
+
 uint8_t MIT_RAW_DATA[8];//接收到的电机发来的原始数据
 
 	float MIT_TZG;//抬最高

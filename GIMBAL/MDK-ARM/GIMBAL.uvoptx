@@ -153,37 +153,122 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_B_SPEED.Max_result</ItemText>
+          <ItemText>MIT_A,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_A_SPEED.Max_result</ItemText>
+          <ItemText>MIT_A.MIT_TZG,0x10</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_C_SPEED.Max_result</ItemText>
+          <ItemText>MIT_A.ANGLE_JD</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\GIMBAL\../Arithmetic/my_positionPID_bate.c\MIT_D_SPEED.Max_result</ItemText>
+          <ItemText>MIT_A.MIT_TSZ</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>FPS_ALL,0x0A</ItemText>
+          <ItemText>MIT_A.kv_temp,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>mit_init_angle_form_flash,0x0A</ItemText>
+          <ItemText>MIT_A.kv</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>MIT_A</ItemText>
+          <ItemText>MIT_A.kp_temp</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.kp</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.target_position</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.ANGLE_JD</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\GIMBAL\../ADD/MIT.c\MIT_A.send_to_MIT_position</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A_SPEED.Target</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.send_to_MIT_speed</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A_POSITION</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.target_speed</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.send_to_MIT_speed</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\GIMBAL\../ADD/MIT.c\MIT_A.velocity_end</ItemText>
+        </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.target_position</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.ANGLE_JD</ItemText>
+        </Ww>
+        <Ww>
+          <count>19</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.velocity_end</ItemText>
+        </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.position_end</ItemText>
+        </Ww>
+        <Ww>
+          <count>21</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.send_to_MIT_position</ItemText>
+        </Ww>
+        <Ww>
+          <count>22</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.send_to_MIT_speed</ItemText>
+        </Ww>
+        <Ww>
+          <count>23</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_A.velocity_end</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>

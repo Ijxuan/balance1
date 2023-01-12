@@ -181,15 +181,15 @@ extern P_PID_t MIT_SPEED_TEXT;//MIT_SPEED
 extern P_PID_t MIT_POSITION_TEXT;//MIT_SPEED位置环
 
 extern P_PID_t MIT_A_SPEED;//MIT_A速度环
-extern P_PID_t MIT_A_POSITION;//MIT_A位置环
+extern P_PID_t_V2 MIT_A_POSITION;//MIT_A位置环
 
 extern P_PID_t MIT_B_SPEED;//MIT_A速度环
-extern P_PID_t MIT_B_POSITION;//MIT_A位置环
+extern P_PID_t_V2 MIT_B_POSITION;//MIT_A位置环
 
 extern P_PID_t MIT_C_SPEED;//MIT_A速度环
-extern P_PID_t MIT_C_POSITION;//MIT_A位置环
+extern P_PID_t_V2 MIT_C_POSITION;//MIT_A位置环
 
 extern P_PID_t MIT_D_SPEED;//MIT_A速度环
-extern P_PID_t MIT_D_POSITION;//MIT_A位置环
+extern P_PID_t_V2 MIT_D_POSITION;//MIT_A位置环
 #endif
 

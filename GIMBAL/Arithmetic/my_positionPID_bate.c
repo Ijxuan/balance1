@@ -58,16 +58,16 @@ P_PID_t MIT_SPEED_TEXT;//MIT_SPEED速度环
 P_PID_t MIT_POSITION_TEXT;//MIT_SPEED位置环
 
 P_PID_t MIT_A_SPEED;//MIT_A速度环
-P_PID_t MIT_A_POSITION;//MIT_A位置环
+P_PID_t_V2 MIT_A_POSITION;//MIT_A位置环
 
 P_PID_t MIT_B_SPEED;//MIT_A速度环
-P_PID_t MIT_B_POSITION;//MIT_A位置环
+P_PID_t_V2 MIT_B_POSITION;//MIT_A位置环
 
 P_PID_t MIT_C_SPEED;//MIT_A速度环
-P_PID_t MIT_C_POSITION;//MIT_A位置环
+P_PID_t_V2 MIT_C_POSITION;//MIT_A位置环
 
 P_PID_t MIT_D_SPEED;//MIT_A速度环
-P_PID_t MIT_D_POSITION;//MIT_A位置环
+P_PID_t_V2 MIT_D_POSITION;//MIT_A位置环
 
 int PID_YES=0;
 
@@ -318,6 +318,11 @@ else if(P_PID->Error>P_PID->max_error_p)
 else if(P_PID->Error<P_PID->min_error_p)
 {
     P_PID->Proportion = P_PID->Kp *P_PID->min_error_p;  //p的误差限制	
+}
+
+if(P_PID->Error	<=P_PID->max_error_i&&P_PID->Error>=P_PID->min_error_i)
+{
+    P_PID->Error_for_i = P_PID->Error;  //i的误差限制	
 }
 if(P_PID->Error>P_PID->max_error_i)
 {

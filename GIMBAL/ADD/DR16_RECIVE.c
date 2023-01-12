@@ -248,7 +248,7 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-							#if 1//MIT ABCD 发射接收丢帧监测
+							#if 0//MIT ABCD 发射接收丢帧监测
 		
 	p=0;
 			send_d_32[p++]=MIT_A.RC_TIMES;//弧度值目标位置		1
@@ -371,7 +371,7 @@ void NM_swj(void)
 			send_d_16[p++]=liftoff_L*10;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif	
-							#if 0//MIT A 运行监测
+							#if 1//MIT A 运行监测
 		
 	p=0;
 			send_d_32[p++]=MIT_A.ANGLE_JD*10;//弧度值目标位置		1
@@ -385,10 +385,10 @@ void NM_swj(void)
 			send_d_32[p++]=text_moto.SPEED_JD*1000;//当前速度-弧度制	6		
 			send_d_32[p++]=target_speed_text*1000;//里程计测试  	7
 	p=0;
-			send_d_16[p++]=0;//测试用目标速度数值,必须为正值;//输出电压      8
+			send_d_16[p++]=MIT_A.MIT_TZG*10;//测试用目标速度数值,必须为正值;//输出电压      8
 
-			send_d_16[p++]=0;//实际       	9
-			send_d_16[p++]=liftoff_R;//目标		10
+			send_d_16[p++]=MIT_A.MIT_TSZ*10;//实际       	9
+			send_d_16[p++]=liftoff_R*10;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif	
 					#if 0//MIT B 运行监测
@@ -402,7 +402,7 @@ void NM_swj(void)
 			send_d_32[p++]= MIT_B_SPEED.Target*1000;//角度制 当前位置 4		4PID_YES
 			send_d_32[p++]=MIT_B.SPEED_JD*1000;////目标速度-弧度制		5
 		
-			send_d_32[p++]=MAX_OUT;//当前速度-弧度制	6		
+			send_d_32[p++]=MIT_B.velocity_end*10;//当前速度-弧度制	6		
 			send_d_32[p++]=MIT_B_SPEED.Max_result;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B.MIT_TZG*10;//测试用目标速度数值,必须为正值;//输出电压      8
