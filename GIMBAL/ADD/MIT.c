@@ -62,17 +62,17 @@ void MIT_PID_INIT(void)
 	
 	SEND_TO_MIT_MAX.Rate=0.15;
 	SEND_TO_MIT_MAX.Absolute_Max=80;
-	MIT_A.kp_temp=3;
-	MIT_A.kv_temp=0;
+	MIT_A.kp_temp=15;
+	MIT_A.kv_temp=2.3;
 	
-	MIT_B.kp_temp=6;
-	MIT_B.kv_temp=2.2;
+	MIT_B.kp_temp=15;
+	MIT_B.kv_temp=2.3;
 	
-	MIT_C.kp_temp=6;
-	MIT_C.kv_temp=2.2;
+	MIT_C.kp_temp=15;
+	MIT_C.kv_temp=2.3;
 	
-	MIT_D.kp_temp=6;
-	MIT_D.kv_temp=2.2;
+	MIT_D.kp_temp=15;
+	MIT_D.kv_temp=2.3;
 }
 
 
@@ -303,12 +303,17 @@ if(liftoff_R>90)liftoff_R=90;
 if(liftoff_R<1)liftoff_R=1;	
 	liftoff_L=liftoff_R;
 	
-//MIT_B_controul();
+MIT_B_controul();
 MIT_A_controul();	
 }
 else{
-//MIT_C_controul();
-//MIT_D_controul();
+//liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
+//liftoff_L+=DR16.rc.ch3/2200.0f;	//左手油门
+if(liftoff_L>90)liftoff_L=90;
+if(liftoff_L<1)liftoff_L=1;	
+	
+MIT_C_controul();
+MIT_D_controul();
 }
 /*
 float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
@@ -471,32 +476,35 @@ CanComm_SendControlPara(MIT_A.send_to_MIT_position,MIT_A.send_to_MIT_speed,MIT_A
 }
 void MIT_C_controul(void)
 {
-//liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
-//liftoff_L+=DR16.rc.ch3/2200.0f;	//左手油门
-if(liftoff_L>90)liftoff_L=90;
-	
-if(liftoff_L<10)liftoff_L=10;	
+
 	
 	MIT_C.target_position=MIT_C.MIT_TZG+liftoff_L;//腿伸直是-1度 减去一个正值(liftoff_R)
 	
-if(MIT_C.target_position>MIT_C.MIT_TSZ-5)MIT_C.target_position=MIT_C.MIT_TSZ-5;
+if(MIT_C.target_position>MIT_C.MIT_TSZ-1)MIT_C.target_position=MIT_C.MIT_TSZ-1;
 	
-if(MIT_C.target_position<MIT_C.MIT_TZG+5)MIT_C.target_position=MIT_C.MIT_TZG+5;	
+if(MIT_C.target_position<MIT_C.MIT_TZG+1)MIT_C.target_position=MIT_C.MIT_TZG+1;	
 	
+
+
 	
 //MIT_C_SPEED.Target=P_PID_bate(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
-	MIT_C_SPEED.Target=P_PID_bate_V2(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
+	MIT_C.target_speed=P_PID_bate_V2(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
 
 
 	
 //MIT_C.send_to_MIT=P_PID_bate(&MIT_C_SPEED,MIT_C_SPEED.Target,MIT_C.SPEED_JD)/10.0f*send_to_MIT_damping;
 
-if(MIT_C.ANGLE_JD>MIT_C.MIT_TSZ+1)MIT_C.send_to_MIT=0;
-	
-if(MIT_C.ANGLE_JD<MIT_C.MIT_TZG-1)MIT_C.send_to_MIT=0;
+//if(MIT_C.ANGLE_JD>MIT_C.MIT_TSZ+1)MIT_C.send_to_MIT=0;
+//	
+//if(MIT_C.ANGLE_JD<MIT_C.MIT_TZG-1)MIT_C.send_to_MIT=0;
+MIT_C.kp=MIT_C.kp_temp*send_to_MIT_damping;
+MIT_C.kv=MIT_C.kv_temp*send_to_MIT_damping;
+
+MIT_C.send_to_MIT_position=MIT_C.target_position/Angle_turn_Radian;
+MIT_C.send_to_MIT_speed=MIT_C.target_speed/Angle_turn_Radian;
 
 //抬最高是-99.2  0.4
-//CanComm_SendControlPara(0,0,0,0,MIT_C.send_to_MIT,MIT_C_SLAVE_ID);
+CanComm_SendControlPara(MIT_C.send_to_MIT_position,MIT_C.send_to_MIT_speed,MIT_C.kp,MIT_C.kv,0,MIT_C_SLAVE_ID);
 
 
 
@@ -511,25 +519,31 @@ void MIT_D_controul(void)
 	
 	MIT_D.target_position=MIT_D.MIT_TZG-liftoff_L;//腿伸直是-1度 减去一个正值(liftoff_R)
 	
-if(MIT_D.target_position>MIT_D.MIT_TSZ+5)MIT_D.target_position=MIT_D.MIT_TSZ+5;
+if(MIT_D.target_position<MIT_D.MIT_TSZ+1)MIT_D.target_position=MIT_D.MIT_TSZ+1;
 	
-if(MIT_D.target_position<MIT_D.MIT_TZG-5)MIT_D.target_position=MIT_D.MIT_TZG-5;	
+if(MIT_D.target_position>MIT_D.MIT_TZG-1)MIT_D.target_position=MIT_D.MIT_TZG-1;	
 
 		
 	
 //MIT_D_SPEED.Target=P_PID_bate(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
-	MIT_D_SPEED.Target=P_PID_bate_V2(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
+	MIT_D.target_speed=P_PID_bate_V2(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
 
 
 	
 //MIT_D.send_to_MIT=P_PID_bate(&MIT_D_SPEED,MIT_D_SPEED.Target,MIT_D.SPEED_JD)/10.0f*send_to_MIT_damping;
+//if(MIT_D.ANGLE_JD>MIT_D.MIT_TZG+1)MIT_D.send_to_MIT=0;
+//	
+//if(MIT_D.ANGLE_JD<MIT_D.MIT_TSZ-1)MIT_D.send_to_MIT=0;
 
-if(MIT_D.ANGLE_JD>MIT_D.MIT_TZG+1)MIT_D.send_to_MIT=0;
-	
-if(MIT_D.ANGLE_JD<MIT_D.MIT_TSZ-1)MIT_D.send_to_MIT=0;
+MIT_D.kp=MIT_D.kp_temp*send_to_MIT_damping;
+MIT_D.kv=MIT_D.kv_temp*send_to_MIT_damping;
+
+MIT_D.send_to_MIT_position=MIT_D.target_position/Angle_turn_Radian;
+MIT_D.send_to_MIT_speed=MIT_D.target_speed/Angle_turn_Radian;
+
 
 //抬最高是106.2  7
-//CanComm_SendControlPara(0,0,0,0,MIT_D.send_to_MIT,MIT_D_SLAVE_ID);
+CanComm_SendControlPara(MIT_D.send_to_MIT_position,MIT_D.send_to_MIT_speed,MIT_D.kp,MIT_D.kv,0,MIT_D_SLAVE_ID);
 
 
 

@@ -289,7 +289,7 @@ void NM_swj(void)
 			send_d_16[p++]=liftoff_R*10;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
-											#if 0//MIT C和D 运行监测
+											#if 1//MIT C和D 运行监测
 		
 	p=0;
 			send_d_32[p++]=MIT_C.ANGLE_JD*10;//弧度值目标位置		1
@@ -371,7 +371,7 @@ void NM_swj(void)
 			send_d_16[p++]=liftoff_L*10;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif	
-							#if 1//MIT A 运行监测
+							#if 0//MIT A 运行监测
 		
 	p=0;
 			send_d_32[p++]=MIT_A.ANGLE_JD*10;//弧度值目标位置		1

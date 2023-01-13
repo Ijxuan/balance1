@@ -1292,19 +1292,24 @@ if(DR16.rc.s_left==2)
 //	MIT_B_SPEED.Min_result=MIT_B_SPEED.Max_result=0;
 //	MIT_C_SPEED.Min_result=MIT_C_SPEED.Max_result=0;
 //	MIT_D_SPEED.Min_result=MIT_D_SPEED.Max_result=0;
-			if(send_to_MIT_damping<0.1f)
+			if(send_to_MIT_damping<0.01f)
 			{
 					if(MIT_MODE_TEXT!=2)//还没有失能电机
 					{
 					MIT_MODE_TEXT=2;//电机失能
 					}
 					DISABLE_ALL_MIT();//失能所有电机
-					liftoff_R=15;
 		
 			}
 			else
 				{
-			send_to_MIT_damping-=0.0005;	//两秒失能
+			send_to_MIT_damping-=0.0005;	//2秒失能
+					if(liftoff_R>3)
+					{
+					liftoff_R-=0.01;//将电机归位到起始点附近 一秒10度
+					}
+						MIT_controul();//系数衰减的同时,继续控制电机
+
 //			SEND_TO_MIT_MAX.Target_Value=0;
 //			MAX_OUT=Ramp_Function(&SEND_TO_MIT_MAX);
 			}
@@ -1325,6 +1330,8 @@ target_position_text_PID=text_moto.ANGLE_JD;
 			if(send_to_MIT_damping<1.0f)
 			{
 send_to_MIT_damping+=0.0005;	//两秒启动
+	liftoff_R=10;//将电机归位到起始点附近
+
 			}
 
 	if(MIT_MODE_TEXT!=1)
