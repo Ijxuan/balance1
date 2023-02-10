@@ -98,7 +98,7 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 	{
 //TARGET_position_V2=milemeter_test.total_mile_truly_use+DR16.rc.ch1*240;//遥控器给定目标位置
 		
-TARGET_position_V2=milemeter_test.total_mile_truly_use+P_PID_bate(&RC_SPEED_TO_POSITION,TARGET_speed_RC,L_speed_new-R_speed_new);//遥控器给定目标速度,转换成速度		
+//TARGET_position_V2=milemeter_test.total_mile_truly_use+P_PID_bate(&RC_SPEED_TO_POSITION,TARGET_speed_RC,L_speed_new-R_speed_new);//遥控器给定目标速度,转换成速度		
 	}
 
 

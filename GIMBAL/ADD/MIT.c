@@ -302,7 +302,7 @@ if(L_OR_R%2==0)
 if(liftoff_R>90)liftoff_R=90;
 if(liftoff_R<1)liftoff_R=1;	
 	liftoff_L=liftoff_R;
-	
+	get_MIT_tg_angle_for_bais();
 MIT_B_controul();
 MIT_A_controul();	
 }
@@ -386,7 +386,7 @@ if(MIT_B.ANGLE_JD<-126.2)MIT_B.send_to_MIT=0;
 CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 */
 
-	MIT_B.target_position=MIT_B.MIT_TZG-liftoff_R;//腿伸直是-125.9度 增加一个正值(liftoff_R)
+	MIT_B.target_position=MIT_B.MIT_TZG-liftoff_R+MIT_Bias_R;//腿伸直是-125.9度 增加一个正值(liftoff_R)
 	
 //	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
 
@@ -448,7 +448,7 @@ if(MIT_A.ANGLE_JD<18.9)MIT_A.send_to_MIT=0;
 //抬最高是19.2 19.6 118.4
 CanComm_SendControlPara(0,0,0,0,MIT_A.send_to_MIT,MIT_A_SLAVE_ID);
 */
-	MIT_A.target_position=MIT_A.MIT_TZG+liftoff_R;//腿伸直是-1度 减去一个正值(liftoff_R)
+	MIT_A.target_position=MIT_A.MIT_TZG+liftoff_R+MIT_Bias_R;//腿伸直是-1度 减去一个正值(liftoff_R)
 	
 if(MIT_A.target_position>(MIT_A.MIT_TSZ-1))MIT_A.target_position=MIT_A.MIT_TSZ-5;
 	
@@ -478,7 +478,7 @@ void MIT_C_controul(void)
 {
 
 	
-	MIT_C.target_position=MIT_C.MIT_TZG+liftoff_L;//腿伸直是-1度 减去一个正值(liftoff_R)
+	MIT_C.target_position=MIT_C.MIT_TZG+liftoff_L+MIT_Bias_L;//腿伸直是-1度 减去一个正值(liftoff_R)
 	
 if(MIT_C.target_position>MIT_C.MIT_TSZ-1)MIT_C.target_position=MIT_C.MIT_TSZ-1;
 	
@@ -517,7 +517,7 @@ void MIT_D_controul(void)
 //	
 //if(liftoff_L<10)liftoff_L=10;	
 	
-	MIT_D.target_position=MIT_D.MIT_TZG-liftoff_L;//腿伸直是-1度 减去一个正值(liftoff_R)
+	MIT_D.target_position=MIT_D.MIT_TZG-liftoff_L+MIT_Bias_L;//腿伸直是-1度 减去一个正值(liftoff_R)
 	
 if(MIT_D.target_position<MIT_D.MIT_TSZ+1)MIT_D.target_position=MIT_D.MIT_TSZ+1;
 	
@@ -612,5 +612,51 @@ MIT_A.MIT_TSZ=MIT_A.MIT_TZG+99;
 MIT_B.MIT_TSZ=MIT_B.MIT_TZG-99;
 MIT_C.MIT_TSZ=MIT_C.MIT_TZG+99;
 MIT_D.MIT_TSZ=MIT_D.MIT_TZG-99;
+
+}
+
+
+/*创建一个变量
+同侧一个关节电机减去一个角度值，相应地另一个关节电机加上一个角度值*/
+/*注意,腿的左右看着c板R标确定,前进方向正好相反*/
+float MIT_Bias_R=0;/*这个值为正的时候腿向前进方向倾斜*/
+float MIT_Bias_L=0;/*这个值可以使得左腿跟右腿保持一致*/
+float pitch_kp=0;/*pitch轴太灵敏了,需要衰减一下*/
+void get_MIT_tg_angle_for_bais(void)
+{
+MIT_Bias_R=DR16.rc.ch1/-30.0f*pitch_kp;/*遥控器直接控制腿部的倾斜角度*/
+	
+	
+//MIT_Bias_R-=DJIC_IMU.total_pitch*pitch_kp;	
+	
+	
+MIT_Bias_L=-MIT_Bias_R;
+if(fabs(MIT_Bias_R)>25)//对最终输出做一个限幅
+{
+	
+if(MIT_Bias_R>25)
+{
+MIT_Bias_R=25;
+}
+else if(MIT_Bias_R<-25)
+{
+MIT_Bias_R=-25;
+}
+
+}
+
+if(fabs(MIT_Bias_L)>25)//对最终输出做一个限幅
+{
+	
+if(MIT_Bias_L>25)
+{
+MIT_Bias_L=25;
+}
+else if(MIT_Bias_L<-25)
+{
+MIT_Bias_L=-25;
+}
+
+}
 
 }

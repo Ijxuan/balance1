@@ -1281,7 +1281,7 @@ send_to_tire_R=0;
 send_to_tire_L=0;
 }
 
-//	/*轮胎电机*/	M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
+	/*轮胎电机*/	M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L);//send_to_SHOOT_L阻力大
 //CAN2_SEND_TO_MIT();
 //		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大
 
