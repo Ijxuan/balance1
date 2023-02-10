@@ -190,6 +190,16 @@
           <WinNumber>1</WinNumber>
           <ItemText>liftoff_L</ItemText>
         </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>M3508s,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>send_to_tire_L</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
