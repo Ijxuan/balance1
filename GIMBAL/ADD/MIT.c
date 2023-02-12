@@ -2,6 +2,7 @@
 #include "DR16_RECIVE.h"
 #include "my_positionPID_bate.h"
 #include "math.h"
+#include "MY_balance_CONTROL.h"
 
 void MIT_PID_INIT(void)
 {
@@ -62,17 +63,17 @@ void MIT_PID_INIT(void)
 	
 	SEND_TO_MIT_MAX.Rate=0.15;
 	SEND_TO_MIT_MAX.Absolute_Max=80;
-	MIT_A.kp_temp=15;
-	MIT_A.kv_temp=2.3;
+	MIT_A.kp_temp=50;
+	MIT_A.kv_temp=3;
 	
-	MIT_B.kp_temp=15;
-	MIT_B.kv_temp=2.3;
+	MIT_B.kp_temp=50;
+	MIT_B.kv_temp=3;
 	
-	MIT_C.kp_temp=15;
-	MIT_C.kv_temp=2.3;
+	MIT_C.kp_temp=50;
+	MIT_C.kv_temp=3;
 	
-	MIT_D.kp_temp=15;
-	MIT_D.kv_temp=2.3;
+	MIT_D.kp_temp=50;
+	MIT_D.kv_temp=3;
 	
 	liftoff_temp.Rate=0.1;
 }
@@ -299,6 +300,7 @@ if(target_position_text_PID<-1)target_position_text_PID=-1;
 //CanComm_SendControlPara(position_HD_text,speed_HD_text,0,0,0,MIT_B_SLAVE_ID);
 L_OR_R++;
 get_MIT_tg_angle_for_liftoff();//计算腿离地高度
+
 get_MIT_tg_angle_for_bais();//计算腿前后倾斜角度
 
 if(L_OR_R%2==0)
@@ -623,14 +625,14 @@ MIT_D.MIT_TSZ=MIT_D.MIT_TZG-99;
 /*注意,腿的左右看着c板R标确定,前进方向正好相反*/
 float MIT_Bias_R=0;/*这个值为正的时候腿向前进方向倾斜*/
 float MIT_Bias_L=0;/*这个值可以使得左腿跟右腿保持一致*/
-float pitch_kp=0;/*pitch轴太灵敏了,需要衰减一下*/
+float pitch_kp=10;/*pitch轴太灵敏了,需要衰减一下*/
 void get_MIT_tg_angle_for_bais(void)
 {
-MIT_Bias_R=DR16.rc.ch1/-30.0f;/*遥控器直接控制腿部的倾斜角度*/
+//MIT_Bias_R=DR16.rc.ch1/-30.0f;/*遥控器直接控制腿部的倾斜角度*/
 	
 	
 //MIT_Bias_R-=DJIC_IMU.total_pitch*pitch_kp;	
-	
+	MIT_Bias_R=POSITION_v2.result*PITCH_XR_K/33/pitch_kp;
 	
 MIT_Bias_L=-MIT_Bias_R;
 if(fabs(MIT_Bias_R)>25)//对最终输出做一个限幅

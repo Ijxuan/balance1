@@ -248,6 +248,26 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
+		#if 1//平衡 里程PID计输出检测
+		
+	p=0;
+			send_d_32[p++]=POSITION_v2.result*1000;//弧度值目标位置		1
+			send_d_32[p++]=POSITION_v2.result*PITCH_XR_K*1000;//弧度值当前位置		2
+		
+			send_d_32[p++]=MIT_B.RC_TIMES;//角度制 目标位置		3 
+		
+			send_d_32[p++]= MIT_A.ANGLE_JD-MIT_A.MIT_TZG;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MIT_B.ANGLE_JD-MIT_B.MIT_TZG;////目标速度-弧度制		5
+		
+			send_d_32[p++]=((MIT_A.ANGLE_JD-MIT_A.MIT_TZG)-(MIT_B.MIT_TZG-MIT_B.ANGLE_JD))/2*10;//当前速度-弧度制	6		
+			send_d_32[p++]=MIT_Bias_R*10;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_D.TX_TIMES;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=MIT_B.MIT_TSZ*10;//实际       	9
+			send_d_16[p++]=liftoff_R*10;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
 							#if 0//MIT ABCD 发射接收丢帧监测
 		
 	p=0;
@@ -289,7 +309,7 @@ void NM_swj(void)
 			send_d_16[p++]=liftoff_R*10;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
-											#if 1//MIT C和D 运行监测
+											#if 0//MIT C和D 运行监测
 		
 	p=0;
 			send_d_32[p++]=MIT_C.ANGLE_JD*10;//弧度值目标位置		1

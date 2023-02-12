@@ -112,7 +112,19 @@ CAN1           	0		<1%
 
 
 
-
+参数的坟场:
+MIT电机比较软:
+	MIT_A.kp_temp=15;
+	MIT_A.kv_temp=2.3;
+	
+	MIT_B.kp_temp=15;
+	MIT_B.kv_temp=2.3;
+	
+	MIT_C.kp_temp=15;
+	MIT_C.kv_temp=2.3;
+	
+	MIT_D.kp_temp=15;
+	MIT_D.kv_temp=2.3;
 
 
 

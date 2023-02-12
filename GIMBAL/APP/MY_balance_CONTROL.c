@@ -71,7 +71,7 @@ SPEED_P_v2.Integral=0;
 SPEED_P_v2.result=0;		
 
 TARGET_position_V2=milemeter_test.total_mile_truly_use;
-		
+		POSITION_v2.result=0;//里程计PID输出置0,因为关节电机用到了这个值
 	}
 
     if(DR16.rc.s_right==2)
@@ -144,7 +144,7 @@ DR16_rc_ch1_last=DR16.rc.ch1;
 //	{
 //	POSITION_v2.result=0;
 //	}	
-	send_to_tire_L+=POSITION_v2.result*PITCH_XR_K;
+//	send_to_tire_L+=POSITION_v2.result*PITCH_XR_K;//*PITCH_XR_K的作用是在平衡状态百分百输出,离平衡状态越远,里程计输出越弱
 
 	
 	
