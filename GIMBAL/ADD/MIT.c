@@ -73,6 +73,8 @@ void MIT_PID_INIT(void)
 	
 	MIT_D.kp_temp=15;
 	MIT_D.kv_temp=2.3;
+	
+	liftoff_temp.Rate=0.1;
 }
 
 
@@ -296,21 +298,21 @@ if(target_position_text_PID<-1)target_position_text_PID=-1;
 //CanComm_SendControlPara(position_HD_text,speed_HD_text,0,0,0,MIT_A_SLAVE_ID);
 //CanComm_SendControlPara(position_HD_text,speed_HD_text,0,0,0,MIT_B_SLAVE_ID);
 L_OR_R++;
+get_MIT_tg_angle_for_liftoff();//计算腿离地高度
+get_MIT_tg_angle_for_bais();//计算腿前后倾斜角度
+
 if(L_OR_R%2==0)
 {
-	liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
-if(liftoff_R>90)liftoff_R=90;
-if(liftoff_R<1)liftoff_R=1;	
-	liftoff_L=liftoff_R;
-	get_MIT_tg_angle_for_bais();
+
 MIT_B_controul();
 MIT_A_controul();	
 }
 else{
 //liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
 //liftoff_L+=DR16.rc.ch3/2200.0f;	//左手油门
-if(liftoff_L>90)liftoff_L=90;
-if(liftoff_L<1)liftoff_L=1;	
+	
+//if(liftoff_L>90)liftoff_L=90;
+//if(liftoff_L<1)liftoff_L=1;	
 	
 MIT_C_controul();
 MIT_D_controul();
@@ -624,7 +626,7 @@ float MIT_Bias_L=0;/*这个值可以使得左腿跟右腿保持一致*/
 float pitch_kp=0;/*pitch轴太灵敏了,需要衰减一下*/
 void get_MIT_tg_angle_for_bais(void)
 {
-MIT_Bias_R=DR16.rc.ch1/-30.0f*pitch_kp;/*遥控器直接控制腿部的倾斜角度*/
+MIT_Bias_R=DR16.rc.ch1/-30.0f;/*遥控器直接控制腿部的倾斜角度*/
 	
 	
 //MIT_Bias_R-=DJIC_IMU.total_pitch*pitch_kp;	
@@ -660,3 +662,69 @@ MIT_Bias_L=-25;
 }
 
 }
+/*离地高度决定函数*/
+Ramp_Struct liftoff_temp;//离地高度斜坡
+void get_MIT_tg_angle_for_liftoff(void)
+{
+	/*左手摇杆,无级变高*/
+	/*
+	liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
+*/
+	
+/*左手摇杆,换挡变高*/
+	/**/
+	static int liftoff_mode=0;
+	static int change_mode=0;//是否切换了挡位,切换挡位后置1
+	 
+	if(DR16.rc.ch3==0)//松手了,才可以换下一档
+	{
+	change_mode=0;
+	}
+	else if(DR16.rc.ch3>300)
+	{
+		if(change_mode==0)//没切换挡位,接下来执行换挡操作
+		{
+			if(liftoff_mode<2)//一共几个挡位 0 1 2 
+			liftoff_mode++;//加高挡位
+			
+			change_mode=1;//切换挡位后置1
+		}
+	}
+		else if(DR16.rc.ch3<-300)
+	{
+		if(change_mode==0)//没切换挡位,接下来执行换挡操作
+		{
+			if(liftoff_mode>0)
+			liftoff_mode--;//减小挡位
+			
+			change_mode=1;//切换挡位后置1
+		}
+	}
+		switch(liftoff_mode)
+		{
+			case 0:
+				liftoff_temp.Target_Value=5;
+			break;
+			case 1:
+				liftoff_temp.Target_Value=40;
+			break;
+			case 2:
+				liftoff_temp.Target_Value=65;
+			break;
+			default:
+				break;
+		}	
+		liftoff_temp.Current_Value=liftoff_R;
+		liftoff_temp.Absolute_Max=90;
+		liftoff_R=Ramp_Function(&liftoff_temp);
+		
+		
+if(liftoff_R>90)liftoff_R=90;
+if(liftoff_R<1)liftoff_R=1;	
+	liftoff_L=liftoff_R;
+
+		
+}
+
+
+

@@ -143,6 +143,7 @@ extern int run_MIT_ENTER_MOTO_MODE_times;
 extern float MIT_Bias_R;/*腿部倾斜值*/
 extern float MIT_Bias_L;/*腿部倾斜值*/
 extern float pitch_kp;/*pitch轴太灵敏了,需要衰减一下*/
+extern Ramp_Struct liftoff_temp;//离地高度斜坡
 
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
@@ -159,5 +160,6 @@ void MIT_C_controul(void);
 void MIT_D_controul(void);
 void MIT_calibration(void);
 void get_MIT_tg_angle_for_bais(void);
+void get_MIT_tg_angle_for_liftoff(void);
 
 #endif
