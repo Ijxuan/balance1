@@ -144,7 +144,7 @@ DR16_rc_ch1_last=DR16.rc.ch1;
 //	{
 //	POSITION_v2.result=0;
 //	}	
-//	send_to_tire_L+=POSITION_v2.result*PITCH_XR_K;//*PITCH_XR_K的作用是在平衡状态百分百输出,离平衡状态越远,里程计输出越弱
+//	send_to_tire_L+=POSITION_v2.result*PITCH_XR_K;//*2023PITCH_XR_K的作用是在平衡状态百分百输出,离平衡状态越远,里程计输出越弱
 
 	
 	
