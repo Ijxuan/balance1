@@ -33,6 +33,7 @@ extern float TARGET_angle_PITCH_BC;//��еƽ��ǶȲ���
 extern milemeter_t milemeter_test;
 extern float PITCH_ZDJD;//最低角度
 extern float PITCH_XR_K;//PITCH轴削弱系数
+extern int TARGET_position_V2;
 
 extern float TARGET_angle_YAW;
 extern float TARGET_angle_speed_YAW;

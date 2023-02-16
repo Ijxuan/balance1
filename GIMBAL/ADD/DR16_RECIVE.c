@@ -248,7 +248,47 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-		#if 1//平衡 里程PID计输出检测
+				#if 1//平衡 位置环通用调参
+		
+	p=0;
+			send_d_32[p++]=BALANCE_P.result;//弧度值目标位置		1
+			send_d_32[p++]=BALANCE_P.result+BALANCE_I.result;//弧度值当前位置		2
+		
+			send_d_32[p++]=send_to_tire_L;//角度制 目标位置		3 
+		
+			send_d_32[p++]= DJIC_IMU.Gyro_y*100;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MIT_B.ANGLE_JD-MIT_B.MIT_TZG;////目标速度-弧度制		5
+		
+			send_d_32[p++]=TARGET_position_V2;//当前速度-弧度制	6		
+			send_d_32[p++]=milemeter_test.total_mile_truly_use;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=TARGET_angle_PITCH_BC*100;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=DJIC_IMU.total_pitch*100;//实际       	9
+			send_d_16[p++]=liftoff_R*10;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+		#if 0//平衡 直立环通用调参
+		
+	p=0;
+			send_d_32[p++]=BALANCE_P.result;//弧度值目标位置		1
+			send_d_32[p++]=BALANCE_P.result+BALANCE_I.result;//弧度值当前位置		2
+		
+			send_d_32[p++]=send_to_tire_L;//角度制 目标位置		3 
+		
+			send_d_32[p++]= DJIC_IMU.Gyro_y*100;//角度制 当前位置 4		4PID_YES
+			send_d_32[p++]=MIT_B.ANGLE_JD-MIT_B.MIT_TZG;////目标速度-弧度制		5
+		
+			send_d_32[p++]=DJIC_IMU.total_pitch*1000;//当前速度-弧度制	6		
+			send_d_32[p++]=L_speed_new-R_speed_new*10;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=TARGET_angle_PITCH_BC*100;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=DJIC_IMU.total_pitch*100;//实际       	9
+			send_d_16[p++]=liftoff_R*10;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+		#if 0//平衡 里程PID计输出检测  关节 腿的倾斜角度
 		
 	p=0;
 			send_d_32[p++]=POSITION_v2.result*1000;//弧度值目标位置		1

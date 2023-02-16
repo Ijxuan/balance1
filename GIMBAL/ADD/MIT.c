@@ -632,8 +632,9 @@ void get_MIT_tg_angle_for_bais(void)
 	
 	
 //MIT_Bias_R-=DJIC_IMU.total_pitch*pitch_kp;	
+	/*依靠改变腿部倾斜角度改变重心
 	MIT_Bias_R=POSITION_v2.result*PITCH_XR_K/33/pitch_kp;
-	
+	*/
 MIT_Bias_L=-MIT_Bias_R;
 if(fabs(MIT_Bias_R)>25)//对最终输出做一个限幅
 {
