@@ -145,6 +145,9 @@ extern float MIT_Bias_L;/*腿部倾斜值*/
 extern float pitch_kp;/*pitch轴太灵敏了,需要衰减一下*/
 extern Ramp_Struct liftoff_temp;//离地高度斜坡
 
+extern float L_X;//左x目标位置
+extern float L_Y;//左Y目标位置
+
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t,uint32_t id);

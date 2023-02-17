@@ -464,6 +464,11 @@
               <FileType>1</FileType>
               <FilePath>..\ADD\LPF.c</FilePath>
             </File>
+            <File>
+              <FileName>mit_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arithmetic\mit_math.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

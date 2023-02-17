@@ -61,3 +61,4 @@ ins_task\mit.o: ..\application\INS_task.h
 ins_task\mit.o: ..\application\struct_typedef.h
 ins_task\mit.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 ins_task\mit.o: ..\APP\MY_balance_CONTROL.h
+ins_task\mit.o: ..\Arithmetic\mit_math.h

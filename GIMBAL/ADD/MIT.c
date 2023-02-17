@@ -3,6 +3,7 @@
 #include "my_positionPID_bate.h"
 #include "math.h"
 #include "MY_balance_CONTROL.h"
+#include "mit_math.h"
 
 void MIT_PID_INIT(void)
 {
@@ -243,6 +244,8 @@ Ramp_Struct MIT_P;//目标位置斜坡
 
 Ramp_Struct SEND_TO_MIT_MAX;//
 
+float L_X=0;//左x目标位置
+float L_Y=0;//左Y目标位置
 
 void MIT_controul(void)
 {
@@ -303,6 +306,9 @@ get_MIT_tg_angle_for_liftoff();//计算腿离地高度
 
 get_MIT_tg_angle_for_bais();//计算腿前后倾斜角度
 
+ mit_math_temp_2( L_X, L_Y);///*平面五连杆逆解*/
+	 
+ 
 if(L_OR_R%2==0)
 {
 
@@ -678,7 +684,10 @@ void get_MIT_tg_angle_for_liftoff(void)
 	/**/
 	static int liftoff_mode=0;
 	static int change_mode=0;//是否切换了挡位,切换挡位后置1
-	 
+	if(DR16.rc.s_left==2) 
+	{
+	liftoff_mode=0;
+	}
 	if(DR16.rc.ch3==0)//松手了,才可以换下一档
 	{
 	change_mode=0;
