@@ -197,12 +197,14 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 }
 
 milemeter_t milemeter_test;
-void milemeter(void)//里程计函数  不但要丝滑,还要足够的精度,不然容易超调
+void milemeter(void)//里程计函数  不但要丝滑,还要足够的精度,不然容易超调  total_mile_by_angle_10
 {
 milemeter_test.total_mile_by_turnCount=M3508s[3].turnCount-M3508s[2].turnCount;
 
 milemeter_test.total_mile_by_angle=M3508s[3].totalAngle-M3508s[2].totalAngle;
 	
+milemeter_test.total_mile_by_angle_10=M3508s[3].totalAngle/10-M3508s[2].totalAngle/10;
+
 milemeter_test.total_mile_by_angle_100=M3508s[3].totalAngle/100-M3508s[2].totalAngle/100;
 	
 milemeter_test.total_mile_by_angle_1000=M3508s[3].totalAngle/1000-M3508s[2].totalAngle/1000;

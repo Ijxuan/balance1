@@ -1,6 +1,8 @@
 #include "mit_math.h"
 #include "arm_math.h"
 #include "DR16_RECIVE.h"
+#include "my_positionPID_bate.h"
+#include "MY_balance_CONTROL.h"
 
 /*平面五连杆逆解*/
 /*压缩状态149.5 锐角30.5*/
@@ -130,13 +132,24 @@ void get_tg_angle_by_WLG_IS(void)///*通过平面五连杆逆解获得目标角度*/
 
 void Accurately_contrul_text(void)///*通过平面五连杆逆解获得目标角度精确控制测试*/
 {
-	
+/*遥控器控制  	
 L_X=10+DR16.rc.ch2/66;
 L_Y=25.33+DR16.rc.ch3/66;
 	
 R_X=10-DR16.rc.ch2/66;
 R_Y=25.33+DR16.rc.ch3/66;
 
+L_X=10+MIT_change_focus.result*PITCH_XR_K;
+L_Y=25.33+DR16.rc.ch3/66;
+	
+R_X=10-MIT_change_focus.result*PITCH_XR_K;
+R_Y=25.33+DR16.rc.ch3/66;	
+*/	
+L_X=10+MIT_change_focus.result;
+L_Y=25.33+DR16.rc.ch3/66;
+	
+R_X=10-MIT_change_focus.result;
+R_Y=25.33+DR16.rc.ch3/66;		
 }
 
 

@@ -61,3 +61,7 @@ ins_task\mit_math.o: ..\Drivers\CMSIS\DSP\Include\arm_math.h
 ins_task\mit_math.o: ../Drivers/CMSIS/Include/core_cm4.h
 ins_task\mit_math.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ins_task\mit_math.o: ..\ADD\DR16_RECIVE.h
+ins_task\mit_math.o: ..\Arithmetic\my_positionPID_bate.h
+ins_task\mit_math.o: ..\application\INS_task.h
+ins_task\mit_math.o: ..\application\struct_typedef.h
+ins_task\mit_math.o: ..\APP\MY_balance_CONTROL.h

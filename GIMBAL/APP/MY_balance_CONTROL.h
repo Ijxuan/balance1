@@ -9,6 +9,7 @@ typedef struct
 {
   int total_mile_by_turnCount;//通过圈数计算里程
   int total_mile_by_angle;//通过totalangle计算里程
+		int total_mile_by_angle_10;//通过totalangle除以10计算里程
 	int total_mile_by_angle_100;//通过totalangle除以100计算里程
   int total_mile_by_angle_1000;//通过totalangle除以1000计算里程
   int total_mile_by_angle_8191;//通过totalangle除以8191计算里程

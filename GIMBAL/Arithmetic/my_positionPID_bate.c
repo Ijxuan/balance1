@@ -69,6 +69,8 @@ P_PID_t_V2 MIT_C_POSITION;//MIT_A位置环
 P_PID_t MIT_D_SPEED;//MIT_A速度环
 P_PID_t_V2 MIT_D_POSITION;//MIT_A位置环
 
+P_PID_t_V2 MIT_change_focus;//MIT_改变重心
+
 int PID_YES=0;
 
 

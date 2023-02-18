@@ -250,6 +250,8 @@ float L_Y=0;//左Y目标位置
 float R_X=0;//右x目标位置
 float R_Y=0;//右Y目标位置
 
+int disable_position;
+
 void MIT_controul(void)
 {
 	
@@ -324,18 +326,30 @@ MIT_B.MIT_TZG_ARRIVE=MIT_B.ANGLE_JD;//刷新边界值
 }
 
 
+if(DR16.rc.s_right==2)
+{
+L_X=10;
+R_X=10;
+MIT_change_focus.result=0;
+	disable_position=milemeter_test.total_mile_by_angle_1000;//失能时
+}
+else if(DR16.rc.s_right==3)
+{
+P_PID_bate_V2(&MIT_change_focus,
+	disable_position,
+	milemeter_test.total_mile_by_angle_1000);
+}
 
+//get_MIT_tg_angle_for_liftoff();//计算腿离地高度
 
+//get_MIT_tg_angle_for_bais();//计算腿前后倾斜角度
 
-get_MIT_tg_angle_for_liftoff();//计算腿离地高度
+ Accurately_contrul_text();
 
-get_MIT_tg_angle_for_bais();//计算腿前后倾斜角度
-
- 
 if(L_OR_R%2==0)
 {
-Accurately_contrul_text();
- mit_math_temp_2( R_X, R_Y);///*平面五连杆逆解*/
+
+	mit_math_temp_2( R_X, R_Y);///*平面五连杆逆解*/
 get_tg_angle_by_WLG_IS(); 
 	
 MIT_B_controul();
@@ -347,7 +361,6 @@ else{
 	
 //if(liftoff_L>90)liftoff_L=90;
 //if(liftoff_L<1)liftoff_L=1;	
-Accurately_contrul_text();
  mit_math_temp_2( L_X, L_Y);///*平面五连杆逆解*/
 get_tg_angle_by_WLG_IS(); 
 	
