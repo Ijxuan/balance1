@@ -78,6 +78,8 @@ float send_to_MIT;//发送给电机的值
 	float send_to_MIT_speed;//发送给电机的位置速度值
 
 float	target_position;//目标角度
+float	target_position_end;//最终目标角度
+
 float	target_speed;//目标角度
 
 	float	kp;//角度*kp
@@ -89,6 +91,8 @@ uint8_t MIT_RAW_DATA[8];//接收到的电机发来的原始数据
 
 	float MIT_TZG;//抬最高
 	float MIT_TSZ;//腿伸直
+	float MIT_TZG_ARRIVE;//抬最高-实际达到值
+
 } MIT_t;
 
 
@@ -147,7 +151,8 @@ extern Ramp_Struct liftoff_temp;//离地高度斜坡
 
 extern float L_X;//左x目标位置
 extern float L_Y;//左Y目标位置
-
+extern float R_X;//右x目标位置
+extern float R_Y;//右Y目标位置
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t,uint32_t id);

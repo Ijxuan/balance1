@@ -246,6 +246,8 @@ Ramp_Struct SEND_TO_MIT_MAX;//
 
 float L_X=0;//左x目标位置
 float L_Y=0;//左Y目标位置
+float R_X=0;//右x目标位置
+float R_Y=0;//右Y目标位置
 
 void MIT_controul(void)
 {
@@ -302,18 +304,41 @@ if(target_position_text_PID<-1)target_position_text_PID=-1;
 //CanComm_SendControlPara(position_HD_text,speed_HD_text,0,0,0,MIT_A_SLAVE_ID);
 //CanComm_SendControlPara(position_HD_text,speed_HD_text,0,0,0,MIT_B_SLAVE_ID);
 L_OR_R++;
+
+if(MIT_C.ANGLE_JD<MIT_C.MIT_TZG_ARRIVE)
+{
+MIT_C.MIT_TZG_ARRIVE=MIT_C.ANGLE_JD;//刷新边界值
+}
+if(MIT_D.ANGLE_JD>MIT_D.MIT_TZG_ARRIVE)
+{
+MIT_D.MIT_TZG_ARRIVE=MIT_D.ANGLE_JD;//刷新边界值
+}
+if(MIT_A.ANGLE_JD<MIT_A.MIT_TZG_ARRIVE)
+{
+MIT_A.MIT_TZG_ARRIVE=MIT_A.ANGLE_JD;//刷新边界值
+}
+if(MIT_B.ANGLE_JD>MIT_B.MIT_TZG_ARRIVE)
+{
+MIT_B.MIT_TZG_ARRIVE=MIT_B.ANGLE_JD;//刷新边界值
+}
+
+
+
+
+
 get_MIT_tg_angle_for_liftoff();//计算腿离地高度
 
 get_MIT_tg_angle_for_bais();//计算腿前后倾斜角度
 
- mit_math_temp_2( L_X, L_Y);///*平面五连杆逆解*/
-	 
  
 if(L_OR_R%2==0)
 {
-
-MIT_B_controul();
-MIT_A_controul();	
+Accurately_contrul_text();
+ mit_math_temp_2( R_X, R_Y);///*平面五连杆逆解*/
+get_tg_angle_by_WLG_IS(); 
+	
+//MIT_B_controul();
+//MIT_A_controul();	
 }
 else{
 //liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
@@ -321,9 +346,12 @@ else{
 	
 //if(liftoff_L>90)liftoff_L=90;
 //if(liftoff_L<1)liftoff_L=1;	
+Accurately_contrul_text();
+ mit_math_temp_2( L_X, L_Y);///*平面五连杆逆解*/
+get_tg_angle_by_WLG_IS(); 
 	
 MIT_C_controul();
-MIT_D_controul();
+//MIT_D_controul();
 }
 /*
 float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
@@ -395,19 +423,21 @@ if(MIT_B.ANGLE_JD<-126.2)MIT_B.send_to_MIT=0;
 //-25.6  -125.9
 CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 */
-
+	#if use_MIT_Accurately==0
 	MIT_B.target_position=MIT_B.MIT_TZG-liftoff_R+MIT_Bias_R;//腿伸直是-125.9度 增加一个正值(liftoff_R)
+	#endif
 	
 //	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
+			MIT_B.target_position_end=MIT_B.target_position;
 
-if(MIT_B.target_position<MIT_B.MIT_TSZ-1)MIT_B.target_position=MIT_B.MIT_TSZ-1;
+if(MIT_B.target_position<MIT_B.MIT_TSZ-3)MIT_B.target_position_end=MIT_B.MIT_TSZ-3;
 	
-if(MIT_B.target_position>MIT_B.MIT_TZG+1)MIT_B.target_position=MIT_B.MIT_TZG+1;	
+if(MIT_B.target_position>MIT_B.MIT_TZG+3)MIT_B.target_position_end=MIT_B.MIT_TZG+3;	
 	
 	
 //MIT_B_SPEED.Target=P_PID_bate(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
 //	
-MIT_B.target_speed=P_PID_bate_V2(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
+MIT_B.target_speed=P_PID_bate_V2(&MIT_B_POSITION,MIT_B.target_position_end,MIT_B.ANGLE_JD);
 
 //	
 //MIT_B.send_to_MIT=P_PID_bate(&MIT_B_SPEED,MIT_B_SPEED.Target,MIT_B.SPEED_JD)/10.0f*send_to_MIT_damping;
@@ -422,7 +452,7 @@ MIT_B.kp=MIT_B.kp_temp*send_to_MIT_damping;
 MIT_B.kv=MIT_B.kv_temp*send_to_MIT_damping;
 
 //	position_HD_text=position_text/Angle_turn_Radian;
-MIT_B.send_to_MIT_position=MIT_B.target_position/Angle_turn_Radian;
+MIT_B.send_to_MIT_position=MIT_B.target_position_end/Angle_turn_Radian;
 MIT_B.send_to_MIT_speed=MIT_B.target_speed/Angle_turn_Radian;
 //CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 
@@ -458,15 +488,19 @@ if(MIT_A.ANGLE_JD<18.9)MIT_A.send_to_MIT=0;
 //抬最高是19.2 19.6 118.4
 CanComm_SendControlPara(0,0,0,0,MIT_A.send_to_MIT,MIT_A_SLAVE_ID);
 */
+	#if use_MIT_Accurately==0
 	MIT_A.target_position=MIT_A.MIT_TZG+liftoff_R+MIT_Bias_R;//腿伸直是-1度 减去一个正值(liftoff_R)
+	#endif
+
+			MIT_A.target_position_end=MIT_A.target_position;
+
+if(MIT_A.target_position>(MIT_A.MIT_TSZ-3))MIT_A.target_position_end=MIT_A.MIT_TSZ-3;
 	
-if(MIT_A.target_position>(MIT_A.MIT_TSZ-1))MIT_A.target_position=MIT_A.MIT_TSZ-5;
-	
-if(MIT_A.target_position<(MIT_A.MIT_TZG+1))MIT_A.target_position=MIT_A.MIT_TZG+5;	
+if(MIT_A.target_position<(MIT_A.MIT_TZG+3))MIT_A.target_position_end=MIT_A.MIT_TZG+3;	
 	
 	
 //MIT_A_SPEED.Target=P_PID_bate(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_JD);
-MIT_A.target_speed=P_PID_bate_V2(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_JD);	
+MIT_A.target_speed=P_PID_bate_V2(&MIT_A_POSITION,MIT_A.target_position_end,MIT_A.ANGLE_JD);	
 
 	
 //MIT_A.send_to_MIT=P_PID_bate(&MIT_A_SPEED,MIT_A_SPEED.Target,MIT_A.SPEED_JD)/10.0f*send_to_MIT_damping;
@@ -478,7 +512,7 @@ MIT_A.target_speed=P_PID_bate_V2(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANG
 MIT_A.kp=MIT_A.kp_temp*send_to_MIT_damping;
 MIT_A.kv=MIT_A.kv_temp*send_to_MIT_damping;
 
-MIT_A.send_to_MIT_position=MIT_A.target_position/Angle_turn_Radian;
+MIT_A.send_to_MIT_position=MIT_A.target_position_end/Angle_turn_Radian;
 MIT_A.send_to_MIT_speed=MIT_A.target_speed/Angle_turn_Radian;
 
 CanComm_SendControlPara(MIT_A.send_to_MIT_position,MIT_A.send_to_MIT_speed,MIT_A.kp,MIT_A.kv,0,MIT_A_SLAVE_ID);
@@ -486,19 +520,21 @@ CanComm_SendControlPara(MIT_A.send_to_MIT_position,MIT_A.send_to_MIT_speed,MIT_A
 }
 void MIT_C_controul(void)
 {
-
-	
+	#if use_MIT_Accurately==0
 	MIT_C.target_position=MIT_C.MIT_TZG+liftoff_L+MIT_Bias_L;//腿伸直是-1度 减去一个正值(liftoff_R)
+
+	#endif	
 	
-if(MIT_C.target_position>MIT_C.MIT_TSZ-1)MIT_C.target_position=MIT_C.MIT_TSZ-1;
+	MIT_C.target_position_end=MIT_C.target_position;
+if(MIT_C.target_position>MIT_C.MIT_TSZ-3)MIT_C.target_position_end=MIT_C.MIT_TSZ-3;
 	
-if(MIT_C.target_position<MIT_C.MIT_TZG+1)MIT_C.target_position=MIT_C.MIT_TZG+1;	
+if(MIT_C.target_position<MIT_C.MIT_TZG+3)MIT_C.target_position_end=MIT_C.MIT_TZG+3;	
 	
 
 
 	
 //MIT_C_SPEED.Target=P_PID_bate(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
-	MIT_C.target_speed=P_PID_bate_V2(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
+	MIT_C.target_speed=P_PID_bate_V2(&MIT_C_POSITION,MIT_C.target_position_end,MIT_C.ANGLE_JD);
 
 
 	
@@ -510,11 +546,11 @@ if(MIT_C.target_position<MIT_C.MIT_TZG+1)MIT_C.target_position=MIT_C.MIT_TZG+1;
 MIT_C.kp=MIT_C.kp_temp*send_to_MIT_damping;
 MIT_C.kv=MIT_C.kv_temp*send_to_MIT_damping;
 
-MIT_C.send_to_MIT_position=MIT_C.target_position/Angle_turn_Radian;
+MIT_C.send_to_MIT_position=MIT_C.target_position_end/Angle_turn_Radian;
 MIT_C.send_to_MIT_speed=MIT_C.target_speed/Angle_turn_Radian;
 
-//抬最高是-99.2  0.4
-CanComm_SendControlPara(MIT_C.send_to_MIT_position,MIT_C.send_to_MIT_speed,MIT_C.kp,MIT_C.kv,0,MIT_C_SLAVE_ID);
+//抬最高是20  0.4
+//CanComm_SendControlPara(MIT_C.send_to_MIT_position,MIT_C.send_to_MIT_speed,MIT_C.kp,MIT_C.kv,0,MIT_C_SLAVE_ID);
 
 
 
@@ -526,17 +562,20 @@ void MIT_D_controul(void)
 //if(liftoff_L>90)liftoff_L=90;
 //	
 //if(liftoff_L<10)liftoff_L=10;	
-	
+	#if use_MIT_Accurately==0
 	MIT_D.target_position=MIT_D.MIT_TZG-liftoff_L+MIT_Bias_L;//腿伸直是-1度 减去一个正值(liftoff_R)
+
+	#endif	
+		MIT_D.target_position_end=MIT_D.target_position;
+
+if(MIT_D.target_position<MIT_D.MIT_TSZ+3)MIT_D.target_position_end=MIT_D.MIT_TSZ+3;
 	
-if(MIT_D.target_position<MIT_D.MIT_TSZ+1)MIT_D.target_position=MIT_D.MIT_TSZ+1;
-	
-if(MIT_D.target_position>MIT_D.MIT_TZG-1)MIT_D.target_position=MIT_D.MIT_TZG-1;	
+if(MIT_D.target_position>MIT_D.MIT_TZG-3)MIT_D.target_position_end=MIT_D.MIT_TZG-3;	
 
 		
 	
 //MIT_D_SPEED.Target=P_PID_bate(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
-	MIT_D.target_speed=P_PID_bate_V2(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
+	MIT_D.target_speed=P_PID_bate_V2(&MIT_D_POSITION,MIT_D.target_position_end,MIT_D.ANGLE_JD);
 
 
 	
@@ -548,7 +587,7 @@ if(MIT_D.target_position>MIT_D.MIT_TZG-1)MIT_D.target_position=MIT_D.MIT_TZG-1;
 MIT_D.kp=MIT_D.kp_temp*send_to_MIT_damping;
 MIT_D.kv=MIT_D.kv_temp*send_to_MIT_damping;
 
-MIT_D.send_to_MIT_position=MIT_D.target_position/Angle_turn_Radian;
+MIT_D.send_to_MIT_position=MIT_D.target_position_end/Angle_turn_Radian;
 MIT_D.send_to_MIT_speed=MIT_D.target_speed/Angle_turn_Radian;
 
 

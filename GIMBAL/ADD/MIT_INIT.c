@@ -28,6 +28,11 @@ MIT_B.MIT_TZG=mit_init_angle_form_flash[1];
 MIT_C.MIT_TZG=mit_init_angle_form_flash[2];
 MIT_D.MIT_TZG=mit_init_angle_form_flash[3];	
 	
+MIT_A.MIT_TZG_ARRIVE=mit_init_angle_form_flash[0];
+MIT_B.MIT_TZG_ARRIVE=mit_init_angle_form_flash[1];
+MIT_C.MIT_TZG_ARRIVE=mit_init_angle_form_flash[2];
+MIT_D.MIT_TZG_ARRIVE=mit_init_angle_form_flash[3];		
+	
 MIT_A.MIT_TSZ=MIT_A.MIT_TZG+99;
 MIT_B.MIT_TSZ=MIT_B.MIT_TZG-99;
 MIT_C.MIT_TSZ=MIT_C.MIT_TZG+99;

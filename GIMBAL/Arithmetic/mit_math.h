@@ -4,9 +4,12 @@
 #include "MIT.h"
 #include "math.h"
 
+#define use_MIT_Accurately 1
 
 void mit_math_temp(void);/*平面五连杆正解*/
 void mit_math_temp_2(float Cx,float Cy);///*平面五连杆逆解*/
+void get_tg_angle_by_WLG_IS(void);///*通过平面五连杆逆解获得目标角度*/
+void Accurately_contrul_text(void);///*通过平面五连杆逆解获得目标角度精确控制测试*/
 
 extern float angle_fai_1;//坐标系原点处腿与水平面的夹角(锐角)
 extern float angle_fai_2;//(20,0)处腿与水平面的夹角(锐角)

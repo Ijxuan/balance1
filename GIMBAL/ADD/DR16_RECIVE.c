@@ -248,7 +248,7 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-				#if 1//平衡 位置环通用调参
+				#if 0//平衡 位置环通用调参
 		
 	p=0;
 			send_d_32[p++]=BALANCE_P.result;//弧度值目标位置		1
@@ -349,18 +349,18 @@ void NM_swj(void)
 			send_d_16[p++]=liftoff_R*10;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
-											#if 0//MIT C和D 运行监测
+											#if 1//MIT C和D 运行监测
 		
 	p=0;
 			send_d_32[p++]=MIT_C.ANGLE_JD*10;//弧度值目标位置		1
 			send_d_32[p++]=MIT_C.target_position*10;//弧度值当前位置		2
 		
-			send_d_32[p++]=MIT_C.send_to_MIT*10;//角度制 目标位置		3 
+			send_d_32[p++]=MIT_C.target_position_end*10;//角度制 目标位置		3 
 		
-			send_d_32[p++]=MIT_D.ANGLE_JD*10;//弧度值目标位置		1
+			send_d_32[p++]=(MIT_C.MIT_TZG+3)*10;//弧度值目标位置		1
 			send_d_32[p++]=MIT_D.target_position*10;//弧度值当前位置		2
 		
-			send_d_32[p++]=MIT_D.send_to_MIT*10;//角度制 目标位置		3 		
+			send_d_32[p++]=MIT_D.position_end*10;//角度制 目标位置		3 		
 			send_d_32[p++]=target_speed_text*1000;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8

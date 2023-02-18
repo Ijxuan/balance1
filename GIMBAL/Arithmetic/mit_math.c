@@ -1,5 +1,6 @@
 #include "mit_math.h"
 #include "arm_math.h"
+#include "DR16_RECIVE.h"
 
 /*平面五连杆逆解*/
 /*压缩状态149.5 锐角30.5*/
@@ -80,8 +81,17 @@ T1=(	-1.0*C0_TEMP+sqrt(C0_TEMP*C0_TEMP+B0_TEMP*B0_TEMP-A0_TEMP*A0_TEMP) )/(A0_TE
 	TEMP_SQRT=sqrt(C0_TEMP*C0_TEMP+B0_TEMP*B0_TEMP-A0_TEMP*A0_TEMP);//506.0810690924429
 angle_fai_1=2*atan(T1);//6.62061009*2=13.24122018
 angle_fai_1_JD=angle_fai_1*180/PI;
-MIT_A_tg_angle_for_IS=(PI-angle_fai_1)*180/PI+29.54;
 
+//MIT_A_tg_angle_for_IS=(PI-angle_fai_1)*180/PI+29.54;
+//MIT_A_tg_angle_for_IS=angle_fai_1_JD+29.54;
+MIT_A_tg_angle_for_IS=180-angle_fai_1_JD+29.54;
+	if(angle_fai_1_JD<0)
+	{
+MIT_A_tg_angle_for_IS=29.54-180-angle_fai_1_JD;
+	}	
+	
+	
+	
 A1_TEMP	=(Cx-20)*(Cx-20)+Cy*Cy-768;
 B1_TEMP=-32.0*(Cx-20);
 C1_TEMP=-32.0*Cy;
@@ -89,7 +99,51 @@ T2=(-1.0*C1_TEMP-sqrt(C1_TEMP*C1_TEMP+B1_TEMP*B1_TEMP-A1_TEMP*A1_TEMP) )/(A1_TEM
 angle_fai_2=2*atan(T2);
 	angle_fai_2_JD=angle_fai_2*180/PI;
 MIT_B_tg_angle_for_IS=angle_fai_2*180/PI+29.54;
-	
+
+//MIT_B_tg_angle_for_IS=180-angle_fai_2_JD+29.54;
+//	if(angle_fai_2_JD<0)
+//	{
+//MIT_B_tg_angle_for_IS=29.54-180-angle_fai_2_JD;
+//	}		
 }
+
+
+
+void get_tg_angle_by_WLG_IS(void)///*通过平面五连杆逆解获得目标角度*/
+{
+	#if use_MIT_Accurately==1
+//	MIT_A.target_position=MIT_A.MIT_TZG_ARRIVE+MIT_A_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+//	MIT_B.target_position=MIT_B.MIT_TZG_ARRIVE-MIT_B_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+//	
+//	MIT_C.target_position=MIT_C.MIT_TZG_ARRIVE+MIT_A_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+//	MIT_D.target_position=MIT_D.MIT_TZG_ARRIVE-MIT_B_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+	MIT_A.target_position=MIT_A.MIT_TZG+MIT_A_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+	MIT_B.target_position=MIT_B.MIT_TZG-MIT_B_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+	
+	MIT_C.target_position=MIT_C.MIT_TZG+MIT_A_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+	MIT_D.target_position=MIT_D.MIT_TZG-MIT_B_tg_angle_for_IS;//腿伸直是-1度 减去一个正值(liftoff_R)
+	
+	#endif
+
+}
+
+
+void Accurately_contrul_text(void)///*通过平面五连杆逆解获得目标角度精确控制测试*/
+{
+	
+L_X=10+DR16.rc.ch2/66;
+L_Y=25.33+DR16.rc.ch3/66;
+	
+R_X=10-DR16.rc.ch2/66;
+R_Y=25.33+DR16.rc.ch3/66;
+
+}
+
+
+
+
+
+
+
 
 
