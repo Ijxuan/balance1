@@ -509,12 +509,12 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 						 15000, -15000); // 转向环速度PID						 
 #endif
 #if 1//第6代参数 关节电机使能
-	P_PID_Parameter_Init(&BALANCE_P,500,0,0,4,//60,0.5,-30,0,
+	P_PID_Parameter_Init(&BALANCE_P,400,0,0,4,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 700, -700,
 						 14000, -14000); // 平衡PID
-	P_PID_Parameter_Init(&BALANCE_I,40,0,0,0,//60,0.5,-30,0,
+	P_PID_Parameter_Init(&BALANCE_I,60,0,0,0,//60,0.5,-30,0,
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 500, -500,
@@ -533,7 +533,7 @@ P_PID_V2_Init(&SPEED_P_v2,-1.5,0,1.5,7300,//-0.5  -0.15软
 						10,-10, //                          float alpha,
 						 1500, -1500,
 						 10000, -10000); // 速度PIDV2
-P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
+P_PID_V2_Init(&POSITION_v2,1,0,0,7300,//-0.5  -0.15软
 						999,-999, //						  float max_error, float min_error,
 						10,-10, //                          float alpha,
 						 1500, -1500,

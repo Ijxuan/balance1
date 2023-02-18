@@ -4,6 +4,7 @@
 #include "math.h"
 #include "MY_balance_CONTROL.h"
 #include "mit_math.h"
+#include "bsp_buzzer.h"
 
 void MIT_PID_INIT(void)
 {
@@ -337,8 +338,8 @@ Accurately_contrul_text();
  mit_math_temp_2( R_X, R_Y);///*平面五连杆逆解*/
 get_tg_angle_by_WLG_IS(); 
 	
-//MIT_B_controul();
-//MIT_A_controul();	
+MIT_B_controul();
+MIT_A_controul();	
 }
 else{
 //liftoff_R+=DR16.rc.ch3/2200.0f;	//左手油门
@@ -351,7 +352,7 @@ Accurately_contrul_text();
 get_tg_angle_by_WLG_IS(); 
 	
 MIT_C_controul();
-//MIT_D_controul();
+MIT_D_controul();
 }
 /*
 float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
@@ -426,9 +427,18 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 	#if use_MIT_Accurately==0
 	MIT_B.target_position=MIT_B.MIT_TZG-liftoff_R+MIT_Bias_R;//腿伸直是-125.9度 增加一个正值(liftoff_R)
 	#endif
-	
+	if(isnan(MIT_B.target_position)==0)
+	{
+	MIT_B.target_position_end=MIT_B.target_position;
+		Buzzer.mode=Zero_times;
+	}
+	else
+	{
+			Buzzer.mode=heaps_times;
+
+	}	
 //	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
-			MIT_B.target_position_end=MIT_B.target_position;
+//			MIT_B.target_position_end=MIT_B.target_position;
 
 if(MIT_B.target_position<MIT_B.MIT_TSZ-3)MIT_B.target_position_end=MIT_B.MIT_TSZ-3;
 	
@@ -491,8 +501,17 @@ CanComm_SendControlPara(0,0,0,0,MIT_A.send_to_MIT,MIT_A_SLAVE_ID);
 	#if use_MIT_Accurately==0
 	MIT_A.target_position=MIT_A.MIT_TZG+liftoff_R+MIT_Bias_R;//腿伸直是-1度 减去一个正值(liftoff_R)
 	#endif
+	if(isnan(MIT_A.target_position)==0)
+	{
+	MIT_A.target_position_end=MIT_A.target_position;
+		Buzzer.mode=Zero_times;
+	}
+	else
+	{
+			Buzzer.mode=heaps_times;
 
-			MIT_A.target_position_end=MIT_A.target_position;
+	}
+//			MIT_A.target_position_end=MIT_A.target_position;
 
 if(MIT_A.target_position>(MIT_A.MIT_TSZ-3))MIT_A.target_position_end=MIT_A.MIT_TSZ-3;
 	
@@ -524,8 +543,16 @@ void MIT_C_controul(void)
 	MIT_C.target_position=MIT_C.MIT_TZG+liftoff_L+MIT_Bias_L;//腿伸直是-1度 减去一个正值(liftoff_R)
 
 	#endif	
-	
+	if(isnan(MIT_C.target_position)==0)
+	{
 	MIT_C.target_position_end=MIT_C.target_position;
+		Buzzer.mode=Zero_times;
+	}
+	else
+	{
+			Buzzer.mode=heaps_times;
+
+	}
 if(MIT_C.target_position>MIT_C.MIT_TSZ-3)MIT_C.target_position_end=MIT_C.MIT_TSZ-3;
 	
 if(MIT_C.target_position<MIT_C.MIT_TZG+3)MIT_C.target_position_end=MIT_C.MIT_TZG+3;	
@@ -550,7 +577,7 @@ MIT_C.send_to_MIT_position=MIT_C.target_position_end/Angle_turn_Radian;
 MIT_C.send_to_MIT_speed=MIT_C.target_speed/Angle_turn_Radian;
 
 //抬最高是20  0.4
-//CanComm_SendControlPara(MIT_C.send_to_MIT_position,MIT_C.send_to_MIT_speed,MIT_C.kp,MIT_C.kv,0,MIT_C_SLAVE_ID);
+CanComm_SendControlPara(MIT_C.send_to_MIT_position,MIT_C.send_to_MIT_speed,MIT_C.kp,MIT_C.kv,0,MIT_C_SLAVE_ID);
 
 
 
@@ -566,7 +593,17 @@ void MIT_D_controul(void)
 	MIT_D.target_position=MIT_D.MIT_TZG-liftoff_L+MIT_Bias_L;//腿伸直是-1度 减去一个正值(liftoff_R)
 
 	#endif	
-		MIT_D.target_position_end=MIT_D.target_position;
+		if(isnan(MIT_D.target_position)==0)
+	{
+	MIT_D.target_position_end=MIT_D.target_position;
+		Buzzer.mode=Zero_times;
+	}
+	else
+	{
+			Buzzer.mode=heaps_times;
+
+	}
+//		MIT_D.target_position_end=MIT_D.target_position;
 
 if(MIT_D.target_position<MIT_D.MIT_TSZ+3)MIT_D.target_position_end=MIT_D.MIT_TSZ+3;
 	

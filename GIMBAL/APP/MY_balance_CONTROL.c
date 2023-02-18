@@ -29,6 +29,8 @@ float PITCH_XR_K=0.1;//PITCH轴削弱函数
 int DR16_rc_ch1_last;
 int DW_FOR_ZX=0;
 
+int target_speed_by_position=0;
+
 Ramp_Struct ZX;//自旋斜坡
 
 int TARGET_speed_RC=0;//遥控速度
@@ -111,7 +113,10 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 	P_PID_bate(&BALANCE_P,0+TARGET_angle_PITCH_BC,DJIC_IMU.total_pitch)
 	+P_PID_bate(&BALANCE_I,0,DJIC_IMU.Gyro_y);
 	
-			P_PID_bate_V2(&SPEED_P_v2,0,L_speed_new-R_speed_new);
+	
+	P_PID_bate_V2(&POSITION_v2,TARGET_position_V2,milemeter_test.total_mile_truly_use);
+	target_speed_by_position=POSITION_v2.result*PITCH_XR_K;;
+			P_PID_bate_V2(&SPEED_P_v2,target_speed_by_position,L_speed_new-R_speed_new);
 	
 	if(DR16.rc.ch1!=0)//前进时关闭速度环
 	{
@@ -141,7 +146,6 @@ DR16_rc_ch1_last=DR16.rc.ch1;
 	/*调试直立环时注释速度环*/
 	send_to_tire_L+=SPEED_P_v2.result;
 	
-	P_PID_bate_V2(&POSITION_v2,TARGET_position_V2,milemeter_test.total_mile_truly_use);
 //			if(DR16.rc.ch0!=0)//自旋时关闭位置环
 //	{
 //	POSITION_v2.result=0;
