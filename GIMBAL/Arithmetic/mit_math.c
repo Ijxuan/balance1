@@ -129,6 +129,7 @@ void get_tg_angle_by_WLG_IS(void)///*通过平面五连杆逆解获得目标角度*/
 
 }
 
+float change_focus_damping=0;//目标角度的衰减
 
 void Accurately_contrul_text(void)///*通过平面五连杆逆解获得目标角度精确控制测试*/
 {
@@ -145,10 +146,33 @@ L_Y=25.33+DR16.rc.ch3/66;
 R_X=10-MIT_change_focus.result*PITCH_XR_K;
 R_Y=25.33+DR16.rc.ch3/66;	
 */	
-L_X=10+MIT_change_focus.result;
+	if(DR16.rc.s_right==2)
+	{
+		if(change_focus_damping>0.01)
+		{
+		change_focus_damping-=0.003;//3.3秒衰减
+		}
+		if(change_focus_damping<=0.01)
+		{
+		change_focus_damping=0;//衰减完毕
+			MIT_change_focus.result=0;
+		}	
+	}
+	if(DR16.rc.s_right==3)
+	{
+		if(change_focus_damping<0.95)
+		{
+		change_focus_damping+=0.003;//3.3秒启动
+		}
+		if(change_focus_damping>=0.95)
+		{
+		change_focus_damping=1;//启动完毕
+		}	
+	}	
+L_X=10+MIT_change_focus.result*change_focus_damping;
 L_Y=25.33+DR16.rc.ch3/66;
 	
-R_X=10-MIT_change_focus.result;
+R_X=10-MIT_change_focus.result*change_focus_damping;
 R_Y=25.33+DR16.rc.ch3/66;		
 }
 

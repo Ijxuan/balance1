@@ -251,7 +251,7 @@ float R_X=0;//右x目标位置
 float R_Y=0;//右Y目标位置
 
 int disable_position;
-
+int DR16_rc_ch1_last_for_mit;
 void MIT_controul(void)
 {
 	
@@ -330,11 +330,25 @@ if(DR16.rc.s_right==2)
 {
 L_X=10;
 R_X=10;
-MIT_change_focus.result=0;
+//MIT_change_focus.result=0;
 	disable_position=milemeter_test.total_mile_by_angle_1000;//失能时
 }
 else if(DR16.rc.s_right==3)
 {
+		if(DR16.rc.ch1!=0)
+	{
+disable_position=milemeter_test.total_mile_by_angle_1000+DR16.rc.ch1/3;//遥控器给定目标位置
+		
+//disable_position=milemeter_test.total_mile_truly_use+P_PID_bate(&RC_SPEED_TO_POSITION,TARGET_speed_RC,L_speed_new-R_speed_new);//遥控器给定目标速度,转换成速度		
+	}
+		
+		if(DR16.rc.ch1==0&&DR16_rc_ch1_last_for_mit!=0)
+		{
+		disable_position=milemeter_test.total_mile_by_angle_1000;//记录松手瞬间的位置
+		}
+DR16_rc_ch1_last_for_mit=DR16.rc.ch1;
+	
+	
 P_PID_bate_V2(&MIT_change_focus,
 	disable_position,
 	milemeter_test.total_mile_by_angle_1000);
