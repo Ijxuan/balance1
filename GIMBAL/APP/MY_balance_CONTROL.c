@@ -143,9 +143,9 @@ DR16_rc_ch1_last=DR16.rc.ch1;
 	{
 	SPEED_P_v2.result=0;
 	}
-	/*调试直立环时注释速度环*/
+	/*调试直立环时注释速度环
 	send_to_tire_L+=SPEED_P_v2.result;
-	
+	*/
 //			if(DR16.rc.ch0!=0)//自旋时关闭位置环
 //	{
 //	POSITION_v2.result=0;

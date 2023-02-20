@@ -455,6 +455,21 @@
           <WinNumber>1</WinNumber>
           <ItemText>MIT_change_focus.result</ItemText>
         </Ww>
+        <Ww>
+          <count>61</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MIT_change_focus_by_speed</ItemText>
+        </Ww>
+        <Ww>
+          <count>62</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>SPEED_L_FOR_MIT,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>63</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>SPEED_R_FOR_MIT</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>

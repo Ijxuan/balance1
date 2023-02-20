@@ -24,7 +24,8 @@ extern LPF_t SPEED_MIT_D;
 extern float LPF_a;//
 extern float LPF_b;//
 //轮胎里程计滤波用
-
+extern LPF_t SPEED_L_FOR_MIT;
+extern LPF_t SPEED_R_FOR_MIT;
 int LPF_V1(int value_wait_lpf,float LPF_k);
 int LPF_V2(LPF_t *LPF_VOID,int value_new_void);
 

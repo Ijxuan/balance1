@@ -133,13 +133,15 @@ float change_focus_damping=0;//目标角度的衰减
 
 void Accurately_contrul_text(void)///*通过平面五连杆逆解获得目标角度精确控制测试*/
 {
-/*遥控器控制  	
+ 	#if use_MIT_change_focus==0
+
 L_X=10+DR16.rc.ch2/66;
 L_Y=25.33+DR16.rc.ch3/66;
 	
 R_X=10-DR16.rc.ch2/66;
 R_Y=25.33+DR16.rc.ch3/66;
-
+	#endif
+/*遥控器控制 	
 L_X=10+MIT_change_focus.result*PITCH_XR_K;
 L_Y=25.33+DR16.rc.ch3/66;
 	
@@ -169,11 +171,22 @@ R_Y=25.33+DR16.rc.ch3/66;
 		change_focus_damping=1;//启动完毕
 		}	
 	}	
+	/*
 L_X=10+MIT_change_focus.result*change_focus_damping;
 L_Y=25.33+DR16.rc.ch3/66;
 	
 R_X=10-MIT_change_focus.result*change_focus_damping;
-R_Y=25.33+DR16.rc.ch3/66;		
+R_Y=25.33+DR16.rc.ch3/66;	
+
+	MIT_change_focus_by_speed.result=0;//调试时专注避免干扰*/
+	#if use_MIT_change_focus==1
+L_X=10+MIT_change_focus_by_speed.result*change_focus_damping;
+L_Y=25.33+DR16.rc.ch3/66;
+	
+R_X=10-MIT_change_focus_by_speed.result*change_focus_damping;
+R_Y=25.33+DR16.rc.ch3/66;	
+	#endif
+	
 }
 
 

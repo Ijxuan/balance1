@@ -248,7 +248,67 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-			#if 1//设置多少的速度合适
+				#if 1//改变重心的双环调节
+		
+	p=0;
+			send_d_32[p++]=L_speed_new_FOR_MIT;//弧度值目标位置		1
+			send_d_32[p++]=M3508s[3].realSpeed/10;//弧度值当前位置		2
+		
+			send_d_32[p++]=R_speed_new_FOR_MIT;//角度制 目标位置		3 
+		
+			send_d_32[p++]=M3508s[2].realSpeed/10;//弧度值目标位置		1
+			send_d_32[p++]=L_speed_new_FOR_MIT-R_speed_new_FOR_MIT;//弧度值当前位置		2
+		
+			send_d_32[p++]=MIT_change_focus.result;//角度制 目标位置		3 		
+			send_d_32[p++]=MIT_change_focus_by_speed.result*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=MIT_change_focus_by_speed.result*10;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+		#if 0//设置多少的速度滤波合适
+		
+	p=0;
+			send_d_32[p++]=L_speed_new_FOR_MIT;//弧度值目标位置		1
+			send_d_32[p++]=M3508s[3].realSpeed/10;//弧度值当前位置		2
+		
+			send_d_32[p++]=R_speed_new_FOR_MIT;//角度制 目标位置		3 
+		
+			send_d_32[p++]=M3508s[2].realSpeed/10;//弧度值目标位置		1
+			send_d_32[p++]=L_speed_new_FOR_MIT-R_speed_new_FOR_MIT;//弧度值当前位置		2
+		
+			send_d_32[p++]=MIT_change_focus.result;//角度制 目标位置		3 		
+			send_d_32[p++]=MIT_change_focus_by_speed.result*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=liftoff_L;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif		
+		#if 0//设置多少的速度合适
+		
+	p=0;
+			send_d_32[p++]=L_speed_new;//弧度值目标位置		1
+			send_d_32[p++]=R_speed_new;//弧度值当前位置		2
+		
+			send_d_32[p++]=M3508s[3].realSpeed;//角度制 目标位置		3 
+		
+			send_d_32[p++]=M3508s[2].realSpeed;//弧度值目标位置		1
+			send_d_32[p++]=M3508s[3].realSpeed-M3508s[2].realSpeed;//弧度值当前位置		2
+		
+			send_d_32[p++]=MIT_change_focus.result;//角度制 目标位置		3 		
+			send_d_32[p++]=MIT_change_focus_by_speed.result*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=liftoff_L;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+			#if 0//设置多少的速度合适
 		
 	p=0;
 			send_d_32[p++]=L_speed_new;//弧度值目标位置		1

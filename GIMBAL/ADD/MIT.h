@@ -153,6 +153,12 @@ extern float L_X;//左x目标位置
 extern float L_Y;//左Y目标位置
 extern float R_X;//右x目标位置
 extern float R_Y;//右Y目标位置
+
+extern int R_speed_new_FOR_MIT;
+extern int L_speed_new_FOR_MIT;
+
+
+
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t,uint32_t id);

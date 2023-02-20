@@ -36,47 +36,27 @@ compiling mit_math.c...
   MIT_A_tg_angle_for_IS=180-angle_fai_1_JD+29.54;
 ..\Arithmetic\mit_math.c(103): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   MIT_B_tg_angle_for_IS=angle_fai_2*180/PI+29.54;
-..\Arithmetic\mit_math.c(151): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		if(change_focus_damping>0.01)
 ..\Arithmetic\mit_math.c(153): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		change_focus_damping-=0.003;//3.3秒衰减
+  		if(change_focus_damping>0.01)
 ..\Arithmetic\mit_math.c(155): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		change_focus_damping-=0.003;//3.3秒衰减
+..\Arithmetic\mit_math.c(157): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if(change_focus_damping<=0.01)
-..\Arithmetic\mit_math.c(163): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		if(change_focus_damping<0.95)
 ..\Arithmetic\mit_math.c(165): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		change_focus_damping+=0.003;//3.3秒启动
+  		if(change_focus_damping<0.95)
 ..\Arithmetic\mit_math.c(167): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		change_focus_damping+=0.003;//3.3秒启动
+..\Arithmetic\mit_math.c(169): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if(change_focus_damping>=0.95)
 ..\Arithmetic\mit_math.c: 10 warnings, 0 errors
-compiling freertos.c...
-..\ADD\DR16_RECIVE.h(212): warning:  #3135-D: attribute does not apply to any entity
-  		__packed struct
-..\ADD\DR16_RECIVE.h(245): warning:  #3135-D: attribute does not apply to any entity
-  		__packed struct {
-..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
-  		__packed struct {
-..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
-      __SIMD32_TYPE *vstate;
-..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
-      vstate = __SIMD32_CONST(S->state);
-../Src/freertos.c(736): warning:  #177-D: variable "error_e"  was declared but never referenced
-  	char error_e[5]="error";
-../Src/freertos.c(1016): warning:  #177-D: variable "i"  was declared but never referenced
-  int i=0;
-../Src/freertos.c(1017): warning:  #177-D: variable "speed_i"  was declared but never referenced
-  int speed_i=0;
-../Src/freertos.c(1354): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  			send_to_MIT_damping-=0.0005;	//2秒失能
-../Src/freertos.c(1357): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  					liftoff_R-=0.01;//将电机归位到起始点附近 一秒10度
-../Src/freertos.c(1380): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  send_to_MIT_damping+=0.0005;	//两秒启动
-../Src/freertos.c: 11 warnings, 0 errors
+compiling MIT.c...
+..\ADD\MIT.c(120): warning:  #177-D: function "CanTransmit"  was declared but never referenced
+  static void CanTransmit(uint8_t *buf, uint8_t len,uint32_t id)
+..\ADD\MIT.c: 1 warning, 0 errors
 linking...
-Program Size: Code=101136 RO-data=4580 RW-data=2040 ZI-data=58296  
+Program Size: Code=101152 RO-data=4580 RW-data=2048 ZI-data=58440  
 FromELF: creating hex file...
-"ins_task\GIMBAL.axf" - 0 Error(s), 21 Warning(s).
+"ins_task\GIMBAL.axf" - 0 Error(s), 11 Warning(s).
 
 <h2>Software Packages used:</h2>
 

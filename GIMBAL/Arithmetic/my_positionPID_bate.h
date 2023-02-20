@@ -193,6 +193,7 @@ extern P_PID_t MIT_D_SPEED;//MIT_A速度环
 extern P_PID_t_V2 MIT_D_POSITION;//MIT_A位置环
 
 extern P_PID_t_V2 MIT_change_focus;//MIT_改变重心
+extern P_PID_t_V2 MIT_change_focus_by_speed;//MIT_根据目标速度改变重心
 
 #endif
 
