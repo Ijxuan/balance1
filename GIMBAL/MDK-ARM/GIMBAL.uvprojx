@@ -539,6 +539,11 @@
               <FileType>1</FileType>
               <FilePath>..\ADD\MIT_INIT.c</FilePath>
             </File>
+            <File>
+              <FileName>LQR_TEST.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\LQR_TEST.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
