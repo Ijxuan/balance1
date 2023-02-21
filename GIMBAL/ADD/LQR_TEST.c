@@ -10,6 +10,9 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update);
 static void chassis_set_contorl(chassis_move_t *chassis_move_control);
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
+float  Nm_L_test;
+float  Nm_R_test;
+
 int send_to_L_test;
 int send_to_R_test;
 
@@ -55,7 +58,9 @@ void chassis_behaviour_control_set(fp32 *vx_set, fp32 *angle_set, chassis_move_t
 
  if (DR16.rc.s_right == 3&& DR16.rc.s_left==3)
     {
-			chassis_balance_control(vx_set, angle_set, chassis_move_rc_to_vector);//平衡模式
+		chassis_remote_control(vx_set, angle_set, chassis_move_rc_to_vector);//遥控器控制模式
+
+//			chassis_balance_control(vx_set, angle_set, chassis_move_rc_to_vector);//平衡模式
     }
  if (DR16.rc.s_right == 2)
     {
@@ -83,10 +88,10 @@ void chassis_behaviour_control_set(fp32 *vx_set, fp32 *angle_set, chassis_move_t
   */
 static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector)
 {
-    if (vx_set == NULL || angle_set == NULL || chassis_move_rc_to_vector == NULL)
-    {
-        return;  //
-    }
+//    if (vx_set == NULL || angle_set == NULL || chassis_move_rc_to_vector == NULL)
+//    {
+//        return;  //
+//    }
 
     chassis_rc_to_control_vector(vx_set, chassis_move_rc_to_vector);
 		
@@ -116,15 +121,16 @@ static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t
   * @param[out]     chassis_move_rc_to_vector: "chassis_move" 变量指针
   * @retval         none
   */
+      int16_t vx_channel ;
+    fp32 vx_set_channel ;
 void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_to_vector)
 {
-    if (chassis_move_rc_to_vector == NULL || vx_set == NULL )
-    {
-        return;
-    }
+//    if (chassis_move_rc_to_vector == NULL || vx_set == NULL )
+//    {
+//        return;
+//    }
     
-    int16_t vx_channel ;
-    fp32 vx_set_channel ;
+
 		
     //deadline, because some remote control need be calibrated,  the value of rocker is not zero in middle place,
     //死区限制，因为遥控器可能存在差异 摇杆在中间，其值不为0
@@ -194,30 +200,57 @@ static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_
     *vx_set = 0.0f;
     *angle_set = 0.0f;
 }
+float K3_OUT=0;
+float K4_OUT=0;
+float K2_OUT=0;
 
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 {
 		/*驱动轮输出力矩=SUM[LQR增益系数*(状态变量目标值-状态变量反馈值)]*/
 		/*注意左右轮输出力矩的正负号，以及各状态变量反馈值的正负号*/
 	  //左轮输出力矩
- send_to_L_test =
-	- (LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) - 
-	LQR_K3*chassis_move_control_loop->chassis_pitch  + 
-	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) + 
-	LQR_K15*chassis_move_control_loop->delta_angle + 
-	LQR_K16*chassis_move_control_loop->chassis_yaw_speed);
+ Nm_R_test = - (
+	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
+	+
+	LQR_K3*chassis_move_control_loop->chassis_pitch
+	- 
+	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed)
+	+ 
+	LQR_K15*chassis_move_control_loop->delta_angle 
+	- 
+	LQR_K16*chassis_move_control_loop->chassis_yaw_speed
+	);
+K2_OUT=	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
+K3_OUT=	LQR_K3*chassis_move_control_loop->chassis_pitch;
+K4_OUT=LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) ;	
+	
 	
 		  //右轮输出力矩
+Nm_L_test  =   (
+	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
++
+	LQR_K3*chassis_move_control_loop->chassis_pitch  
+	- 
+	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) 
+	+ 
+	LQR_K25*chassis_move_control_loop->delta_angle 
+	- 
+	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
+	);
 
- send_to_R_test =   
-	(LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) - 
-	LQR_K3*chassis_move_control_loop->chassis_pitch  + 
-	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) + 
-	LQR_K25*chassis_move_control_loop->delta_angle + 
-	LQR_K26*chassis_move_control_loop->chassis_yaw_speed);
+
+    //赋值电流值
+
+			send_to_L_test = (int16_t)(Nm_L_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
+    
+send_to_R_test=(int16_t)(Nm_R_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
+
+if(DR16.rc.s_left==3&&DR16.rc.s_right==3)
+{
+send_to_tire_L=send_to_L_test;send_to_tire_R=send_to_R_test;
 
 
-
+}
 
 
 
@@ -364,7 +397,8 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 		
     //get movement control target-points, 获取运动控制目标值
     chassis_behaviour_control_set(&vx_set, &angle_set, chassis_move_control);
-
+    chassis_move_control->vx_max_speed = NORMAL_MAX_CHASSIS_SPEED_X;
+    chassis_move_control->vx_min_speed = -NORMAL_MAX_CHASSIS_SPEED_X;
 //    if (chassis_move_control->chassis_mode == CHASSIS_REMOTE_MODE)
 //    {
 //			chassis_move_control->delta_angle = 0.0f;
@@ -376,10 +410,14 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 			if (DR16.rc.s_right == 3&& DR16.rc.s_left==3)
     {
 			chassis_move_control->chassis_yaw_set = rad_format(angle_set);
-			chassis_move_control->delta_angle = chassis_move_control->chassis_yaw_set;
+			chassis_move_control->delta_angle = rad_format(chassis_move_control->chassis_yaw_set - chassis_move_control->chassis_yaw);
 			chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
     }
-	
+	else
+	{
+	chassis_move_control->chassis_yaw_set = chassis_move_control->chassis_yaw;
+		angle_set=rad_format((float)INS_angle[0]);
+	}
 //		else if (chassis_move_control->chassis_mode == CHASSIS_DOWN_MODE)
 //		{
 //			chassis_move_control->chassis_yaw_set = rad_format(angle_set);

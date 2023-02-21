@@ -60,6 +60,7 @@
 #include "CAN2_SEND.h"
 #include "MIT.h"
 #include "MIT_INIT.h"
+#include"LQR_TEST.h"
 
 /* USER CODE END Includes */
 
@@ -607,6 +608,8 @@ ZX.Absolute_Max=660;
 	 
 SPEED_MIT.LPF_K=0.04;
 //Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
+
+
 
   /* USER CODE END Init */
 
@@ -1418,7 +1421,7 @@ if(DR16.rc.s_left==1)
 		}
 
 }
-
+LQR_TEST_CON();
 
 vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 		

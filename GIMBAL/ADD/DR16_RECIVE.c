@@ -19,6 +19,7 @@
 #include "Vision_Control.h"
 #include "MY_balance_CONTROL.h"
 #include "MIT.h"
+#include"LQR_TEST.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
@@ -248,7 +249,27 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-				#if 1//改变重心的双环调节
+						#if 1//lQR正负号确定
+		
+	p=0;
+			send_d_32[p++]=K3_OUT*1000;//弧度值目标位置		1
+			send_d_32[p++]=K4_OUT*1000;//弧度值当前位置		2
+		
+			send_d_32[p++]=send_to_L_test;//角度制 目标位置		3 
+		
+			send_d_32[p++]=send_to_R_test;//弧度值目标位置		1
+			send_d_32[p++]=K2_OUT*1000;//弧度值当前位置		2
+		
+			send_d_32[p++]=MIT_change_focus.result;//角度制 目标位置		3 		
+			send_d_32[p++]=MIT_change_focus_by_speed.result*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=send_to_tire_R;//实际       	9
+			send_d_16[p++]=send_to_tire_L;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+				#if 0//改变重心的双环调节
 		
 	p=0;
 			send_d_32[p++]=L_speed_new_FOR_MIT;//弧度值目标位置		1

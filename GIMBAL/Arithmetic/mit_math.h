@@ -5,7 +5,8 @@
 #include "math.h"
 
 #define use_MIT_Accurately 1
-#define use_MIT_change_focus 1
+
+#define use_MIT_change_focus 0
 
 void mit_math_temp(void);/*平面五连杆正解*/
 void mit_math_temp_2(float Cx,float Cy);///*平面五连杆逆解*/

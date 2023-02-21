@@ -105,9 +105,21 @@ typedef struct
 	fp32 chassis_roll_speed;          //底盘陀螺仪反馈的当前roll角速度
 } chassis_move_t;
 
+
+
+
+extern float  Nm_L_test;
+extern float  Nm_R_test;
+
 extern int send_to_L_test;
 extern int send_to_R_test;
+extern float K3_OUT;
+extern float K4_OUT;
+extern float K2_OUT;
+
 void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_to_vector);
+void LQR_TEST_CON(void);
+
 fp32 fp32_constrain(fp32 Value, fp32 minValue, fp32 maxValue);
 //限幅函数
 #endif

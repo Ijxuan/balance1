@@ -90,7 +90,7 @@ send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpe
 
 }
 
-    if(DR16.rc.s_right==3)
+    if(DR16.rc.s_right==10)
 {
 	TARGET_speed=DR16.rc.ch1;
 //	TARGET_angle_PITCH=DR16.rc.ch1/-6.6*TARGET_angle_PITCH_MAX;//Ò£¿ØÆ÷Ö±½Ó¿ØÖÆÇãÐ±½Ç¶È
@@ -190,7 +190,12 @@ tire_R_TARGE_speed=-1*tire_L_TARGE_speed*1.45f;
 	send_to_tire_L=P_PID_bate(&TIRE_L_SPEED_pid,tire_L_TARGE_speed,M3508s[3].realSpeed);
 send_to_tire_R=P_PID_bate(&TIRE_R_SPEED_pid,tire_R_TARGE_speed,M3508s[2].realSpeed);9
 */
+	
+//send_to_tire_L=0;
+//send_to_tire_R=0;
+	
 }
+
 }
 
 
