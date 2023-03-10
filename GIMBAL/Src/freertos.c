@@ -550,15 +550,15 @@ P_PID_V2_Init(&POSITION_v2,1,0,0,7300,//-0.5  -0.15软
 						 //                          float alpha,
 						 2000, -2000,
 						 15000, -15000); // 转向环速度PID    MIT_change_focus	
-P_PID_V2_Init(&MIT_change_focus_by_speed,0.1,0.01,0,19999,//-0.5  -0.15软
+P_PID_V2_Init(&MIT_change_focus_by_speed,0.05,0.01,0,19999,//-0.5  -0.15软
 						19999,-19999, //						  float max_error, float min_error,
 						1,-1, //                          float alpha,
 						 30, -30,
 						 25, -25); //平衡-根据目标速度改变重心PID 
-P_PID_V2_Init(&MIT_change_focus,7,0,0,19999,//-0.5  -0.15软
+P_PID_V2_Init(&MIT_change_focus,0.3,0.5,0,19999,//-0.5  -0.15软
 						19999,-19999, //						  float max_error, float min_error,
 						1,-1, //                          float alpha,
-						 0, 0,
+						 500, -500,
 						 5000, -5000); //平衡-根据位置改变目标速度PID    
 
 #endif
