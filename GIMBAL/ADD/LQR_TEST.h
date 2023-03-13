@@ -34,18 +34,60 @@ typedef float fp32;
 
 
 //LQR feedback parameter
-//LQR反馈增益系数
-#define LQR_K1 -0.0224f
-#define LQR_K2 -2.2554f
-#define LQR_K3 -10.1436f
-#define LQR_K4 -1.5177f
-#define LQR_K15 2.2361f
-#define LQR_K16 0.6863f
+//LQR反馈增益系数 -默认
+//#define LQR_K1 -0.0224f
+//#define LQR_K2 -2.2554f
+//#define LQR_K3 -10.1436f
+//#define LQR_K4 -1.5177f
+//#define LQR_K15 2.2361f
+//#define LQR_K16 0.6863f
+//#define LQR_K25 -LQR_K15
+//#define LQR_K26 -LQR_K16
+
+//总量改成11.65KG
+//#define LQR_K1 -0.0224f
+//#define LQR_K2 -2.2542f
+//#define LQR_K3 -11.7836f
+//#define LQR_K4 -1.4369f
+//#define LQR_K15 2.2361f
+//#define LQR_K16 0.5377f
+//#define LQR_K25 -LQR_K15
+//#define LQR_K26 -LQR_K16
+
+//总量改成11.65KG 车轮质量改成0.3KG
+//#define LQR_K1 -0.0224f
+//#define LQR_K2 -2.2528f
+//#define LQR_K3 -11.5491f
+//#define LQR_K4 -1.3836f
+//#define LQR_K15 2.2361f
+//#define LQR_K16 0.4304f
+//#define LQR_K25 -LQR_K15
+//#define LQR_K26 -LQR_K16
+
+//总量改成11.65KG 车轮质量改成0.3KG  摆长 15cm
+//#define LQR_K1 -0.0224f
+//#define LQR_K2 -2.2529f//乘轮胎速度
+//#define LQR_K3 -13.7787f//乘机体角度
+//#define LQR_K4 -2.3758f//乘机体角速度
+//#define LQR_K15 2.2361f
+//#define LQR_K16 0.6126f
+//#define LQR_K25 -LQR_K15
+//#define LQR_K26 -LQR_K16
+
+//总量改成7.026KG 车轮质量改成0.5KG 
+//车轮转动惯量，单位为kg*m^2   1488.358
+//摆长 111.81mm 
+//车体转动惯量，单位为kg*m^2     137252.709
+//%绕y轴的转动惯量 转向惯量      160792.682
+
+#define LQR_K1 -0.0224f//没用到
+#define LQR_K2 -1.8254f//乘轮胎速度
+#define LQR_K3 -7.5984f//乘机体角度
+#define LQR_K4 -1.2251f//乘机体角速度
+#define LQR_K15 2.2361f//YAW角度
+#define LQR_K16 0.4105f//YAW角速度
 #define LQR_K25 -LQR_K15
 #define LQR_K26 -LQR_K16
-
-
-
 extern fp32 loop_fp32_constrain(fp32 Input, fp32 minValue, fp32 maxValue);
 
 #define PII					3.14159265358979f

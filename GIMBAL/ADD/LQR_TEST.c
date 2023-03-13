@@ -206,6 +206,9 @@ float K2_OUT=0;
 
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 {
+	    fp32 max_torque = 0.0f, torque_rate = 0.0f;
+    fp32 temp = 0.0f;
+    uint8_t i = 0;
 		/*驱动轮输出力矩=SUM[LQR增益系数*(状态变量目标值-状态变量反馈值)]*/
 		/*注意左右轮输出力矩的正负号，以及各状态变量反馈值的正负号*/
 	  //左轮输出力矩
@@ -220,9 +223,9 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	- 
 	LQR_K16*chassis_move_control_loop->chassis_yaw_speed
 	);
-K2_OUT=	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
-K3_OUT=	LQR_K3*chassis_move_control_loop->chassis_pitch;
-K4_OUT=LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) ;	
+//K2_OUT=	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
+//K3_OUT=	LQR_K3*chassis_move_control_loop->chassis_pitch;
+//K4_OUT=LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) ;	
 	
 	
 		  //右轮输出力矩
@@ -238,16 +241,39 @@ Nm_L_test  =   (
 	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
 	);
 
+    //计算轮子最大转矩，并限制其最大转矩
+			temp = fabs(Nm_R_test);
+			if (max_torque < temp)
+			{
+				max_torque = temp;
+			}
+			
+			temp = fabs(Nm_L_test);
+			if (max_torque < temp)
+			{
+				max_torque = temp;
+			}			
 
-    //赋值电流值
 
-			send_to_L_test = (int16_t)(Nm_L_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
+    if (max_torque > MAX_WHEEL_TORQUE)
+    {
+			torque_rate = MAX_WHEEL_TORQUE / max_torque;
+
+				send_to_L_test *= torque_rate;
+				send_to_R_test *= torque_rate;
+
+    }   
+
+	//赋值电流值
+
+send_to_L_test = (int16_t)(Nm_L_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
     
 send_to_R_test=(int16_t)(Nm_R_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
 
 if(DR16.rc.s_left==3&&DR16.rc.s_right==3)
 {
-send_to_tire_L=send_to_L_test;send_to_tire_R=send_to_R_test;
+send_to_tire_L=send_to_L_test;
+send_to_tire_R=send_to_R_test;
 
 
 }
