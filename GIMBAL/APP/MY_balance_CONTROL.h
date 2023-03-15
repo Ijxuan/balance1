@@ -15,6 +15,8 @@ typedef struct
   int total_mile_by_angle_8191;//通过totalangle除以8191计算里程
   int total_mile_by_angle_4000;//通过totalangle除以4000计算里程
   int total_mile_truly_use;//真正在用的里程计
+	  float total_mile_LQR_use;//真正在用的里程计
+	float K_LQR_use;//真正在用的里程计
 }milemeter_t;
 
 void balance_control(void);
@@ -45,6 +47,7 @@ extern int TARGET_speed_RC;
 extern int target_speed_by_position;
 
 
+//extern float TARGET_angle_YAW;
 
 
 

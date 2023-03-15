@@ -1,8 +1,10 @@
-#include"LQR_TEST.h"
+#include "LQR_TEST.h"
 #include "DR16_RECIVE.h"
 #include "M3508.h"
 #include "INS_task.h"
 #include "user_lib.h"
+#include "MY_balance_CONTROL.h"
+#include "my_positionPID_bate.h"
 
 static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
 static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
@@ -15,6 +17,8 @@ float  Nm_R_test;
 
 int send_to_L_test;
 int send_to_R_test;
+
+float LQR_TARGET_position=0;
 
 //底盘运动数据
 chassis_move_t chassis_move;
@@ -95,8 +99,8 @@ static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t
 
     chassis_rc_to_control_vector(vx_set, chassis_move_rc_to_vector);
 		
-    *angle_set = rad_format(chassis_move_rc_to_vector->chassis_yaw_set - 
-	CHASSIS_ANGLE_Z_RC_SEN * DR16.rc.ch0);
+    *angle_set = rad_format(chassis_move_rc_to_vector->chassis_yaw_set
+	- CHASSIS_ANGLE_Z_RC_SEN * DR16.rc.ch0);
 }
 
 
@@ -136,10 +140,10 @@ void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_
     //死区限制，因为遥控器可能存在差异 摇杆在中间，其值不为0
 //    rc_deadband_limit(chassis_move_rc_to_vector->chassis_RC->rc.ch[CHASSIS_X_CHANNEL], vx_channel, CHASSIS_RC_DEADLINE);
 		
-	vx_channel=DR16.rc.ch1;
+	vx_channel=DR16.rc.ch1*-1;
 	
     //将遥杆参数转换为运动参数
-    vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN;
+    vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN+TARGET_SPEED_POSITION;
 		
     //keyboard set speed set-point
     //键盘控制
@@ -203,7 +207,7 @@ static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_
 float K3_OUT=0;
 float K4_OUT=0;
 float K2_OUT=0;
-
+float TARGET_SPEED_POSITION;
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 {
 	    fp32 max_torque = 0.0f, torque_rate = 0.0f;
@@ -211,6 +215,10 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
     uint8_t i = 0;
 		/*驱动轮输出力矩=SUM[LQR增益系数*(状态变量目标值-状态变量反馈值)]*/
 		/*注意左右轮输出力矩的正负号，以及各状态变量反馈值的正负号*/
+	
+	if(R_Y<30)
+	{
+	
 	  //左轮输出力矩
  Nm_R_test = - (
 	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
@@ -218,10 +226,10 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	LQR_K3*chassis_move_control_loop->chassis_pitch
 	- 
 	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed)
-	+ 
-	LQR_K15*chassis_move_control_loop->delta_angle 
-	- 
-	LQR_K16*chassis_move_control_loop->chassis_yaw_speed
+//	+ 
+//	LQR_K15*chassis_move_control_loop->delta_angle 
+//	- 
+//	LQR_K16*chassis_move_control_loop->chassis_yaw_speed
 	);
 //K2_OUT=	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
 //K3_OUT=	LQR_K3*chassis_move_control_loop->chassis_pitch;
@@ -235,11 +243,46 @@ Nm_L_test  =   (
 	LQR_K3*chassis_move_control_loop->chassis_pitch  
 	- 
 	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) 
-	+ 
-	LQR_K25*chassis_move_control_loop->delta_angle 
-	- 
-	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
+//	+ 
+//	LQR_K25*chassis_move_control_loop->delta_angle 
+//	- 
+//	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
 	);
+}
+else 	if(R_Y>=30)
+{
+	  //左轮输出力矩
+ Nm_R_test = - (
+	M_LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
+	+
+	M_LQR_K3*chassis_move_control_loop->chassis_pitch
+	- 
+	M_LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed)
+//	+ 
+//	LQR_K15*chassis_move_control_loop->delta_angle 
+//	- 
+//	LQR_K16*chassis_move_control_loop->chassis_yaw_speed
+	);
+//K2_OUT=	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
+//K3_OUT=	LQR_K3*chassis_move_control_loop->chassis_pitch;
+//K4_OUT=LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) ;	
+	
+	
+		  //右轮输出力矩
+Nm_L_test  =   (
+	M_LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
++
+	M_LQR_K3*chassis_move_control_loop->chassis_pitch  
+	- 
+	M_LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) 
+//	+ 
+//	LQR_K25*chassis_move_control_loop->delta_angle 
+//	- 
+//	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
+	);
+
+}
+
 
     //计算轮子最大转矩，并限制其最大转矩
 			temp = fabs(Nm_R_test);
@@ -268,14 +311,50 @@ Nm_L_test  =   (
 
 send_to_L_test = (int16_t)(Nm_L_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
     
-send_to_R_test=(int16_t)(Nm_R_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
+send_to_R_test = (int16_t)(Nm_R_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
+	
 
+	
 if(DR16.rc.s_left==3&&DR16.rc.s_right==3)
 {
-send_to_tire_L=send_to_L_test;
+send_to_tire_L=send_to_L_test;//将LQR算出来的值赋给发送变量
 send_to_tire_R=send_to_R_test;
 
+	
+	TARGET_SPEED_POSITION=P_PID_bate(&LQR_SPEED_BY_POSITION,LQR_TARGET_position,milemeter_test.total_mile_truly_use)/1000.0f;
 
+	if(DR16.rc.ch1!=0)//前进时更新目标位置
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+TARGET_SPEED_POSITION=0;
+}
+	if(DR16.rc.ch0!=0)//转向时更新目标位置
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+TARGET_SPEED_POSITION=0;
+}
+	if(DW_FOR_ZX!=0)//小陀螺时更新目标位置
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+TARGET_SPEED_POSITION=0;
+}
+	if(DR16.rc.ch0!=0)
+	{
+	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/15.0;
+	}		
+	TARGET_angle_speed_YAW=P_PID_bate(&change_direction_angle,TARGET_angle_YAW,DJIC_IMU.total_yaw);
+	if(DW_FOR_ZX!=0)//拨轮控制,控制速度
+	{
+	TARGET_angle_speed_YAW=DW_FOR_ZX;
+	TARGET_angle_YAW	=DJIC_IMU.total_yaw;
+	}
+send_to_tire_L+=P_PID_bate(&change_direction_speed,TARGET_angle_speed_YAW,DJIC_IMU.Gyro_z);
+send_to_tire_R+=P_PID_bate(&change_direction_speed,TARGET_angle_speed_YAW,DJIC_IMU.Gyro_z);
+	
+}
+else
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
 }
 
 

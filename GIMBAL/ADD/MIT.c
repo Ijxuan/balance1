@@ -80,6 +80,10 @@ void MIT_PID_INIT(void)
 	MIT_D.kv_temp=3;
 	
 	liftoff_temp.Rate=0.1;
+	
+	MIT_BALENCE_start.Absolute_Max=20;//通过MIT保持机体平衡 斜坡函数极限值
+	MIT_BALENCE_start.Rate=0.003;
+	
 }
 
 

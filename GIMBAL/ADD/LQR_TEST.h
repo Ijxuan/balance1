@@ -81,13 +81,23 @@ typedef float fp32;
 //%绕y轴的转动惯量 转向惯量      160792.682
 
 #define LQR_K1 -0.0224f//没用到
-#define LQR_K2 -1.8254f//乘轮胎速度
-#define LQR_K3 -7.5984f//乘机体角度
-#define LQR_K4 -1.2251f//乘机体角速度
+#define LQR_K2 -1.7538f//乘轮胎速度
+#define LQR_K3 -7.1050f//乘机体角度
+#define LQR_K4 -1.1819f//乘机体角速度
 #define LQR_K15 2.2361f//YAW角度
 #define LQR_K16 0.4105f//YAW角速度
 #define LQR_K25 -LQR_K15
 #define LQR_K26 -LQR_K16
+
+#define M_LQR_K1 -0.0224f//没用到
+#define M_LQR_K2 -1.7462f//乘轮胎速度
+#define M_LQR_K3 -9.5951f//乘机体角度
+#define M_LQR_K4 -1.3175f//乘机体角速度
+#define M_LQR_K15 2.2361f//YAW角度
+#define M_LQR_K16 0.4105f//YAW角速度
+#define M_LQR_K25 -LQR_K15
+#define M_LQR_K26 -LQR_K16
+
 extern fp32 loop_fp32_constrain(fp32 Input, fp32 minValue, fp32 maxValue);
 
 #define PII					3.14159265358979f
@@ -158,6 +168,8 @@ extern int send_to_R_test;
 extern float K3_OUT;
 extern float K4_OUT;
 extern float K2_OUT;
+extern float TARGET_SPEED_POSITION;
+extern float LQR_TARGET_position;
 
 void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_to_vector);
 void LQR_TEST_CON(void);

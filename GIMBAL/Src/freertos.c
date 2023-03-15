@@ -562,12 +562,28 @@ P_PID_V2_Init(&MIT_change_focus,0.3,0.5,0,19999,//-0.5  -0.15软
 						 5000, -5000); //平衡-根据位置改变目标速度PID    
 
 #endif
+
+	P_PID_Parameter_Init(&LQR_SPEED_BY_POSITION,-0.0005,0,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 3000, -3000); //通过位置误差计算出LQR目标速度 
+						 
+		P_PID_Parameter_Init(&keep_BALENCE_by_MIT,0.3,0,0,7300,//-0.5  -0.15软
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 0, -0,
+						 5, -5); // 					 
+	
+
 SPEED_L.LPF_K=0.85;
 SPEED_R.LPF_K=0.85;
 SPEED_R_FOR_MIT.LPF_K=0.15;
 SPEED_L_FOR_MIT.LPF_K=0.15;
 
-milemeter_A.LPF_K=0.6;
+milemeter_A.LPF_K=0.1;
+milemeter_test.K_LQR_use=2;
+
 ZX.Rate=1;
 ZX.Absolute_Max=660;
 	P_PID_Parameter_Init(&RC_SPEED_TO_POSITION,0.8,0,0,0,//-0.00001

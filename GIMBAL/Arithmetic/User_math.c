@@ -27,7 +27,7 @@ void Value_Limit(float* value,float* min,float* max)
 	}
 }
 
-float Ramp_Function(Ramp_Struct* data)
+float Ramp_Function(Ramp_Struct* data)//Ð±ÆÂº¯Êý
 {
 	
 	if(data->Current_Value > data->Target_Value)

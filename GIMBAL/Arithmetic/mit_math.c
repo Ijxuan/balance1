@@ -3,6 +3,7 @@
 #include "DR16_RECIVE.h"
 #include "my_positionPID_bate.h"
 #include "MY_balance_CONTROL.h"
+#include "math.h"
 
 /*平面五连杆逆解*/
 /*压缩状态149.5 锐角30.5*/
@@ -134,12 +135,12 @@ float change_focus_damping=0;//目标角度的衰减
 void Accurately_contrul_text(void)///*通过平面五连杆逆解获得目标角度精确控制测试*/
 {
  	#if use_MIT_change_focus==0
-
-L_X=10+DR16.rc.ch2/660.0*10.0;
-L_Y=25.33+DR16.rc.ch3/660.0*10.0;
+MIT_keep_BALENCE();
+L_X=10+DR16.rc.ch2/660.0*10.0+keep_BALENCE_by_MIT_RT;
+L_Y=24.33+DR16.rc.ch3/660.0*10.0;
 	
-R_X=10-DR16.rc.ch2/660.0*10.0;
-R_Y=25.33+DR16.rc.ch3/660.0*10.0;
+R_X=10-DR16.rc.ch2/660.0*10.0-keep_BALENCE_by_MIT_RT;
+R_Y=24.33+DR16.rc.ch3/660.0*10.0;
 	#endif
 /*遥控器控制 	
 L_X=10+MIT_change_focus.result*PITCH_XR_K;
@@ -190,6 +191,43 @@ R_Y=25.33+DR16.rc.ch3/66;
 }
 
 
+
+
+
+
+float keep_BALENCE_by_MIT_RT=0;
+Ramp_Struct MIT_BALENCE_start;
+int banlence_times=0;//机体保持平衡时长
+int banlence_states_las_times=0;//上一时刻是否保持了平衡
+
+
+
+
+
+
+void MIT_keep_BALENCE()
+{
+if(fabs(DJIC_IMU.total_pitch)<10.0f)//只在平衡状态下生效
+	{
+banlence_times++;
+keep_BALENCE_by_MIT_RT=0;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+else
+{
+keep_BALENCE_by_MIT_RT=0;
+}
+//		keep_BALENCE_by_MIT_RT=P_PID_bate(&keep_BALENCE_by_MIT,0,DJIC_IMU.total_pitch);
+
+}
 
 
 

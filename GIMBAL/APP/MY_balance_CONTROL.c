@@ -220,7 +220,8 @@ milemeter_test.total_mile_by_angle_8191=M3508s[3].totalAngle/8191-M3508s[2].tota
 	
 //milemeter_test.total_mile_truly_use=milemeter_test.total_mile_by_angle;	
 	
-	milemeter_test.total_mile_truly_use=LPF_V2( &milemeter_A,milemeter_test.total_mile_by_angle_100);
+	milemeter_test.total_mile_truly_use=LPF_V2( &milemeter_A,milemeter_test.total_mile_by_angle/milemeter_test.K_LQR_use);
+//	milemeter_test.total_mile_LQR_use;
 }
 
 

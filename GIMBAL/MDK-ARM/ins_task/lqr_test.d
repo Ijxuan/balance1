@@ -62,3 +62,5 @@ ins_task\lqr_test.o: ..\ADD\M3508.h
 ins_task\lqr_test.o: ..\application\INS_task.h
 ins_task\lqr_test.o: ..\application\struct_typedef.h
 ins_task\lqr_test.o: ..\components\algorithm\user_lib.h
+ins_task\lqr_test.o: ..\APP\MY_balance_CONTROL.h
+ins_task\lqr_test.o: ..\Arithmetic\my_positionPID_bate.h

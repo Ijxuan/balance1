@@ -72,6 +72,10 @@ P_PID_t_V2 MIT_D_POSITION;//MIT_A位置环
 P_PID_t_V2 MIT_change_focus;//MIT_根据目标位置改变重心
 P_PID_t_V2 MIT_change_focus_by_speed;//MIT_根据目标速度改变重心
 
+P_PID_t LQR_SPEED_BY_POSITION;//LQR位置环算速度
+
+P_PID_t keep_BALENCE_by_MIT;//通过MIT保持机体平衡
+
 int PID_YES=0;
 
 
