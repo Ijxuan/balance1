@@ -5,6 +5,7 @@
 #include "user_lib.h"
 #include "MY_balance_CONTROL.h"
 #include "my_positionPID_bate.h"
+#include "mit_math.h"
 
 static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
 static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
@@ -463,15 +464,21 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
     //¼ÆËãµ×ÅÌ×ËÌ¬½Ç¶È
     chassis_move_update->chassis_yaw = 
 	rad_format((float)INS_angle[0]);
-	
-    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
+//	if(DR16.rc.ch1==0)
+    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]-angle_qhq_pi);
+//	else
+//	{
+//    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
+//	}
+//	    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
+
     chassis_move_update->chassis_roll = (float)INS_angle[1];
 		
 		//calculate chassis euler angular velocity
 		//¼ÆËãµ×ÅÌ×ËÌ¬½ÇËÙ¶È
 		chassis_move_update->chassis_yaw_speed = INS_gyro[2];
 		
-	chassis_move_update->chassis_pitch_speed =  INS_gyro[0];
+	chassis_move_update->chassis_pitch_speed =  INS_gyro[0]-pitch_speed_new;
 		
 	chassis_move_update->chassis_roll_speed = INS_gyro[1];	  
 		//calculate chassis velocity and synthesis angular velocity

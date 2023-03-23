@@ -19,7 +19,8 @@
 #include "Vision_Control.h"
 #include "MY_balance_CONTROL.h"
 #include "MIT.h"
-#include"LQR_TEST.h"
+#include "LQR_TEST.h"
+#include "mit_math.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
@@ -249,24 +250,84 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-				#if 1//通过MIT保持机体平衡 正负号确定
+						#if 0//通过MIT保持机体平衡 反向验证
 		
 	p=0;
-			send_d_32[p++]=DJIC_IMU.total_pitch*10;//弧度值目标位置		1
-			send_d_32[p++]=0;//弧度值当前位置		2
+			send_d_32[p++]=change_angle_total_angle*1000000;//弧度值		1
+			send_d_32[p++]=change_angle_total_speed_end*1000000;//弧度值		2
 		
-			send_d_32[p++]=DJIC_IMU.total_pitch*10;//角度制 目标位置		3 
+			send_d_32[p++]=pitch_speed_new*10000;//角度制 		3 
 		
-			send_d_32[p++]=send_to_R_test;//弧度值目标位置		1
-			send_d_32[p++]=K2_OUT*1000;//弧度值当前位置		2
+			send_d_32[p++]=(INS_gyro[0]-pitch_speed_new)*10000;//角度制		1
+			send_d_32[p++]=DJIC_IMU.Gyro_y*10;//角度制		2
 		
-			send_d_32[p++]=MIT_change_focus.result;//角度制 目标位置		3 		
-			send_d_32[p++]=MIT_change_focus_by_speed.result*100;//里程计测试  	7
+			send_d_32[p++]=INS_gyro[0]*10000;//弧度值目标位置		3 		
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
 
 			send_d_16[p++]=send_to_tire_R;//实际       	9
-			send_d_16[p++]=send_to_tire_L;//目标		10
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+				#if 0//通过MIT保持机体平衡 自制角速度
+		
+	p=0;
+			send_d_32[p++]=cumulate_angle_change*100;//弧度值		1
+			send_d_32[p++]=pitch_speed_new*100;//弧度值		2
+		
+			send_d_32[p++]=cumulate_angle_change_JD*10;//角度制 		3 
+		
+			send_d_32[p++]=pitch_speed_new_JD*10;//角度制		1
+			send_d_32[p++]=DJIC_IMU.Gyro_y*10;//角度制		2
+		
+			send_d_32[p++]=INS_gyro[0]*100;//弧度值目标位置		3 		
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=send_to_tire_R;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+						#if 1//通过MIT保持机体平衡 数据重新确定
+		
+	p=0;
+			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*10;//弧度值目标位置		1
+			send_d_32[p++]=angle_qhq*10;//弧度值当前位置		2
+		
+			send_d_32[p++]=DJIC_IMU.total_pitch*10;//角度制 目标位置		3 
+		
+			send_d_32[p++]=DJIC_IMU.Gyro_z*10;//弧度值目标位置		1
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//弧度值当前位置		2
+		
+			send_d_32[p++]=angle_qhq*10;//角度制 目标位置		3 		
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=send_to_tire_R;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+				#if 0//通过MIT保持机体平衡 正负号确定
+		
+	p=0;
+			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*10;//弧度值目标位置		1
+			send_d_32[p++]=angle_qhq*10;//弧度值当前位置		2
+		
+			send_d_32[p++]=DJIC_IMU.total_pitch*10;//角度制 目标位置		3 
+		
+			send_d_32[p++]=keep_BALENCE_by_MIT.result*100;//弧度值目标位置		1
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//弧度值当前位置		2
+		
+			send_d_32[p++]=angle_qhq*10;//角度制 目标位置		3 		
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=send_to_tire_R;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
 		#if 0//lQR正负号确定

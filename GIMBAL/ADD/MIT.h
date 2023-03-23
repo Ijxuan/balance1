@@ -157,8 +157,10 @@ extern float R_Y;//右Y目标位置
 extern int R_speed_new_FOR_MIT;
 extern int L_speed_new_FOR_MIT;
 
-
-
+extern float L_C_X_NOW;//此时此刻左轮的坐标（x轴）
+extern float L_C_Y_NOW;//此时此刻左轮的坐标（y轴）
+extern float R_C_X_NOW;//此时此刻右轮的坐标（x轴）
+extern float R_C_Y_NOW;//此时此刻右轮的坐标（y轴）
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t,uint32_t id);

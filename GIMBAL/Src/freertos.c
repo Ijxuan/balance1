@@ -60,7 +60,8 @@
 #include "CAN2_SEND.h"
 #include "MIT.h"
 #include "MIT_INIT.h"
-#include"LQR_TEST.h"
+#include "LQR_TEST.h"
+#include "mit_math.h"
 
 /* USER CODE END Includes */
 
@@ -569,11 +570,11 @@ P_PID_V2_Init(&MIT_change_focus,0.3,0.5,0,19999,//-0.5  -0.15软
 						 2000, -2000,
 						 3000, -3000); //通过位置误差计算出LQR目标速度 
 						 
-		P_PID_Parameter_Init(&keep_BALENCE_by_MIT,0.3,0,0,7300,//-0.5  -0.15软
+		P_PID_Parameter_Init(&keep_BALENCE_by_MIT,1,0,0,20,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
-						 0, -0,
-						 5, -5); // 					 
+						 500, -500,
+						 16, -16); // 					 
 	
 
 SPEED_L.LPF_K=0.85;
@@ -1437,8 +1438,14 @@ if(DR16.rc.s_left==1)
 		}
 
 }
-LQR_TEST_CON();
+//	mit_math_temp();//正解验算
 
+mit_math_temp(MIT_A.ANGLE_JD-MIT_A.MIT_TZG-29.54,
+			  MIT_B.MIT_TZG-MIT_B.ANGLE_JD-29.54,
+				&R_C_X_NOW,&R_C_Y_NOW);//正解验算 
+LQR_TEST_CON();
+update_gyro();//由角度计算角速度
+gyro_test();//积分角速度比较速度验证
 vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 		
 	}

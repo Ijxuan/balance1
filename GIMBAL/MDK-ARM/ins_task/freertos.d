@@ -111,3 +111,4 @@ ins_task\freertos.o: ..\ADD\MIT.h
 ins_task\freertos.o: ..\ADD\MIT_INIT.h
 ins_task\freertos.o: ..\bsp\boards\bsp_flash.h
 ins_task\freertos.o: ..\ADD\LQR_TEST.h
+ins_task\freertos.o: ..\Arithmetic\mit_math.h

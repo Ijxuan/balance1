@@ -92,3 +92,4 @@ ins_task\dr16_recive.o: ..\Arithmetic\FPS_Calculate.h
 ins_task\dr16_recive.o: ..\APP\MY_balance_CONTROL.h
 ins_task\dr16_recive.o: ..\ADD\MIT.h
 ins_task\dr16_recive.o: ..\ADD\LQR_TEST.h
+ins_task\dr16_recive.o: ..\Arithmetic\mit_math.h

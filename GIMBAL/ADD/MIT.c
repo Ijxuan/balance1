@@ -82,8 +82,10 @@ void MIT_PID_INIT(void)
 	liftoff_temp.Rate=0.1;
 	
 	MIT_BALENCE_start.Absolute_Max=20;//通过MIT保持机体平衡 斜坡函数极限值
-	MIT_BALENCE_start.Rate=0.003;
+	MIT_BALENCE_start.Rate=0.002;
 	
+	MIT_BALENCE_GO_TO_TG.Absolute_Max=20;
+	MIT_BALENCE_GO_TO_TG.Rate=0.02;
 }
 
 
@@ -120,6 +122,11 @@ float send_to_MIT_damping=0;//发送给电机的值的衰减
 int MIT_DISABLE_TIMES=0;//电机失能时间累计
 int MIT_ENABLE_TIMES=0;//电机使能时间累计
 
+float L_C_X_NOW=0;//此时此刻左轮的坐标（x轴）
+float L_C_Y_NOW=0;//此时此刻左轮的坐标（y轴）
+
+float R_C_X_NOW=0;//此时此刻右轮的坐标（x轴）
+float R_C_Y_NOW=0;//此时此刻右轮的坐标（y轴）
 /* 把buf中的内容通过CAN接口发送出去 */
 static void CanTransmit(uint8_t *buf, uint8_t len,uint32_t id)
 {
