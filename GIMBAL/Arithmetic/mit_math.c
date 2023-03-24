@@ -134,11 +134,6 @@ angle_fai_2=2*atan(T2);
 	angle_fai_2_JD=angle_fai_2*180/PI;
 MIT_B_tg_angle_for_IS=angle_fai_2*180/PI+29.54;
 
-//MIT_B_tg_angle_for_IS=180-angle_fai_2_JD+29.54;
-//	if(angle_fai_2_JD<0)
-//	{
-//MIT_B_tg_angle_for_IS=29.54-180-angle_fai_2_JD;
-//	}		
 }
 
 

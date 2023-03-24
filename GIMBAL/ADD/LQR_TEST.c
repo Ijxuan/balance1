@@ -227,15 +227,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	LQR_K3*chassis_move_control_loop->chassis_pitch
 	- 
 	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed)
-//	+ 
-//	LQR_K15*chassis_move_control_loop->delta_angle 
-//	- 
-//	LQR_K16*chassis_move_control_loop->chassis_yaw_speed
 	);
-//K2_OUT=	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
-//K3_OUT=	LQR_K3*chassis_move_control_loop->chassis_pitch;
-//K4_OUT=LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) ;	
-	
 	
 		  //ÓÒÂÖÊä³öÁ¦¾Ø
 Nm_L_test  =   (
@@ -244,10 +236,6 @@ Nm_L_test  =   (
 	LQR_K3*chassis_move_control_loop->chassis_pitch  
 	- 
 	LQR_K4*(-chassis_move_control_loop->chassis_pitch_speed) 
-//	+ 
-//	LQR_K25*chassis_move_control_loop->delta_angle 
-//	- 
-//	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
 	);
 }
 else 	if(R_Y>=30)
