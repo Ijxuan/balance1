@@ -306,7 +306,7 @@ void NM_swj(void)
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
 
-			send_d_16[p++]=send_to_tire_R;//实际       	9
+			send_d_16[p++]=engine_body_height_R*10;//实际       	9
 			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif

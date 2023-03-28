@@ -86,6 +86,9 @@ void MIT_PID_INIT(void)
 	
 	MIT_BALENCE_GO_TO_TG.Absolute_Max=20;
 	MIT_BALENCE_GO_TO_TG.Rate=0.02;
+	
+	liftoff_SE.Absolute_Max=43;
+	liftoff_SE.Rate=0.01;
 }
 
 
@@ -99,7 +102,8 @@ MIT_t MIT_D;
 
 float liftoff_R=10;//右边离地高度
 float liftoff_L=10;//左边离地高度
-
+float engine_body_height_R;//右边机体高度
+float engine_body_height_L;//左边机体高度
 int16_t sendto_MIT_TEXT=1;
 float send_to_MIT_text=0;//发送给电机的值
 /**/

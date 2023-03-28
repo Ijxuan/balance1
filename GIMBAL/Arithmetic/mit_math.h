@@ -16,6 +16,7 @@ void Accurately_contrul_text(void);///*Í¨¹ıÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊ
 void MIT_keep_BALENCE(void);//¹Ø½Úµç»úÊ±¿Ì±£³ÖÆ½ºâ
 void update_gyro(void);
 void gyro_test(void);
+void engine_body_height_control(void);
 
 extern float angle_fai_1;//×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç)
 extern float angle_fai_2;//(20,0)´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç)
@@ -61,7 +62,9 @@ extern	float change_angle_1ms;//1msµÄ»ı·Ö
 extern	float change_angle_total_speed_end;//ÀÛ¼ÓÍê³ÉÖµ
 
 extern	float change_angle_total_angle;//Êµ¼Ê½Ç¶È±ä»¯Á¿-ÓÃÓÚ¶Ô±È
-	
+extern	Ramp_Struct liftoff_SE;//ÀëµØ¸ß¶ÈĞ±ÆÂ
+extern float height_text;
+
 #endif
 
 

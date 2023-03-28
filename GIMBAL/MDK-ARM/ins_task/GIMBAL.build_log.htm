@@ -39,30 +39,78 @@ compiling LQR_TEST.c...
 ..\ADD\LQR_TEST.c(182): warning:  #177-D: function "chassis_down_control"  was declared but never referenced
   static void chassis_down_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector)
 ..\ADD\LQR_TEST.c: 5 warnings, 0 errors
+compiling MIT.c...
+..\ADD\MIT.c(135): warning:  #177-D: function "CanTransmit"  was declared but never referenced
+  static void CanTransmit(uint8_t *buf, uint8_t len,uint32_t id)
+..\ADD\MIT.c: 1 warning, 0 errors
 compiling mit_math.c...
 ..\Arithmetic\mit_math.c(121): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   MIT_A_tg_angle_for_IS=180-angle_fai_1_JD+29.54;
 ..\Arithmetic\mit_math.c(135): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   MIT_B_tg_angle_for_IS=angle_fai_2*180/PI+29.54;
-..\Arithmetic\mit_math.c(186): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(191): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if(change_focus_damping>0.01)
-..\Arithmetic\mit_math.c(188): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(193): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		change_focus_damping-=0.003;//3.3秒衰减
-..\Arithmetic\mit_math.c(190): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(195): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if(change_focus_damping<=0.01)
-..\Arithmetic\mit_math.c(198): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(203): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if(change_focus_damping<0.95)
-..\Arithmetic\mit_math.c(200): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(205): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		change_focus_damping+=0.001;//10秒启动
-..\Arithmetic\mit_math.c(202): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(207): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		if(change_focus_damping>=0.95)
-..\Arithmetic\mit_math.c(351): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\Arithmetic\mit_math.c(356): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	change_angle_1ms=INS_gyro[0]*0.001;
-..\Arithmetic\mit_math.c: 9 warnings, 0 errors
+..\Arithmetic\mit_math.c(436): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  if(engine_body_height_R>43.1)engine_body_height_R=43.1;
+..\Arithmetic\mit_math.c(437): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  if(engine_body_height_R<13.3)engine_body_height_R=13.3; 
+..\Arithmetic\mit_math.c: 11 warnings, 0 errors
+compiling DR16_RECIVE.c...
+..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
+      __SIMD32_TYPE *vstate;
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
+      vstate = __SIMD32_CONST(S->state);
+..\ADD\LQR_TEST.h(179): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\ADD\DR16_RECIVE.c: 4 warnings, 0 errors
+compiling freertos.c...
+..\ADD\DR16_RECIVE.h(212): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct
+..\ADD\DR16_RECIVE.h(245): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\APP\MY_CLOUD_CONTROL.h(70): warning:  #3135-D: attribute does not apply to any entity
+  		__packed struct {
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4865): warning:  #3108-D: attribute "__packed__" does not apply here
+      __SIMD32_TYPE *vstate;
+..\Drivers\CMSIS\DSP\Include\arm_math.h(4873): warning:  #3108-D: attribute "__packed__" does not apply here
+      vstate = __SIMD32_CONST(S->state);
+..\ADD\LQR_TEST.h(179): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Src/freertos.c(764): warning:  #177-D: variable "error_e"  was declared but never referenced
+  	char error_e[5]="error";
+../Src/freertos.c(1044): warning:  #177-D: variable "i"  was declared but never referenced
+  int i=0;
+../Src/freertos.c(1045): warning:  #177-D: variable "speed_i"  was declared but never referenced
+  int speed_i=0;
+../Src/freertos.c(1382): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			send_to_MIT_damping-=0.0005;	//2秒失能
+../Src/freertos.c(1385): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  					liftoff_R-=0.01;//将电机归位到起始点附近 一秒10度
+../Src/freertos.c(1408): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  send_to_MIT_damping+=0.0005;	//两秒启动
+../Src/freertos.c(1443): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  mit_math_temp(MIT_A.ANGLE_JD-MIT_A.MIT_TZG-29.54,
+../Src/freertos.c(1444): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			  MIT_B.MIT_TZG-MIT_B.ANGLE_JD-29.54,
+../Src/freertos.c: 14 warnings, 0 errors
 linking...
-Program Size: Code=106292 RO-data=4576 RW-data=2232 ZI-data=58768  
+Program Size: Code=106608 RO-data=4580 RW-data=2256 ZI-data=58784  
 FromELF: creating hex file...
-"ins_task\GIMBAL.axf" - 0 Error(s), 14 Warning(s).
+"ins_task\GIMBAL.axf" - 0 Error(s), 35 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -85,7 +133,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

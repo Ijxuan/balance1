@@ -153,6 +153,8 @@ extern float L_X;//左x目标位置
 extern float L_Y;//左Y目标位置
 extern float R_X;//右x目标位置
 extern float R_Y;//右Y目标位置
+extern float engine_body_height_R;//右边机体高度
+extern float engine_body_height_L;//左边机体高度
 
 extern int R_speed_new_FOR_MIT;
 extern int L_speed_new_FOR_MIT;

@@ -165,11 +165,16 @@ void Accurately_contrul_text(void)///*通过平面五连杆逆解获得目标角度精确控制测试
  	#if use_MIT_change_focus==0
 	/*keep_BALENCE_by_MIT_THETA_to_X*/
 MIT_keep_BALENCE();
+engine_body_height_control();
 L_X=10+DR16.rc.ch2/660.0*10.0+keep_BALENCE_by_MIT_THETA_to_X;
-L_Y=24.33+DR16.rc.ch3/660.0*10.0;
+//L_Y=24.33+DR16.rc.ch3/660.0*10.0;//无极变高
+L_Y=	engine_body_height_L;
+	
 	
 R_X=10-DR16.rc.ch2/660.0*10.0-keep_BALENCE_by_MIT_THETA_to_X;
-R_Y=24.33+DR16.rc.ch3/660.0*10.0;
+//R_Y=24.33+DR16.rc.ch3/660.0*10.0;//无极变高
+R_Y=engine_body_height_R;	
+	
 	
 angle_qhq_pi=atan(	(10.0f-R_C_X_NOW) /R_C_Y_NOW);
 angle_qhq	=angle_qhq_pi*180.0f/PI;
@@ -363,6 +368,77 @@ change_angle_total_speed=0;
 
 }
 
+/*离地高度决定函数*/
+Ramp_Struct liftoff_SE;//离地高度斜坡
+float height_text=20;
+/*Y的取值范围：13.3-43.1*/
+void engine_body_height_control(void)
+{
+ /*左手摇杆,无级变高*/
+ /*
+ liftoff_R+=DR16.rc.ch3/2200.0f; //左手油门
+*/
+ 
+/*左手摇杆,换挡变高*/
+ /**/
+ static int liftoff_mode_T=0;
+ static int change_mode_T=0;//是否切换了挡位,切换挡位后置1
+ if(DR16.rc.s_left==2) 
+ {
+ liftoff_mode_T=0;
+ }
+ if(DR16.rc.ch3==0)//松手了,才可以换下一档
+ {
+ change_mode_T=0;
+ }
+ else if(DR16.rc.ch3>300)
+ {
+  if(change_mode_T==0)//没切换挡位,接下来执行换挡操作
+  {
+   if(liftoff_mode_T<2)//一共几个挡位 0 1 2 
+   liftoff_mode_T++;//加高挡位
+   
+   change_mode_T=1;//切换挡位后置1
+  }
+ }
+  else if(DR16.rc.ch3<-300)
+ {
+  if(change_mode_T==0)//没切换挡位,接下来执行换挡操作
+  {
+   if(liftoff_mode_T>0)
+   liftoff_mode_T--;//减小挡位
+   
+   change_mode_T=1;//切换挡位后置1
+  }
+ }
+  switch(liftoff_mode_T)
+  {
+   case 0:
+    liftoff_SE.Target_Value=14.5;
+   break;
+   case 1:
+    liftoff_SE.Target_Value=28;
+   break;
+   case 2:
+    liftoff_SE.Target_Value=40;
+   break;
+    case 3:
+    liftoff_SE.Target_Value=height_text;
+   break;
+   default:
+    break;
+  } 
+  liftoff_SE.Current_Value=engine_body_height_R;
+  liftoff_temp.Absolute_Max=43;
+  engine_body_height_R=Ramp_Function(&liftoff_SE);
+  
+  
+if(engine_body_height_R>43.1)engine_body_height_R=43.1;
+if(engine_body_height_R<13.3)engine_body_height_R=13.3; 
+  
+ engine_body_height_L=engine_body_height_R;
 
+  
+}
 
 

@@ -760,6 +760,21 @@
           <WinNumber>1</WinNumber>
           <ItemText>keep_BALENCE_by_MIT_RT</ItemText>
         </Ww>
+        <Ww>
+          <count>122</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>height_text</ItemText>
+        </Ww>
+        <Ww>
+          <count>123</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>liftoff_SE.Target_Value</ItemText>
+        </Ww>
+        <Ww>
+          <count>124</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>liftoff_SE</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
