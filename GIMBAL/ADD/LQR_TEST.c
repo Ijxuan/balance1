@@ -134,7 +134,7 @@ void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_
 //    {
 //        return;
 //    }
-    
+
 
 		
     //deadline, because some remote control need be calibrated,  the value of rocker is not zero in middle place,
@@ -142,8 +142,10 @@ void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_
 //    rc_deadband_limit(chassis_move_rc_to_vector->chassis_RC->rc.ch[CHASSIS_X_CHANNEL], vx_channel, CHASSIS_RC_DEADLINE);
 		
 	vx_channel=DR16.rc.ch1*-1;
-	
-    //将遥杆参数转换为运动参数
+
+get_speed_by_position_V1();//计算TARGET_SPEED_POSITION
+
+//将遥杆参数转换为运动参数
     vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN+TARGET_SPEED_POSITION;
 		
     //keyboard set speed set-point
@@ -310,23 +312,7 @@ send_to_tire_L=send_to_L_test;//将LQR算出来的值赋给发送变量
 send_to_tire_R=send_to_R_test;
 
 	
-	TARGET_SPEED_POSITION=P_PID_bate(&LQR_SPEED_BY_POSITION,LQR_TARGET_position,milemeter_test.total_mile_truly_use)/1000.0f;
 
-	if(DR16.rc.ch1!=0)//前进时更新目标位置
-{
-LQR_TARGET_position=milemeter_test.total_mile_truly_use;
-TARGET_SPEED_POSITION=0;
-}
-	if(DR16.rc.ch0!=0)//转向时更新目标位置
-{
-LQR_TARGET_position=milemeter_test.total_mile_truly_use;
-TARGET_SPEED_POSITION=0;
-}
-	if(DW_FOR_ZX!=0)//小陀螺时更新目标位置
-{
-LQR_TARGET_position=milemeter_test.total_mile_truly_use;
-TARGET_SPEED_POSITION=0;
-}
 	if(DR16.rc.ch0!=0)
 	{
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/15.0;
@@ -537,4 +523,51 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 //    else
 //        return Value;
 //}
+
+
+float pitch_cut_off_angle=10.0f;//截止倾角超过这个角度就没速度了
+float speed_damping_p=1;//衰减系数
+
+void get_speed_by_position_V1()
+{
+
+if(fabs((double)DJIC_IMU.total_pitch)>=pitch_cut_off_angle)
+{
+speed_damping_p=0;//超过截止角度，衰减系数为0
+}
+else
+{
+speed_damping_p=1.0f-(fabs((double)DJIC_IMU.total_pitch)/pitch_cut_off_angle);
+}
+
+ 	TARGET_SPEED_POSITION=P_PID_bate(&LQR_SPEED_BY_POSITION,LQR_TARGET_position,milemeter_test.total_mile_truly_use)/1000.0f*speed_damping_p;
+
+	if(DR16.rc.ch1!=0)//前进时更新目标位置
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+TARGET_SPEED_POSITION=0;
+}
+	if(DR16.rc.ch0!=0)//转向时更新目标位置
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+TARGET_SPEED_POSITION=0;
+}
+	if(DW_FOR_ZX!=0)//小陀螺时更新目标位置
+{
+LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+TARGET_SPEED_POSITION=0;
+}   
+
+
+}
+
+
+
+
+
+
+
+
+
+
 

@@ -395,7 +395,7 @@ void engine_body_height_control(void)
  {
   if(change_mode_T==0)//没切换挡位,接下来执行换挡操作
   {
-   if(liftoff_mode_T<2)//一共几个挡位 0 1 2 
+   if(liftoff_mode_T<3)//一共几个挡位 0 1 2 
    liftoff_mode_T++;//加高挡位
    
    change_mode_T=1;//切换挡位后置1
@@ -417,13 +417,13 @@ void engine_body_height_control(void)
     liftoff_SE.Target_Value=14.5;
    break;
    case 1:
-    liftoff_SE.Target_Value=28;
+    liftoff_SE.Target_Value=19;
    break;
    case 2:
-    liftoff_SE.Target_Value=40;
+    liftoff_SE.Target_Value=25;
    break;
     case 3:
-    liftoff_SE.Target_Value=height_text;
+    liftoff_SE.Target_Value=40;
    break;
    default:
     break;

@@ -564,7 +564,7 @@ P_PID_V2_Init(&MIT_change_focus,0.3,0.5,0,19999,//-0.5  -0.15»Ì
 
 #endif
 
-	P_PID_Parameter_Init(&LQR_SPEED_BY_POSITION,-0.0005,0,0,7300,//-0.5  -0.15»Ì
+	P_PID_Parameter_Init(&LQR_SPEED_BY_POSITION,-0.004,0,0,7300,//-0.5  -0.15»Ì
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 2000, -2000,
