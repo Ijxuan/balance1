@@ -250,6 +250,26 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
+								#if 1//LQR位移确定
+		
+	p=0;
+			send_d_32[p++]=LQRweiyi_text*1000;//弧度值目标位置		1
+			send_d_32[p++]=LQRweiyi_PO_TG*1000;//lqr位移目标
+		
+			send_d_32[p++]=TARGET_SPEED_POSITION_V2*100;//角度制 目标位置		3 
+		
+			send_d_32[p++]=DJIC_IMU.Gyro_z*10;//弧度值目标位置		1
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//弧度值当前位置		2
+		
+			send_d_32[p++]=angle_qhq*10;//角度制 目标位置		3 		
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=engine_body_height_R*10;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
 						#if 0//通过MIT保持机体平衡 反向验证
 		
 	p=0;
@@ -290,7 +310,7 @@ void NM_swj(void)
 			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif
-						#if 1//通过MIT保持机体平衡 数据重新确定
+						#if 0//通过MIT保持机体平衡 数据重新确定
 		
 	p=0;
 			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*10;//弧度值目标位置		1

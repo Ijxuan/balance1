@@ -23,6 +23,10 @@ float LQR_TARGET_position=0;
 
 //底盘运动数据
 chassis_move_t chassis_move;
+float LQRweiyi_text=0;
+float LQRweiyi_PO_TG=0;//lqr位移目标
+float LQRweiyi_SPEED_TG=0;//LQR速度目标
+
 
 void LQR_TEST_CON()
 {
@@ -142,11 +146,13 @@ void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_
 //    rc_deadband_limit(chassis_move_rc_to_vector->chassis_RC->rc.ch[CHASSIS_X_CHANNEL], vx_channel, CHASSIS_RC_DEADLINE);
 		
 	vx_channel=DR16.rc.ch1*-1;
+	vx_channel=0;
 
 get_speed_by_position_V1();//计算TARGET_SPEED_POSITION
-
+TARGET_SPEED_POSITION=0;//LQR有位置环，不劳速度费心了
+	get_speed_by_position_V2();
 //将遥杆参数转换为运动参数
-    vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN+TARGET_SPEED_POSITION;
+    vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN+TARGET_SPEED_POSITION_V2;
 		
     //keyboard set speed set-point
     //键盘控制
@@ -211,6 +217,8 @@ float K3_OUT=0;
 float K4_OUT=0;
 float K2_OUT=0;
 float TARGET_SPEED_POSITION;
+float TARGET_SPEED_POSITION_V2;
+
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 {
 	    fp32 max_torque = 0.0f, torque_rate = 0.0f;
@@ -224,7 +232,9 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	
 	  //左轮输出力矩
  Nm_R_test = - (
-	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
+	LQR_K1*(chassis_move_control_loop->chassis_position_tg-chassis_move_control_loop->chassis_position_now)
+	+
+		LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
 	+
 	LQR_K3*chassis_move_control_loop->chassis_pitch
 	- 
@@ -233,6 +243,8 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	
 		  //右轮输出力矩
 Nm_L_test  =   (
+	LQR_K1*(chassis_move_control_loop->chassis_position_tg-chassis_move_control_loop->chassis_position_now)
++
 	LQR_K2*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) 
 +
 	LQR_K3*chassis_move_control_loop->chassis_pitch  
@@ -459,6 +471,9 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 		//计算底盘速度和合成轮角速度
 		chassis_move_update->vx = ((chassis_move_update->motor_chassis[0].speed) - (chassis_move_update->motor_chassis[1].speed))/2 ;
 	  chassis_move_update->omg = ((chassis_move_update->motor_chassis[0].omg) - (chassis_move_update->motor_chassis[1].omg))/2 ;
+
+	chassis_move_update->chassis_position_now=encoderToDistance((M3508s[3].totalAngle-M3508s[2].totalAngle)/2);
+	LQRweiyi_text=chassis_move_update->chassis_position_now;
 }
 
 
@@ -493,6 +508,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 //			chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
 //    }
 //		else
+	LQR_target_position();
 			if (DR16.rc.s_right == 3&& DR16.rc.s_left==3)
     {
 			chassis_move_control->chassis_yaw_set = rad_format(angle_set);
@@ -562,12 +578,109 @@ TARGET_SPEED_POSITION=0;
 }
 
 
+/*
+
+float get_target_velocity(float target_position, float current_position, float dt) 
+{
+    float error = target_position - current_position; // 计算误差
+    float target_velocity = error / dt; // 计算目标速度
+    return target_velocity; // 返回目标速度
+}
+
+float target_velocity(float target_pos, float current_pos, float delta_t) {
+    float max_velocity = 1.5; // 最大速度为1.5m/s
+    float velocity = (target_pos - current_pos) / delta_t; // 计算目标速度
+    if (velocity > max_velocity) { // 如果速度超过了最大速度
+        velocity = max_velocity; // 将速度限制为最大速度
+    } else if (velocity < -max_velocity) { // 如果速度小于负的最大速度
+        velocity = -max_velocity; // 将速度限制为负的最大速度
+    }
+    return velocity; // 返回限制后的速度
+}
 
 
 
 
+*/
 
 
+// 减速比
+//double reductionRatio = 3591.0 / 187.0;
+//// 编码器分度值
+//int encoderResolution = 8191;
+//// 轮胎直径（单位：米）
+//double wheelDiameter = 0.16;
+
+// 将编码器转过的角度转换成轮胎滚动距离（单位：米）
+double encoderToDistance(int encoderCount) {
+    // 计算轮胎周长
+//    double wheelCircumference = PI * wheelDiameter;
+//	
+//    // 计算电机轴转过的角度
+//    double motorAngle = encoderCount / (double)encoderResolution * 2 * PI;
+//    
+//	// 计算轮胎转过的角度
+//    double wheelAngle = motorAngle / reductionRatio;
+//    
+//	// 计算轮胎滚动距离
+    double distance = encoderCount * PI  / 983073.58125;
+	
+    return distance;
+	
+}
 
 
+void LQR_target_position()
+{
+			if (DR16.rc.s_right == 3&& DR16.rc.s_left==3)
+			{
+chassis_move.chassis_position_tg=chassis_move.chassis_position_tg+DR16.rc.ch1/660.0/1000.0f;
+		LQRweiyi_PO_TG=	chassis_move.chassis_position_tg;	
+			}
+			else
+			{
+chassis_move.chassis_position_tg=chassis_move.chassis_position_now;
+			}
+}
 
+void get_speed_by_position_V2()
+{
+TARGET_SPEED_POSITION_V2=DR16.rc.ch1/-660.0;
+	LQRweiyi_SPEED_TG=TARGET_SPEED_POSITION_V2;
+	if(TARGET_SPEED_POSITION_V2>1.0f)
+	{
+	TARGET_SPEED_POSITION_V2=1;
+	}
+	if(TARGET_SPEED_POSITION_V2<-1.0f)
+	{
+	TARGET_SPEED_POSITION_V2=-1;
+	}
+//if(fabs((double)DJIC_IMU.total_pitch)>=pitch_cut_off_angle)
+//{
+//speed_damping_p=0;//超过截止角度，衰减系数为0
+//}
+//else
+//{
+//speed_damping_p=1.0f-(fabs((double)DJIC_IMU.total_pitch)/pitch_cut_off_angle);
+//}
+
+// 	TARGET_SPEED_POSITION=P_PID_bate(&LQR_SPEED_BY_POSITION,LQR_TARGET_position,milemeter_test.total_mile_truly_use)/1000.0f*speed_damping_p;
+
+//	if(DR16.rc.ch1!=0)//前进时更新目标位置
+//{
+//LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+//TARGET_SPEED_POSITION=0;
+//}
+//	if(DR16.rc.ch0!=0)//转向时更新目标位置
+//{
+//LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+//TARGET_SPEED_POSITION=0;
+//}
+//	if(DW_FOR_ZX!=0)//小陀螺时更新目标位置
+//{
+//LQR_TARGET_position=milemeter_test.total_mile_truly_use;
+//TARGET_SPEED_POSITION=0;
+//}   
+
+
+}

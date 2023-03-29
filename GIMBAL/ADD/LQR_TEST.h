@@ -80,7 +80,7 @@ typedef float fp32;
 //车体转动惯量，单位为kg*m^2     137252.709
 //%绕y轴的转动惯量 转向惯量      160792.682
 
-#define LQR_K1 -0.0224f//没用到
+#define LQR_K1 -1.0000f//没用到
 #define LQR_K2 -2.7490f//乘轮胎速度
 #define LQR_K3 -9.5940f//乘机体角度
 #define LQR_K4 -1.6526f//乘机体角速度
@@ -155,6 +155,10 @@ typedef struct
   fp32 chassis_yaw_speed;           //底盘陀螺仪反馈的当前yaw角速度
 	fp32 chassis_pitch_speed;         //底盘陀螺仪反馈的当前pitch角速度
 	fp32 chassis_roll_speed;          //底盘陀螺仪反馈的当前roll角速度
+	
+	fp32 chassis_position_tg;          //底盘位置目标
+	fp32 chassis_position_now;          //底盘位置当前
+
 } chassis_move_t;
 
 
@@ -172,9 +176,16 @@ extern float TARGET_SPEED_POSITION;
 extern float LQR_TARGET_position;
 extern float pitch_cut_off_angle;//截止倾角超过这个角度就没速度了
 extern float speed_damping_p;//衰减系数
+extern float LQRweiyi_text;//LQR位移数据确定
+extern float TARGET_SPEED_POSITION_V2;
+extern float LQRweiyi_PO_TG;//lqr位移目标
+extern float LQRweiyi_SPEED_TG;//LQR速度目标
 void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_to_vector);
 void LQR_TEST_CON(void);
 void get_speed_by_position_V1(void);
+double encoderToDistance(int encoderCount) ;
+void LQR_target_position(void);
+void get_speed_by_position_V2(void);
 
 fp32 fp32_constrain(fp32 Value, fp32 minValue, fp32 maxValue);
 //限幅函数
