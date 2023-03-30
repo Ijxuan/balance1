@@ -250,7 +250,27 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-								#if 1//LQR位移确定
+										#if 1//LQR位移确定
+		
+	p=0;
+			send_d_32[p++]=DR16.mouse.z;//弧度值目标位置		1
+			send_d_32[p++]=DR16.mouse.x;//lqr位移目标
+		
+			send_d_32[p++]=DR16.mouse.y;//角度制 目标位置		3 
+		
+			send_d_32[p++]=DR16.keyBoard.press_W*100;//弧度值目标位置		1
+			send_d_32[p++]=DR16.keyBoard.press_A*100;//弧度值当前位置		2
+		
+			send_d_32[p++]=DR16.keyBoard.press_S*100;//角度制 目标位置		3 		
+			send_d_32[p++]=DR16.keyBoard.press_D*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
+
+			send_d_16[p++]=engine_body_height_R*10;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+								#if 0//LQR位移确定
 		
 	p=0;
 			send_d_32[p++]=LQRweiyi_text*1000;//弧度值目标位置		1

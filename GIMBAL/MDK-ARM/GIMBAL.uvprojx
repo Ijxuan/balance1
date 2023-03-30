@@ -544,6 +544,11 @@
               <FileType>1</FileType>
               <FilePath>..\ADD\LQR_TEST.c</FilePath>
             </File>
+            <File>
+              <FileName>DR16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\DR16.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
