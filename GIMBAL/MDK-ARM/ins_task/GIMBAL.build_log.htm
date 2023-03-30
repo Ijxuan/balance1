@@ -32,17 +32,17 @@ compiling LQR_TEST.c...
   #endif
 ..\components\algorithm\user_lib.h(54): warning:  #47-D: incompatible redefinition of macro "rad_format"  (declared at line 105 of "..\ADD\LQR_TEST.h")
   #define rad_format(Ang) loop_fp32_constrain((Ang), -PI, PI)
-..\ADD\LQR_TEST.c(226): warning:  #177-D: variable "i"  was declared but never referenced
+..\ADD\LQR_TEST.c(227): warning:  #177-D: variable "i"  was declared but never referenced
       uint8_t i = 0;
-..\ADD\LQR_TEST.c(626): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\ADD\LQR_TEST.c(627): warning:  #1035-D: single-precision operand implicitly converted to double-precision
       double distance = encoderCount * PI  / 983073.58125;
-..\ADD\LQR_TEST.c(207): warning:  #177-D: function "chassis_balance_control"  was declared but never referenced
+..\ADD\LQR_TEST.c(208): warning:  #177-D: function "chassis_balance_control"  was declared but never referenced
   static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector)
-..\ADD\LQR_TEST.c(190): warning:  #177-D: function "chassis_down_control"  was declared but never referenced
+..\ADD\LQR_TEST.c(191): warning:  #177-D: function "chassis_down_control"  was declared but never referenced
   static void chassis_down_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector)
 ..\ADD\LQR_TEST.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=107388 RO-data=4576 RW-data=2280 ZI-data=58792  
+Program Size: Code=107596 RO-data=4576 RW-data=2280 ZI-data=58792  
 FromELF: creating hex file...
 "ins_task\GIMBAL.axf" - 0 Error(s), 6 Warning(s).
 
@@ -67,7 +67,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

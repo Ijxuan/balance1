@@ -6,6 +6,7 @@
 #include "MY_balance_CONTROL.h"
 #include "my_positionPID_bate.h"
 #include "mit_math.h"
+#include "math.h"
 
 static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
 static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
@@ -632,16 +633,37 @@ double encoderToDistance(int encoderCount) {
 
 void LQR_target_position()
 {
+	static int DR16_rc_ch1_last_V2;
+	
 			if (DR16.rc.s_right == 3&& DR16.rc.s_left==3)
 			{
 chassis_move.chassis_position_tg=chassis_move.chassis_position_tg+DR16.rc.ch1/660.0/1000.0f;
 		LQRweiyi_PO_TG=	chassis_move.chassis_position_tg;	
+				
+				
+						if(DR16.rc.ch1==0&&DR16_rc_ch1_last_V2!=0)
+		{
+		chassis_move.chassis_position_tg=chassis_move.chassis_position_now;//记录松手瞬间的位置 作为目标位置
+		}
+
+DR16_rc_ch1_last_V2=DR16.rc.ch1;
+		if( (chassis_move.chassis_position_tg-chassis_move.chassis_position_now)>1)//目标如果距离当前位置一米以上，则限制
+		{chassis_move.chassis_position_tg=chassis_move.chassis_position_now+1;}
+		if( (chassis_move.chassis_position_tg-chassis_move.chassis_position_now)<-1)
+		{chassis_move.chassis_position_tg=chassis_move.chassis_position_now-1;}	
+		
+		if(fabs (DJIC_IMU.total_pitch) >12.0f )
+		{
+		chassis_move.chassis_position_tg=chassis_move.chassis_position_now;//为平衡时将 当前位置 作为目标位置
+		}
 			}
 			else
 			{
 chassis_move.chassis_position_tg=chassis_move.chassis_position_now;
 			}
 }
+
+
 
 void get_speed_by_position_V2()
 {
