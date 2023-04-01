@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "main.h": "c",
-        "my_positionpid_bate.h": "c"
+        "my_positionpid_bate.h": "c",
+        "keyboard_to_vjoy.h": "c",
+        "mit_math.h": "c"
     }
 }

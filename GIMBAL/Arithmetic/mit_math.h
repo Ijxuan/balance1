@@ -9,64 +9,60 @@
 
 #define use_MIT_change_focus 0
 
-void mit_math_temp(float fai1,float fai2,float *X_now,float *Y_now);/*Æ½ÃæÎåÁ¬¸ËÕý½â*/
-void mit_math_temp_2(float Cx,float Cy);///*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
-void get_tg_angle_by_WLG_IS(void);///*Í¨¹ýÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È*/
-void Accurately_contrul_text(void);///*Í¨¹ýÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊÔ*/
-void MIT_keep_BALENCE(void);//¹Ø½Úµç»úÊ±¿Ì±£³ÖÆ½ºâ
+void mit_math_temp(float fai1, float fai2, float *X_now, float *Y_now); /*Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+void mit_math_temp_2(float Cx, float Cy);                               ///*Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+void get_tg_angle_by_WLG_IS(void);                                      ///*Í¨ï¿½ï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ç¶ï¿½*/
+void Accurately_contrul_text(void);                                     ///*Í¨ï¿½ï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ç¶È¾ï¿½È·ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½*/
+void MIT_keep_BALENCE(void);                                            // ï¿½Ø½Úµï¿½ï¿½Ê±ï¿½Ì±ï¿½ï¿½ï¿½Æ½ï¿½ï¿½
 void update_gyro(void);
 void gyro_test(void);
 void engine_body_height_control(void);
 
-extern float angle_fai_1;//×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ð½Ç(Èñ½Ç)
-extern float angle_fai_2;//(20,0)´¦ÍÈÓëË®Æ½ÃæµÄ¼Ð½Ç(Èñ½Ç)
-extern float angle_fai_1_JD;//×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ð½Ç(Èñ½Ç) ½Ç¶ÈÖÆ
-extern float angle_fai_2_JD;//(20,0)´¦ÍÈÓëË®Æ½ÃæµÄ¼Ð½Ç(Èñ½Ç) ½Ç¶ÈÖÆ
+extern float angle_fai_1;    // ï¿½ï¿½ï¿½ï¿½ÏµÔ­ï¿½ã´¦ï¿½ï¿½ï¿½ï¿½Ë®Æ½ï¿½ï¿½Ä¼Ð½ï¿½(ï¿½ï¿½ï¿½)
+extern float angle_fai_2;    //(20,0)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Æ½ï¿½ï¿½Ä¼Ð½ï¿½(ï¿½ï¿½ï¿½)
+extern float angle_fai_1_JD; // ï¿½ï¿½ï¿½ï¿½ÏµÔ­ï¿½ã´¦ï¿½ï¿½ï¿½ï¿½Ë®Æ½ï¿½ï¿½Ä¼Ð½ï¿½(ï¿½ï¿½ï¿½) ï¿½Ç¶ï¿½ï¿½ï¿½
+extern float angle_fai_2_JD; //(20,0)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Æ½ï¿½ï¿½Ä¼Ð½ï¿½(ï¿½ï¿½ï¿½) ï¿½Ç¶ï¿½ï¿½ï¿½
 
-extern float MIT_A_tg_angle_for_IS;//×ø±êÏµÔ­µã´¦¹Ø½Úµç»úÄ¿±ê½Ç¶È
-extern float MIT_B_tg_angle_for_IS;//(20,0)´¦¹Ø½Úµç»úÄ¿±ê½Ç¶È
+extern float MIT_A_tg_angle_for_IS; // ï¿½ï¿½ï¿½ï¿½ÏµÔ­ï¿½ã´¦ï¿½Ø½Úµï¿½ï¿½Ä¿ï¿½ï¿½Ç¶ï¿½
+extern float MIT_B_tg_angle_for_IS; //(20,0)ï¿½ï¿½ï¿½Ø½Úµï¿½ï¿½Ä¿ï¿½ï¿½Ç¶ï¿½
 extern float A0_TEMP;
 extern float B0_TEMP;
 extern float C0_TEMP;
 extern float TEMP_SQRT;
-extern int sqrt_allow;//ÄÜ²»ÄÜÇóÆ½·½¸ù
+extern int sqrt_allow; // ï¿½Ü²ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½ï¿½
 
 extern float keep_BALENCE_by_MIT_RT;
 
 extern Ramp_Struct MIT_BALENCE_start;
 extern Ramp_Struct MIT_BALENCE_GO_TO_TG;
 
-extern int if_use_Ramp_Function;//ÊÇ·ñÊ¹ÓÃÐ±ÆÂº¯Êý
-extern float angle_qhq;//Ç°ºóÇãÐ±µÄ½Ç¶È
-extern float angle_qhq_pi;//Ç°ºóÇãÐ±µÄ½Ç¶È »¡¶ÈÖÆ
+extern int if_use_Ramp_Function; // ï¿½Ç·ï¿½Ê¹ï¿½ï¿½Ð±ï¿½Âºï¿½ï¿½ï¿½
+extern float angle_qhq;          // Ç°ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ä½Ç¶ï¿½
+extern float angle_qhq_pi;       // Ç°ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ä½Ç¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 extern float C_x_now;
 extern float C_y_now;
 
-extern float angle_fai_1_zhen;//×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ð½Ç(Èñ½Ç) Õý½â
-extern float angle_fai_2_zhen;//(20,0)´¦ÍÈÓëË®Æ½ÃæµÄ¼Ð½Ç(Èñ½Ç) Õý½â
-extern float angle_fai_3_zhen;//µÚ¶þÏóÏÞÏ¥¸Ç´¦¼Ð½Ç Õý½â
-extern float A0_TEMP_zhen;//Õý½â
-extern float B0_TEMP_zhen;//Õý½â
-extern float C0_TEMP_zhen;//Õý½â
+extern float angle_fai_1_zhen; // ï¿½ï¿½ï¿½ï¿½ÏµÔ­ï¿½ã´¦ï¿½ï¿½ï¿½ï¿½Ë®Æ½ï¿½ï¿½Ä¼Ð½ï¿½(ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½
+extern float angle_fai_2_zhen; //(20,0)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Æ½ï¿½ï¿½Ä¼Ð½ï¿½(ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½
+extern float angle_fai_3_zhen; // ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½Ï¥ï¿½Ç´ï¿½ï¿½Ð½ï¿½ ï¿½ï¿½ï¿½ï¿½
+extern float A0_TEMP_zhen;     // ï¿½ï¿½ï¿½ï¿½
+extern float B0_TEMP_zhen;     // ï¿½ï¿½ï¿½ï¿½
+extern float C0_TEMP_zhen;     // ï¿½ï¿½ï¿½ï¿½
 
-extern int cumulate_time_ms;//ÀÛ»ýÊ±¼ä
-extern float cumulate_angle_change;//ÀÛ»ý½Ç¶È±ä»¯
-extern float pitch_speed_new;//¼ÆËã³öµÄpitchÖá½ÇËÙ¶È
+extern int cumulate_time_ms;        // ï¿½Û»ï¿½Ê±ï¿½ï¿½
+extern float cumulate_angle_change; // ï¿½Û»ï¿½ï¿½Ç¶È±ä»¯
+extern float pitch_speed_new;       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
 
-extern float cumulate_angle_change_JD;//ÀÛ»ý½Ç¶È±ä»¯ ½Ç¶ÈÖÆ
-extern float pitch_speed_new_JD;//¼ÆËã³öµÄpitchÖá½ÇËÙ¶È _½Ç¶ÈÖÆ
+extern float cumulate_angle_change_JD; // ï¿½Û»ï¿½ï¿½Ç¶È±ä»¯ ï¿½Ç¶ï¿½ï¿½ï¿½
+extern float pitch_speed_new_JD;       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½Ù¶ï¿½ _ï¿½Ç¶ï¿½ï¿½ï¿½
 
-extern  int speed_to_angle_time_ms;//»ý·Ö½ÇËÙ¶È-Ê±¼ä
-extern	float change_angle_1ms;//1msµÄ»ý·Ö
-//	float change_angle_total_speed=0;//ÓÃÓÚÀÛ¼ÓµÄÖÐ¼ä±äÁ¿
-extern	float change_angle_total_speed_end;//ÀÛ¼ÓÍê³ÉÖµ
+extern int speed_to_angle_time_ms; // ï¿½ï¿½ï¿½Ö½ï¿½ï¿½Ù¶ï¿½-Ê±ï¿½ï¿½
+extern float change_angle_1ms;     // 1msï¿½Ä»ï¿½ï¿½ï¿½
+//	float change_angle_total_speed=0;//ï¿½ï¿½ï¿½ï¿½ï¿½Û¼Óµï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½
+extern float change_angle_total_speed_end; // ï¿½Û¼ï¿½ï¿½ï¿½ï¿½Öµ
 
-extern	float change_angle_total_angle;//Êµ¼Ê½Ç¶È±ä»¯Á¿-ÓÃÓÚ¶Ô±È
-extern	Ramp_Struct liftoff_SE;//ÀëµØ¸ß¶ÈÐ±ÆÂ
+extern float change_angle_total_angle; // Êµï¿½Ê½Ç¶È±ä»¯ï¿½ï¿½-ï¿½ï¿½ï¿½Ú¶Ô±ï¿½
+extern Ramp_Struct liftoff_SE;         // ï¿½ï¿½Ø¸ß¶ï¿½Ð±ï¿½ï¿½
 extern float height_text;
 
 #endif
-
-
-
-

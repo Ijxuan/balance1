@@ -1,55 +1,42 @@
 #ifndef __keyBoard_to_vjoy_H
 #define __keyBoard_to_vjoy_H
 
-
 #include "main.h"
 
-#define TIME_KeyMouse_Press 1 //³¬¹ı¸ÃÊ±¼äÊÓÎª °´ÏÂ¡£
-//ÔÚÁ½ÕßÖ®¼äÊÓÎª µ¥»÷
-#define TIME_KeyMouse_LongPress 30 //³¬¹ı¸ÃÊ±¼äÊÓÎª ³¤°´
+#define TIME_KeyMouse_Press 1 // è¶…è¿‡è¯¥æ—¶é—´è§†ä¸º æŒ‰ä¸‹ã€‚
+// åœ¨ä¸¤è€…ä¹‹é—´è§†ä¸º å•å‡»
+#define TIME_KeyMouse_LongPress 30 // è¶…è¿‡è¯¥æ—¶é—´è§†ä¸º é•¿æŒ‰
 
 typedef enum
 {
-    Click_Press = 2,  //µ¥»÷
-    Long_Press = 3, //³¤°´
-    No_Press = 1 //ËÉ¿ª
+    Click_Press = 2, // å•å‡»
+    Long_Press = 3,  // é•¿æŒ‰
+    No_Press = 1     // æ¾å¼€
 } Press_static_e;
 
-typedef   struct
-    {
+typedef struct
+{
 
-        uint32_t Press_TIMES;//°´ÏÂ¶à¾Ã                //¼üÊó°´ÏÂ±êÖ¾
-        Press_static_e Press_static;          //¼üµ¥»÷±êÖ¾
-        uint8_t Press_static_last_time;           //¼ü±êÖ¾-ÉÏÒ»Ê±¿Ì
-        uint8_t Click_Press_wait_use;           //µ¥»÷µÈ´ıÊ¹ÓÃ
+    uint32_t Press_TIMES;           // æŒ‰ä¸‹å¤šä¹…                //é”®é¼ æŒ‰ä¸‹æ ‡å¿—
+    Press_static_e Press_static;    // é”®å•å‡»æ ‡å¿—
+    uint8_t Press_static_last_time; // é”®æ ‡å¿—-ä¸Šä¸€æ—¶åˆ»
+    uint8_t Click_Press_wait_use;   // å•å‡»ç­‰å¾…ä½¿ç”¨
 
-    } keyBoard_PRESS;       //¼üµÄ¶ÔÍâÊä³ö¡£
-	
-typedef	struct {
-		float ch_WS;//ÓÉW¡¢SÁ½¸ö¼ü×é³ÉµÄÍ¨µÀ
-		float ch_AD;//ÓÉA¡¢DÁ½¸ö¼ü×é³ÉµÄÍ¨µÀ
-		float ch_MOUSE;//ÓÉÊó±êÁ½¸ö¼ü×é³ÉµÄÍ¨µÀ
-		float ch_GB;//ÓÉG¡¢BÁ½¸ö¼ü×é³ÉµÄÍ¨µÀ
+} keyBoard_PRESS; // é”®çš„å¯¹å¤–è¾“å‡ºã€‚
 
-	}vjoy;//ĞéÄâÒ¡¸Ë
+typedef struct
+{
+    float ch_WS;    // ç”±Wã€Sä¸¤ä¸ªé”®ç»„æˆçš„é€šé“
+    float ch_AD;    // ç”±Aã€Dä¸¤ä¸ªé”®ç»„æˆçš„é€šé“
+    float ch_MOUSE; // ç”±é¼ æ ‡ä¸¤ä¸ªé”®ç»„æˆçš„é€šé“
+    float ch_GB;    // ç”±Gã€Bä¸¤ä¸ªé”®ç»„æˆçš„é€šé“
+
+} vjoy; // è™šæ‹Ÿæ‘‡æ†
 extern float rate_add;
 extern float rate_decrease;
-extern	vjoy vjoy_TEST;//ĞéÄâÒ¡¸Ë²âÊÔ
-extern	keyBoard_PRESS keyBoard_W;//W¼üµÄ½á¹¹Ìå
+extern vjoy vjoy_TEST;            // è™šæ‹Ÿæ‘‡æ†æµ‹è¯•
+extern keyBoard_PRESS keyBoard_W; // Wé”®çš„ç»“æ„ä½“
 
-void keyBoard_WASD (void);
+void keyBoard_WASD(void);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
