@@ -7,6 +7,7 @@
 #include "my_positionPID_bate.h"
 #include "mit_math.h"
 #include "math.h"
+#include "keyBoard_to_vjoy.h"
 
 static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
 static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
@@ -76,9 +77,11 @@ void chassis_behaviour_control_set(fp32 *vx_set, fp32 *angle_set, chassis_move_t
     {
 //			chassis_down_control(vx_set, angle_set, chassis_move_rc_to_vector);
     }	
- if (DR16.rc.s_right == 1)
+ if (DR16.rc.s_right == 3&& DR16.rc.s_left==1)
     {
-//chassis_remote_control(vx_set, angle_set, chassis_move_rc_to_vector);//遥控器控制模式
+		chassis_remote_control(vx_set, angle_set, chassis_move_rc_to_vector);//遥控器控制模式
+
+//			chassis_balance_control(vx_set, angle_set, chassis_move_rc_to_vector);//平衡模式
     }	
 	
 	
@@ -319,7 +322,7 @@ send_to_R_test = (int16_t)(Nm_R_test / CHASSIS_MOTOR_CURRENT_TO_TORQUE_SEN);
 	
 
 	
-if(DR16.rc.s_left==3&&DR16.rc.s_right==3)
+if( (DR16.rc.s_left==3&&DR16.rc.s_right==3)||(DR16.rc.s_left==1&&DR16.rc.s_right==3) )
 {
 send_to_tire_L=send_to_L_test;//将LQR算出来的值赋给发送变量
 send_to_tire_R=send_to_R_test;
@@ -329,7 +332,13 @@ send_to_tire_R=send_to_R_test;
 	if(DR16.rc.ch0!=0)
 	{
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+DR16.rc.ch0/15.0;
+	}
+	if(abs(DR16.mouse.x)>=1)
+	{
+	TARGET_angle_YAW=TARGET_angle_YAW+DR16.mouse.x/700.0;
 	}		
+
+	
 	TARGET_angle_speed_YAW=P_PID_bate(&change_direction_angle,TARGET_angle_YAW,DJIC_IMU.total_yaw);
 	if(DW_FOR_ZX!=0)//拨轮控制,控制速度
 	{
@@ -516,6 +525,12 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 			chassis_move_control->delta_angle = rad_format(chassis_move_control->chassis_yaw_set - chassis_move_control->chassis_yaw);
 			chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
     }
+				if (DR16.rc.s_right == 3&& DR16.rc.s_left==1)
+    {
+			chassis_move_control->chassis_yaw_set = rad_format(angle_set);
+			chassis_move_control->delta_angle = rad_format(chassis_move_control->chassis_yaw_set - chassis_move_control->chassis_yaw);
+			chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
+    }
 	else
 	{
 	chassis_move_control->chassis_yaw_set = chassis_move_control->chassis_yaw;
@@ -657,6 +672,29 @@ DR16_rc_ch1_last_V2=DR16.rc.ch1;
 		chassis_move.chassis_position_tg=chassis_move.chassis_position_now;//为平衡时将 当前位置 作为目标位置
 		}
 			}
+			else if (DR16.rc.s_right == 3&& DR16.rc.s_left==1)
+			{
+chassis_move.chassis_position_tg=chassis_move.chassis_position_tg+DR16.rc.ch1/660.0/1000.0f+vjoy_TEST.ch_WS/100000.0;
+		LQRweiyi_PO_TG=	chassis_move.chassis_position_tg;	
+				
+				
+						if( (DR16.rc.ch1==0&&DR16_rc_ch1_last_V2!=0)||(vjoy_TEST.ch_WS==0&&DR16_rc_ch1_last_V2!=0) )
+		{
+		chassis_move.chassis_position_tg=chassis_move.chassis_position_now;//记录松手瞬间的位置 作为目标位置
+		}
+
+DR16_rc_ch1_last_V2=DR16.rc.ch1+vjoy_TEST.ch_WS;
+		if( (chassis_move.chassis_position_tg-chassis_move.chassis_position_now)>1)//目标如果距离当前位置一米以上，则限制
+		{chassis_move.chassis_position_tg=chassis_move.chassis_position_now+1;}
+		if( (chassis_move.chassis_position_tg-chassis_move.chassis_position_now)<-1)
+		{chassis_move.chassis_position_tg=chassis_move.chassis_position_now-1;}	
+		
+		if(fabs (DJIC_IMU.total_pitch) >12.0f )
+		{
+		chassis_move.chassis_position_tg=chassis_move.chassis_position_now;//为平衡时将 当前位置 作为目标位置
+		}			
+			
+			}
 			else
 			{
 chassis_move.chassis_position_tg=chassis_move.chassis_position_now;
@@ -668,6 +706,10 @@ chassis_move.chassis_position_tg=chassis_move.chassis_position_now;
 void get_speed_by_position_V2()
 {
 TARGET_SPEED_POSITION_V2=DR16.rc.ch1/-660.0;
+				if (DR16.rc.s_right == 3&& DR16.rc.s_left==1)
+				{
+			TARGET_SPEED_POSITION_V2	-=vjoy_TEST.ch_WS/100.0f;
+				}
 	LQRweiyi_SPEED_TG=TARGET_SPEED_POSITION_V2;
 	if(TARGET_SPEED_POSITION_V2>1.0f)
 	{

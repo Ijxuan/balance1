@@ -62,6 +62,7 @@
 #include "MIT_INIT.h"
 #include "LQR_TEST.h"
 #include "mit_math.h"
+#include "keyBoard_to_vjoy.h"
 
 /* USER CODE END Includes */
 
@@ -1338,7 +1339,7 @@ void Robot_Control(void const *argument)
 	
 //		GM6020_SetVoltage(send_to_yaw,0 , 0, send_to_pitch); //云台  send_to_pitch
 //		GM6020_SetVoltage(0,0 , 0, 0); //云台  send_to_pitch
-		
+	keyBoard_WASD();	
 		balance_control();
 	
 
@@ -1399,7 +1400,7 @@ target_position_text_PID=text_moto.ANGLE_JD;
 
 			
 }
- if(DR16.rc.s_left==3)
+ if(DR16.rc.s_left==3||DR16.rc.s_left==1)
 {
 //	SEND_TO_MIT_MAX.Target_Value=70;
 //	MAX_OUT=Ramp_Function(&SEND_TO_MIT_MAX);
@@ -1429,6 +1430,7 @@ MIT_MODE_TEXT=1;
 	}
 MIT_ENABLE_TIMES=MIT_ENABLE_TIMES+1;
 }
+/*
 if(DR16.rc.s_left==1)
 {
 	if(sendto_MIT_TEXT==1)
@@ -1437,7 +1439,8 @@ if(DR16.rc.s_left==1)
 			sendto_MIT_TEXT=0;
 		}
 
-}
+}*/  //关节电机测试模式
+
 //	mit_math_temp();//正解验算
 
 mit_math_temp(MIT_A.ANGLE_JD-MIT_A.MIT_TZG-29.54,

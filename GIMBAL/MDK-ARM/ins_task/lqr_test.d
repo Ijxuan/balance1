@@ -65,3 +65,4 @@ ins_task\lqr_test.o: ..\components\algorithm\user_lib.h
 ins_task\lqr_test.o: ..\APP\MY_balance_CONTROL.h
 ins_task\lqr_test.o: ..\Arithmetic\my_positionPID_bate.h
 ins_task\lqr_test.o: ..\Arithmetic\mit_math.h
+ins_task\lqr_test.o: ..\ADD\keyBoard_to_vjoy.h

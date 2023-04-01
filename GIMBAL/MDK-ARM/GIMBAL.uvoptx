@@ -160,6 +160,31 @@
           <WinNumber>1</WinNumber>
           <ItemText>\\GIMBAL\../ADD/DR16_RECIVE.c\DR16.rc</ItemText>
         </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>keyBoard_W,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>vjoy_ch_WS</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>rate_add,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>rate_decrease</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>vjoy_TEST,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
@@ -775,8 +800,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ADD\DR16.c</PathWithFileName>
-      <FilenameWithoutPath>DR16.c</FilenameWithoutPath>
+      <PathWithFileName>..\ADD\keyBoard_to_vjoy.c</PathWithFileName>
+      <FilenameWithoutPath>keyBoard_to_vjoy.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

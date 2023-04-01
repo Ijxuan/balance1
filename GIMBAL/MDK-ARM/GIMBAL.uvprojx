@@ -545,9 +545,9 @@
               <FilePath>..\ADD\LQR_TEST.c</FilePath>
             </File>
             <File>
-              <FileName>DR16.c</FileName>
+              <FileName>keyBoard_to_vjoy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\ADD\DR16.c</FilePath>
+              <FilePath>..\ADD\keyBoard_to_vjoy.c</FilePath>
             </File>
           </Files>
         </Group>
