@@ -67,8 +67,8 @@ void MIT_PID_INIT(void)
 	MIT_A.kp_temp = 50;
 	MIT_A.kv_temp = 3;
 
-	MIT_B.kp_temp = 50;
-	MIT_B.kv_temp = 3;
+	MIT_B.kp_temp = 40;
+	MIT_B.kv_temp = 2;
 
 	MIT_C.kp_temp = 50;
 	MIT_C.kv_temp = 3;

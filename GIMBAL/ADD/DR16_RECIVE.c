@@ -260,11 +260,11 @@ void NM_swj(void)
 		
 			send_d_32[p++]=DR16.mouse.y;//角度制 目标位置		3 
 		
-			send_d_32[p++]=TARGET_angle_YAW*100;//弧度值目标位置		1
-			send_d_32[p++]=DR16.keyBoard.press_A*100;//弧度值当前位置		2
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//目标摆角		1
+			send_d_32[p++]=angle_qhq*100;//当前摆角		2
 		
-			send_d_32[p++]=DR16.keyBoard.press_S*100;//角度制 目标位置		3 		
-			send_d_32[p++]=DR16.keyBoard.press_D*100;//里程计测试  	7
+			send_d_32[p++]=MIT_B.target_position*100;//角度制 目标位置		3 		
+			send_d_32[p++]=(INS_angle[2] - angle_qhq_pi)* Angle_turn_Radian*100;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
 
