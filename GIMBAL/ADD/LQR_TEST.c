@@ -29,6 +29,13 @@ float LQRweiyi_text = 0;
 float LQRweiyi_PO_TG = 0;	 // lqr位移目标
 float LQRweiyi_SPEED_TG = 0; // LQR速度目标
 
+double LQR_K1_REAL_TIME;
+double LQR_K2_REAL_TIME;
+double LQR_K3_REAL_TIME;//多项式拟合
+double LQR_K4_REAL_TIME;//多项式拟合
+double LQR_K3_REAL_TIME_xx;//线性拟合
+double LQR_K4_REAL_TIME_xx;//线性拟合
+
 void LQR_TEST_CON()
 {
 
@@ -39,6 +46,8 @@ void LQR_TEST_CON()
 	// set chassis control set-point
 	// 底盘控制量设置
 	chassis_set_contorl(&chassis_move);
+
+LQR_parameter();//LQR参数刷新
 
 	// chassis control LQR calculate
 	// 底盘控制LQR计算
@@ -205,6 +214,7 @@ static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_
 float K3_OUT = 0;
 float K4_OUT = 0;
 float K2_OUT = 0;
+float K1_OUT = 0;
 float TARGET_SPEED_POSITION;
 float TARGET_SPEED_POSITION_V2;
 
@@ -215,7 +225,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	uint8_t i = 0;
 	/*驱动轮输出力矩=SUM[LQR增益系数*(状态变量目标值-状态变量反馈值)]*/
 	/*注意左右轮输出力矩的正负号，以及各状态变量反馈值的正负号*/
-
+/*
 	if (R_Y < 30)
 	{
 
@@ -258,7 +268,26 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 					 //	LQR_K26*chassis_move_control_loop->chassis_yaw_speed
 		);
 	}
+*/
+		// 左轮输出力矩
+		Nm_R_test = -(
+			LQR_K1 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) +
+			LQR_K2_REAL_TIME * (chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) +
+			LQR_K3_REAL_TIME_xx * chassis_move_control_loop->chassis_pitch -
+			LQR_K4_REAL_TIME_xx * (-chassis_move_control_loop->chassis_pitch_speed));
 
+		// 右轮输出力矩
+		Nm_L_test = (LQR_K1 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) +
+					 LQR_K2_REAL_TIME * (chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) +
+					 LQR_K3_REAL_TIME_xx * chassis_move_control_loop->chassis_pitch -
+					 LQR_K4_REAL_TIME_xx * (-chassis_move_control_loop->chassis_pitch_speed));
+		
+		K1_OUT=LQR_K1 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) ;
+		K2_OUT=	LQR_K2_REAL_TIME*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
+		 K3_OUT=	LQR_K3_REAL_TIME_xx*chassis_move_control_loop->chassis_pitch;
+		 K4_OUT=LQR_K4_REAL_TIME_xx*(-chassis_move_control_loop->chassis_pitch_speed) ;
+		
+		
 	// 计算轮子最大转矩，并限制其最大转矩
 	temp = fabs(Nm_R_test);
 	if (max_torque < temp)
@@ -371,6 +400,8 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 //    }
 //    return Input;
 //}
+float chassis_vx_real=0;
+float chassis_speed_real=0;
 
 static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 {
@@ -400,7 +431,7 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	chassis_move_update->chassis_yaw =
 		rad_format((float)INS_angle[0]);
 	//	if(DR16.rc.ch1==0)
-	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi);
+	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi-0.0f/180.0f*PI);//重心补偿到1.5度平衡
 	//	else
 	//	{
 	//    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
@@ -419,7 +450,9 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	// calculate chassis velocity and synthesis angular velocity
 	// 计算底盘速度和合成轮角速度
 	chassis_move_update->vx = ((chassis_move_update->motor_chassis[0].speed) - (chassis_move_update->motor_chassis[1].speed)) / 2;
-	chassis_move_update->omg = ((chassis_move_update->motor_chassis[0].omg) - (chassis_move_update->motor_chassis[1].omg)) / 2;
+chassis_vx_real=chassis_move_update->vx ;
+
+chassis_move_update->omg = ((chassis_move_update->motor_chassis[0].omg) - (chassis_move_update->motor_chassis[1].omg)) / 2;
 
 	chassis_move_update->chassis_position_now = encoderToDistance((M3508s[3].totalAngle - M3508s[2].totalAngle) / 2);
 	LQRweiyi_text = chassis_move_update->chassis_position_now;
@@ -680,3 +713,39 @@ void get_speed_by_position_V2()
 	// TARGET_SPEED_POSITION=0;
 	//}
 }
+
+double swing_link_length;//摆杆长度-实际
+
+void LQR_parameter()
+{
+	double x;
+	x=swing_link_length*10.0f;
+if(x<120)
+x=120.0;
+if(x>450)
+x=450.0;//x取值的限制
+
+LQR_K1_REAL_TIME=-1.0;
+LQR_K2_REAL_TIME=  (3E-09) * x * x * x - (4E-06) * x * x + (0.0001) * x - 3.011;
+//LQR_K3_REAL_TIME= (1E-05)*x* x - 0.0252*x - 6.8288;//浮点运算精度不够了
+//LQR_K4_REAL_TIME= -1.0*4E-06*x*x - 0.0023*x - 1.3267;	
+	
+LQR_K3_REAL_TIME_xx=-0.0163*x - 7.4001;
+LQR_K4_REAL_TIME_xx=-0.0043*x - 0.9757;	
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

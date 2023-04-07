@@ -172,6 +172,7 @@ extern int send_to_R_test;
 extern float K3_OUT;
 extern float K4_OUT;
 extern float K2_OUT;
+extern float K1_OUT;
 extern float TARGET_SPEED_POSITION;
 extern float LQR_TARGET_position;
 extern float pitch_cut_off_angle;//截止倾角超过这个角度就没速度了
@@ -180,12 +181,18 @@ extern float LQRweiyi_text;//LQR位移数据确定
 extern float TARGET_SPEED_POSITION_V2;
 extern float LQRweiyi_PO_TG;//lqr位移目标
 extern float LQRweiyi_SPEED_TG;//LQR速度目标
+extern double swing_link_length;//摆杆长度-实际
+extern float chassis_vx_real;
+extern float chassis_speed_real;
+extern fp32 vx_set_channel;
+
 void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_to_vector);
 void LQR_TEST_CON(void);
 void get_speed_by_position_V1(void);
 double encoderToDistance(int encoderCount) ;
 void LQR_target_position(void);
 void get_speed_by_position_V2(void);
+void LQR_parameter(void);
 
 fp32 fp32_constrain(fp32 Value, fp32 minValue, fp32 maxValue);
 //限幅函数

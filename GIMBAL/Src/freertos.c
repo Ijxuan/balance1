@@ -1395,7 +1395,10 @@ void Robot_Control(void const *argument)
 
 		mit_math_temp(MIT_A.ANGLE_JD - MIT_A.MIT_TZG - 29.54,
 					  MIT_B.MIT_TZG - MIT_B.ANGLE_JD - 29.54,
-					  &R_C_X_NOW, &R_C_Y_NOW); // 正解验算
+					  &R_C_X_NOW, &R_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW
+		swing_link_length=sqrt((R_C_X_NOW-10.0)*(R_C_X_NOW-10.0)+R_C_Y_NOW*R_C_Y_NOW);
+		//求摆杆长度 实时计算LQR参数要用到
+		
 		LQR_TEST_CON();
 		update_gyro(); // 由角度计算角速度
 		gyro_test();   // 积分角速度比较速度验证

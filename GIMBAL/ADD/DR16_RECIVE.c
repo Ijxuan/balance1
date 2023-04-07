@@ -252,7 +252,27 @@ void NM_swj(void)
 	if(1)
 	{
 		
-												#if 1//虚拟摇杆确定
+												#if 1//LQR双向不一致
+		
+	p=0;
+			send_d_32[p++]=K1_OUT*1000;//弧度值目标位置		1
+			send_d_32[p++]=K2_OUT*1000;//lqr位移目标
+		
+			send_d_32[p++]=K3_OUT*1000;//角度制 目标位置		3 
+		
+			send_d_32[p++]=K4_OUT*1000;//目标摆角		1
+			send_d_32[p++]=Nm_L_test*1000;//当前摆角		2
+		
+			send_d_32[p++]=chassis_vx_real*100;//角度制 目标位置		3 实际速度 		
+			send_d_32[p++]=(INS_angle[2] - angle_qhq_pi)* Angle_turn_Radian*100;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=TARGET_SPEED_POSITION_V2*100;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+
+			send_d_16[p++]=engine_body_height_R*10;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif		
+												#if 0//虚拟摇杆确定
 		
 	p=0;
 			send_d_32[p++]=vjoy_TEST.ch_WS;//弧度值目标位置		1
