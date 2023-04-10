@@ -549,6 +549,11 @@
               <FileType>1</FileType>
               <FilePath>..\ADD\keyBoard_to_vjoy.c</FilePath>
             </File>
+            <File>
+              <FileName>Jump.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\Jump.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

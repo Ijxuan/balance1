@@ -4,6 +4,7 @@
 #include "my_positionPID_bate.h"
 #include "MY_balance_CONTROL.h"
 #include "math.h"
+#include "Jump.h"
 
 /*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
 /*Ñ¹Ëõ×´Ì¬149.5 Èñ½Ç30.5*/
@@ -151,15 +152,17 @@ void Accurately_contrul_text(void) ///*Í¨¹ýÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊ
 
 #if use_MIT_change_focus == 0
 	/*keep_BALENCE_by_MIT_THETA_to_X*/
-	MIT_keep_BALENCE();
+	MIT_keep_BALENCE();///*Í¨¹ý¹Ø½Úµç»ú±£³Ö»úÌåË®Æ½µÄº¯Êý*/
 	engine_body_height_control();/*ÀëµØ¸ß¶È¾ö¶¨º¯Êý*/
+	jump_text();///*ÌøÔ¾¿ØÖÆº¯Êý
+
 	L_X = 10 + DR16.rc.ch2 / 660.0 * 10.0 + keep_BALENCE_by_MIT_THETA_to_X;
 	// L_Y=24.33+DR16.rc.ch3/660.0*10.0;//ÎÞ¼«±ä¸ß
-	L_Y = engine_body_height_L;
+	L_Y = engine_body_height_L+jump_height_L;
 
 	R_X = 10 - DR16.rc.ch2 / 660.0 * 10.0 - keep_BALENCE_by_MIT_THETA_to_X;
 	// R_Y=24.33+DR16.rc.ch3/660.0*10.0;//ÎÞ¼«±ä¸ß
-	R_Y = engine_body_height_R;
+	R_Y = engine_body_height_R+jump_height_R;
 
 	angle_qhq_pi = atan((10.0f - R_C_X_NOW) / R_C_Y_NOW);
 	angle_qhq = angle_qhq_pi * 180.0f / PI;
@@ -280,7 +283,7 @@ void MIT_keep_BALENCE()
 		// keep_BALENCE_by_MIT_RT=Ramp_Function(&MIT_BALENCE_GO_TO_TG);//Ð±ÆÂ¸³Öµ
 	}
 	keep_BALENCE_by_MIT_THETA_to_X = sin(keep_BALENCE_by_MIT_RT * PI / 180.0f) * R_C_Y_NOW;
-//			keep_BALENCE_by_MIT_THETA_to_X=0;
+			keep_BALENCE_by_MIT_THETA_to_X=0;
 
 	banlence_states_last_times = banlence_states_this_imes;
 }

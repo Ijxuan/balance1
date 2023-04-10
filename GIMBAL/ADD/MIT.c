@@ -75,7 +75,17 @@ void MIT_PID_INIT(void)
 
 	MIT_D.kp_temp = 50;
 	MIT_D.kv_temp = 3;
+//	MIT_A.kp_temp = 10;
+//	MIT_A.kv_temp = 1;
 
+//	MIT_B.kp_temp = 10;
+//	MIT_B.kv_temp = 1;
+
+//	MIT_C.kp_temp = 10;
+//	MIT_C.kv_temp = 1;
+
+//	MIT_D.kp_temp = 10;
+//	MIT_D.kv_temp = 1;
 	liftoff_temp.Rate = 0.1;
 
 	MIT_BALENCE_start.Absolute_Max = 20; // 通过MIT保持机体平衡 斜坡函数极限值
@@ -99,6 +109,12 @@ float liftoff_R = 10;		// 右边离地高度
 float liftoff_L = 10;		// 左边离地高度
 float engine_body_height_R; // 右边机体高度
 float engine_body_height_L; // 左边机体高度
+
+float jump_height_R; // 右边跳跃高度
+float jump_height_L; // 左边跳跃高度
+
+float engine_body_height_L; // 左边机体高度
+
 int16_t sendto_MIT_TEXT = 1;
 float send_to_MIT_text = 0; // 发送给电机的值
 /**/
@@ -821,3 +837,12 @@ void get_MIT_tg_angle_for_liftoff(void)
 		liftoff_R = 1;
 	liftoff_L = liftoff_R;
 }
+
+
+
+
+
+
+
+
+

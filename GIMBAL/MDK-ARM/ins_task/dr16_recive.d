@@ -93,4 +93,6 @@ ins_task\dr16_recive.o: ..\APP\MY_balance_CONTROL.h
 ins_task\dr16_recive.o: ..\ADD\MIT.h
 ins_task\dr16_recive.o: ..\ADD\LQR_TEST.h
 ins_task\dr16_recive.o: ..\Arithmetic\mit_math.h
+ins_task\dr16_recive.o: ..\Arithmetic\mit_math.h
 ins_task\dr16_recive.o: ..\ADD\keyBoard_to_vjoy.h
+ins_task\dr16_recive.o: ..\ADD\Jump.h

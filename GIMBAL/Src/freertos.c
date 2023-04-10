@@ -949,7 +949,8 @@ void IMU_Send(void const *argument)
 #endif
 		if (DR16.rc.s_left == 2)
 		{
-			if (DR16.rc.ch0 < -600 && DR16.rc.ch1 < -600 && DR16.rc.ch3 < -600 && DR16.rc.ch2 > 600)
+			if (DR16.rc.ch0 < -600 && DR16.rc.ch1 < -600 && DR16.rc.ch3 < -600 && DR16.rc.ch2 > 600)//ÄÚ°Ë
+
 			{
 				calibration_times++;
 			}
@@ -957,8 +958,7 @@ void IMU_Send(void const *argument)
 			{
 				calibration_times = 0;
 			}
-
-			if (DR16.rc.ch0 > 600 && DR16.rc.ch1 > 600 && DR16.rc.ch3 > 600 && DR16.rc.ch2 < -600)
+			if (DR16.rc.ch0 > 600 && DR16.rc.ch1 > 600 && DR16.rc.ch3 > 600 && DR16.rc.ch2 < -600)//ÔÙÍâ°Ë
 			{
 				flash_read_times++;
 			}

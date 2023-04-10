@@ -330,11 +330,11 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 		}
 
 		TARGET_angle_speed_YAW = P_PID_bate(&change_direction_angle, TARGET_angle_YAW, DJIC_IMU.total_yaw);
-		if (DW_FOR_ZX != 0) // 拨轮控制,控制速度
-		{
-			TARGET_angle_speed_YAW = DW_FOR_ZX;
-			TARGET_angle_YAW = DJIC_IMU.total_yaw;
-		}
+//		if (DW_FOR_ZX != 0) // 拨轮控制,控制速度
+//		{
+//			TARGET_angle_speed_YAW = DW_FOR_ZX;
+//			TARGET_angle_YAW = DJIC_IMU.total_yaw;
+//		}
 		send_to_tire_L += P_PID_bate(&change_direction_speed, TARGET_angle_speed_YAW, DJIC_IMU.Gyro_z);
 		send_to_tire_R += P_PID_bate(&change_direction_speed, TARGET_angle_speed_YAW, DJIC_IMU.Gyro_z);
 	}
@@ -621,7 +621,8 @@ void LQR_target_position()
 
 		if (DR16.rc.ch1 == 0 && DR16_rc_ch1_last_V2 != 0)
 		{
-			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 记录松手瞬间的位置 作为目标位置
+//			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 记录松手瞬间的位置 作为目标位置
+			chassis_move.chassis_position_tg = chassis_move.chassis_position_tg; // 记录松手瞬间的目标位置 位置 作为目标位置
 		}
 
 		DR16_rc_ch1_last_V2 = DR16.rc.ch1;
@@ -715,6 +716,7 @@ void get_speed_by_position_V2()
 }
 
 double swing_link_length;//摆杆长度-实际
+double swing_link_length_text;//摆杆长度-实际
 
 void LQR_parameter()
 {
@@ -726,12 +728,12 @@ if(x>450)
 x=450.0;//x取值的限制
 
 LQR_K1_REAL_TIME=-1.0;
-LQR_K2_REAL_TIME=  (3E-09) * x * x * x - (4E-06) * x * x + (0.0001) * x - 3.011;
+LQR_K2_REAL_TIME=  (5E-09) * x * x * x - (5E-06) * x * x + (0.0018) * x - 1.8558;
 //LQR_K3_REAL_TIME= (1E-05)*x* x - 0.0252*x - 6.8288;//浮点运算精度不够了
 //LQR_K4_REAL_TIME= -1.0*4E-06*x*x - 0.0023*x - 1.3267;	
 	
-LQR_K3_REAL_TIME_xx=-0.0163*x - 7.4001;
-LQR_K4_REAL_TIME_xx=-0.0043*x - 0.9757;	
+LQR_K3_REAL_TIME_xx=-0.0087*x - 6.3395;
+LQR_K4_REAL_TIME_xx=-0.002*x - 0.8555;	
 
 
 }
