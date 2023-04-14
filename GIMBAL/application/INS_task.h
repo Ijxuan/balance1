@@ -107,7 +107,8 @@ typedef struct
 
 } DJIC_IMU_t;
 extern DJIC_IMU_t DJIC_IMU;
-
+extern float g_for_C;//重力加速度在长边得分量
+extern float g_for_G;//重力加速度垂直于R标得分量
 
 extern fp32 INS_angle[3];
 extern fp32 INS_gyro[3];

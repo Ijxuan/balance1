@@ -42,7 +42,7 @@
 #define KP_MAX 500.0f
 #define KD_MIN 0.0f     // N-m/rad/s
 #define KD_MAX 5.0f
-#define T_MIN -18.0f
+#define T_MIN -18.0f    // N-m
 #define T_MAX 18.0f
 
 #define Angle_turn_Radian 57.295779513082320876798154814105f
@@ -94,7 +94,23 @@ uint8_t MIT_RAW_DATA[8];//接收到的电机发来的原始数据
 	float MIT_TZG_ARRIVE;//抬最高-实际达到值
 
 } MIT_t;
+typedef struct
+{
 
+
+float x_speed;
+float y_speed;
+
+	float fai_0;//90-摆杆角度
+	float fai_1;//A点与x轴的夹角 钝角
+	float fai_2;//B点与x轴的夹角 锐角
+	float fai_3;//D点与x轴的夹角 钝角
+	float fai_4;//E点与x轴的夹角 锐角
+
+		float T_A;//A点电机力矩
+		float T_E;//E点电机力矩
+
+} connecting_rod_t;//连杆机构
 
 
 
@@ -104,6 +120,8 @@ extern MIT_t MIT_B;
 extern MIT_t MIT_C;
 extern MIT_t MIT_D;
 
+extern connecting_rod_t right_leg;//连杆机构
+extern connecting_rod_t Left_leg;
 
 extern int MIT_MODE_TEXT;
 extern int16_t sendto_MIT_TEXT;//发送给电机 为1时发 为0时不发

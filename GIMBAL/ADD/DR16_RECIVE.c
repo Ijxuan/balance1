@@ -252,7 +252,27 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-												#if 1//力矩
+														#if 0//加速度
+		
+	p=0;
+			send_d_32[p++]=INS_accel[0]*100;//弧度值目标位置	 形象	1
+			send_d_32[p++]=INS_accel[1]*100;//lqr位移目标
+		
+			send_d_32[p++]=INS_accel[2]*100;//角度制 目标位置		3 
+		
+			send_d_32[p++]=DJIC_IMU.add_speed_C*100;//目标摆角		1
+			send_d_32[p++]=new_speed_test*10000;//右边的力矩		2
+		
+			send_d_32[p++]=speed_now_time_m_s*10000;//左边的力矩
+			send_d_32[p++]=(MIT_A.current_end+MIT_C.current_end-MIT_B.current_end-MIT_D.current_end)*1000;//里程计测试  	7
+	p=0;
+			send_d_16[p++]=R_C_Y_NOW*10000;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+
+			send_d_16[p++]=jump_times;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+												#if 0//力矩 跳跃-离地检测
 		
 	p=0;
 			send_d_32[p++]=(40-R_C_Y_NOW)*1000;//弧度值目标位置	 形象	1
@@ -273,7 +293,7 @@ void NM_swj(void)
 														//保留到小数点后四位558 320 660   bjTlta
 #endif		
 		
-												#if 0//力矩
+												#if 1//力矩
 		
 	p=0;
 			send_d_32[p++]=MIT_A.current_end*1000;//弧度值目标位置		1
@@ -282,15 +302,15 @@ void NM_swj(void)
 			send_d_32[p++]=MIT_C.current_end*1000;//角度制 目标位置		3 
 		
 			send_d_32[p++]=MIT_D.current_end*1000;//目标摆角		1
-			send_d_32[p++]=(MIT_A.current_end-MIT_B.current_end)*1000;//右边的力矩		2
+			send_d_32[p++]=right_leg.T_A*1000;//右边的力矩		2
 		
-			send_d_32[p++]=(MIT_C.current_end-MIT_D.current_end)*1000;//左边的力矩
+			send_d_32[p++]=right_leg.T_E*1000;//左边的力矩
 			send_d_32[p++]=(MIT_A.current_end+MIT_C.current_end-MIT_B.current_end-MIT_D.current_end)*1000;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=R_C_Y_NOW*100;//测试用目标速度数值,必须为正值;//输出电压  实际    8
 
-			send_d_16[p++]=engine_body_height_R*10;//实际       	9
-			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+			send_d_16[p++]=right_leg.y_speed*100;//实际       	9
+			send_d_16[p++]=F_y_R*100;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif		
 												#if 0//LQR双向不一致

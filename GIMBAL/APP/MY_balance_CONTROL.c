@@ -6,6 +6,8 @@
 #include "math.h"
 #include "keyBoard_to_vjoy.h"
 
+
+
 int M3508_speed_new;
 float L_R_XS = -0.3f;
 float total_pitch_last = 0;
@@ -248,3 +250,122 @@ void PIRCH_XR(void)		  // PITCH轴削弱
 
 	PITCH_XR_K = 1 - (fabs((double)DJIC_IMU.total_pitch) / PITCH_ZDJD);
 }
+
+float new_speed_test;
+float new_speed_test_last;
+float speed_last_time_m_s;
+float add_speed_C_last;
+float add_speed_C_total;
+float add_speed_C_long_time_ago;
+
+int time_JG=1;
+int i_qq=0;
+float speed_now_time_m_s;
+int i_foe_accel=0;
+
+
+float last_speed_50_ms[50];
+float last_accel_50_ms[50];
+float last_accel;
+float accel_all;
+int speed_num;
+int accel_num;
+float now_speed,now_accel;
+float yuche_speed;
+void speed_accel()
+{
+//取本次电机速度
+//用50次前的电机速度叠50次加速度的
+//记录本次陀螺仪加速度与电机速度
+
+
+now_speed = speed_now_time_m_s = 0.00040490766f *( M3508s[2].realSpeed-M3508s[3].realSpeed)/2.0f;
+now_accel = DJIC_IMU.add_speed_C;
+if(speed_num>49){speed_num=0;}
+if(accel_num>49){accel_num=0;}
+
+if((accel_num+1) == 50){accel_all -= last_accel_50_ms[0];}
+else{accel_all -= last_accel_50_ms[accel_num+1];}
+last_accel_50_ms[accel_num] = (last_accel + now_accel) / 2 * 0.001;
+accel_all += last_accel_50_ms[accel_num];
+
+if((speed_num+1) == 50){yuche_speed = last_speed_50_ms[0] + accel_all;}
+else{yuche_speed = last_speed_50_ms[speed_num+1] + accel_all;}
+last_speed_50_ms[speed_num] = now_speed;
+last_accel = now_accel;
+accel_num++;
+speed_num++;
+
+new_speed_test = yuche_speed;
+}
+
+//void speed_accel()
+//{
+//	i_qq++;
+//	speed_now_time_m_s=0.00040490766f *( M3508s[2].realSpeed-M3508s[3].realSpeed)/2.0f;
+//	if(i_qq>time_JG)
+//	{
+////new_speed_test=speed_last_time_m_s+time_JG/1000.0f*(DJIC_IMU.add_speed_C+add_speed_C_last)/2.0f;
+//new_speed_test=speed_last_time_m_s+time_JG/1000.0f*(add_speed_C_total);
+//		
+//new_speed_test=speed_last_time_m_s+1000.0f*(add_speed_C_total);
+
+//	speed_last_time_m_s=0.00040490766f *( M3508s[2].realSpeed-M3508s[3].realSpeed)/2.0f;
+//		add_speed_C_total=0;//累加清零
+//		add_speed_C_last=DJIC_IMU.add_speed_C;
+//	i_qq=0;
+//	}
+//	else
+//	{
+//	add_speed_C_total+=DJIC_IMU.add_speed_C;//累加
+//	}
+//new_speed_test_last=new_speed_test;
+//}
+
+
+
+//#define N 10    // 采样窗口长度
+//#define ALPHA 0.7   // 时间加权系数
+
+//float read_speed() {    // 使用实际数据源读取速度
+//    // 实现具体的速度读取逻辑
+//    float speed = 0.0;
+//    return speed;
+//}
+
+//float read_add_speed() {    // 使用实际数据源读取加速度
+//    // 实现具体的加速度读取逻辑
+//    float add_speed = 0.0;
+//    return add_speed;
+//}
+
+float time_weighted_average(float *data, float alpha, int n) {    // 时间加权平均
+//    float result = 0.0;
+//    float w = 1.0;
+//    for(int i = 0; i < n; i++) {
+//        result += w * data[i];
+//        w *= (1 - alpha);
+//    }
+//    result += w * data[n];
+//    return result;
+}
+
+//    float speed_data[N + 1] = {0.0};   // 存储速度数据的循环数组
+//    float add_speed = 0.0;
+//    float speed = 0.0;
+void speed_accel_V2() 
+	{
+
+//        add_speed = DJIC_IMU.add_speed_C;   // 读取加速度数据
+//        speed += add_speed / 1000.0;    // 通过加速度计算速度
+//        speed_data[N] = speed;          // 存储当前速度数据
+//        speed = time_weighted_average(speed_data, ALPHA, N);    // 计算时间加权平均速度
+//        for(int i = 0; i < N; i++) {    // 移除最早的速度数据
+//            speed_data[i] = speed_data[i + 1];
+//									}
+//		
+	}
+
+
+
+

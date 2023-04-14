@@ -76,8 +76,8 @@ void mit_math_temp(float fai1, float fai2, float *X_now, float *Y_now) ///*Æ½ÃæÎ
 	*Y_now = 32.0 * sin(angle_fai_3_zhen) + 16.0 * sin(angle_fai_1_zhen / 180.0f * PI);
 }
 
-float T1 = 0;					 // ×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(¶Ù½Ç)
-float T2 = 0;					 // ×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç)
+float T1_Q = 0;					 // ×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(¶Ù½Ç)
+float T2 = 0;					 // (20,0) E µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç)
 float MIT_A_tg_angle_for_IS = 0; // ×ø±êÏµÔ­µã´¦¹Ø½Úµç»úÄ¿±ê½Ç¶È
 float MIT_B_tg_angle_for_IS = 0; //(20,0)´¦¹Ø½Úµç»úÄ¿±ê½Ç¶È
 float TEMP_SQRT = 0;
@@ -96,7 +96,7 @@ void mit_math_temp_2(float Cx, float Cy) ///*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
 	A0_TEMP = Cx * Cx + Cy * Cy - 768;																			   // 447.8225
 	B0_TEMP = -32.0 * Cx;																						   //-320
 	C0_TEMP = -32.0 * Cy;																						   //-595.2
-	T1 = (-1.0 * C0_TEMP + sqrt(C0_TEMP * C0_TEMP + B0_TEMP * B0_TEMP - A0_TEMP * A0_TEMP)) / (A0_TEMP - B0_TEMP); // 89.12/767.8225=0.1160684923924475
+	T1_Q = (-1.0 * C0_TEMP + sqrt(C0_TEMP * C0_TEMP + B0_TEMP * B0_TEMP - A0_TEMP * A0_TEMP)) / (A0_TEMP - B0_TEMP); // 89.12/767.8225=0.1160684923924475
 	// 1.570796325»¡¶È
 	if (C0_TEMP * C0_TEMP + B0_TEMP * B0_TEMP - A0_TEMP * A0_TEMP > 0)
 	{
@@ -107,7 +107,7 @@ void mit_math_temp_2(float Cx, float Cy) ///*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
 		sqrt_allow = 0;
 	}
 	TEMP_SQRT = sqrt(C0_TEMP * C0_TEMP + B0_TEMP * B0_TEMP - A0_TEMP * A0_TEMP); // 506.0810690924429
-	angle_fai_1 = 2 * atan(T1);													 // 6.62061009*2=13.24122018
+	angle_fai_1 = 2 * atan(T1_Q);													 // 6.62061009*2=13.24122018
 	angle_fai_1_JD = angle_fai_1 * 180 / PI;
 
 	// MIT_A_tg_angle_for_IS=(PI-angle_fai_1)*180/PI+29.54;
@@ -118,13 +118,13 @@ void mit_math_temp_2(float Cx, float Cy) ///*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
 		MIT_A_tg_angle_for_IS = 29.54 - 180 - angle_fai_1_JD;
 	}
 
-	A1_TEMP = (Cx - 20) * (Cx - 20) + Cy * Cy - 768;
+	A1_TEMP = (Cx - 20) * (Cx - 20) + Cy * Cy - 768;//Ô­Ê½ÊÇXc-Xa Çófai4 °ÑXa»»³ÉXe  °ÑYa»»³ÉYe
 	B1_TEMP = -32.0 * (Cx - 20);
 	C1_TEMP = -32.0 * Cy;
 	T2 = (-1.0 * C1_TEMP - sqrt(C1_TEMP * C1_TEMP + B1_TEMP * B1_TEMP - A1_TEMP * A1_TEMP)) / (A1_TEMP - B1_TEMP);
 	angle_fai_2 = 2 * atan(T2);
 	angle_fai_2_JD = angle_fai_2 * 180 / PI;
-	MIT_B_tg_angle_for_IS = angle_fai_2 * 180 / PI + 29.54;
+	MIT_B_tg_angle_for_IS = angle_fai_2 * 180 / PI + 29.54;//Ğ´ÁËÒ»¾ä·Ï»°,ÎªÊ²Ã´²»ÓÃangle_fai_2_JD?
 }
 
 void get_tg_angle_by_WLG_IS(void) ///*Í¨¹ıÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È*/
@@ -408,3 +408,100 @@ void engine_body_height_control(void)
 
 	engine_body_height_L = engine_body_height_R;
 }
+
+/*MITÄ¿±êÁ¦¾Ø¼ÆËãº¯Êı*/
+float Y_k=1.0;//Y·½ÏòÄ£ÄâµÄµ¯»ÉÏµÊı
+float Y_d=0.5;//Y·½ÏòÄ£ÄâµÄ×èÄáÏµÊı
+float F_y_R=0;//ÓÒ±ßÍÈµÄÖ§³ÅÁ¦
+
+float TG_y=45.09;//ÓÒ±ßÍÈµÄÄ¿±êY
+float TG_x=10;//ÓÒ±ßÍÈµÄÄ¿±êX
+
+float real_y=0;//ÓÒ±ßÍÈµÄµ±Ç°Y
+float temp_1_angle=0;//c²âÊÔ
+float temp_2_angle=0;//²âÊÔ
+
+/*
+¾ÙÀı:x=10 y=45.09
+right_leg.fai_0= PI/2
+
+right_leg.fai_1=1.745329  100
+right_leg.fai_2=1.159946  66.46
+right_leg.fai_3=1.981647  113.54
+right_leg.fai_4=1.396263  80
+*/
+void MIT_orque_TG()
+{
+	
+	TG_x=R_X;
+	TG_y=R_Y;
+mit_math_temp_2(TG_x, TG_y); ///*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
+right_leg.fai_0=PI/2-angle_qhq_pi;
+	
+right_leg.fai_1=angle_fai_1;
+		if(angle_fai_1<0)
+		{
+		right_leg.fai_1=angle_fai_1+2*PI;
+		}
+	//Bµã×ø±ê: (16.0*cos(right_leg.fai_1) , 16.0*sin(right_leg.fai_1) )
+	//Cµã×ø±ê: (TG_x,TG_y)	
+right_leg.fai_2=atan( (TG_y-16.0*sin(right_leg.fai_1)) /( TG_x-16.0*cos(right_leg.fai_1) ) );
+		
+right_leg.fai_4=angle_fai_2;
+//Dµã×ø±ê: (16.0*cos(right_leg.fai_4) , 16.0*sin(right_leg.fai_4) )
+right_leg.fai_3=PI-atan( (TG_y-16.0*sin(right_leg.fai_4)) /( 16.0*cos(right_leg.fai_4) +20.0-TG_x) );//¼ì²éÒ»ÏÂ
+//ËùÓĞ½Ç¶È¶¼×¼±¸ºÃÁË	
+		
+		//¼ÆËãXYµÄËÙ¶È
+		MIT_c_get_xy_speed(&right_leg.x_speed,&right_leg.y_speed,&Left_leg.x_speed,&Left_leg.y_speed);	
+		real_y=R_C_Y_NOW;//Êµ¼ÊY¸ß¶È
+F_y_R=Y_k*(TG_y-real_y)+Y_d*right_leg.y_speed;//CµãµÄÄ¿±êÁ¦¾Ø
+		
+right_leg.T_A= 0.16*sin(right_leg.fai_0-right_leg.fai_3)
+		*sin(right_leg.fai_1-right_leg.fai_2)
+		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_R*-1.0;
+		temp_1_angle=sin(right_leg.fai_0-right_leg.fai_3);
+		
+right_leg.T_E= 0.16*sin(right_leg.fai_0-right_leg.fai_2)
+		*sin(right_leg.fai_3-right_leg.fai_4)
+		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_R*-1.0;
+				temp_2_angle=sin(right_leg.fai_0-right_leg.fai_2);
+				
+}
+//¼ÆËãµÃµ½ cµãxy×ø±êµÄËÙ¶È Ö¸Õëµ÷ÓÃ
+int sampling_interval_time=20;//²ÉÑù¼ä¸ôÊ±¼ä ms
+
+//ËÙ¶Èµ¥Î»Îª cm Ã¿Ãë
+//L1 16.0   L2 32.0   L3 32.0   L4 16.0
+// fai0=PI/2-sita
+void MIT_c_get_xy_speed(float * x_speed_R,float * y_speed_R , float * x_speed_L,float * y_speed_L)
+{
+static int sampling_i;
+	static float R_C_X_last=10;
+	static float R_C_Y_last=10;
+	sampling_i++;
+	if(sampling_i>=sampling_interval_time)
+	{
+	*x_speed_R=(R_C_X_NOW-R_C_X_last)*1000.0f/sampling_interval_time;
+	*y_speed_R=(R_C_Y_NOW-R_C_Y_last)*1000.0f/sampling_interval_time;
+		R_C_X_last=R_C_X_NOW;
+		R_C_Y_last=R_C_Y_NOW;
+		sampling_i=0;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -67,3 +67,6 @@ ins_task\mit.o: ..\bsp\boards\bsp_buzzer.h
 ins_task\mit.o: ../Inc/tim.h
 ins_task\mit.o: ..\ADD\M3508.h
 ins_task\mit.o: ..\ADD\LPF.h
+ins_task\mit.o: ..\Drivers\CMSIS\DSP\Include\arm_math.h
+ins_task\mit.o: ../Drivers/CMSIS/Include/core_cm4.h
+ins_task\mit.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

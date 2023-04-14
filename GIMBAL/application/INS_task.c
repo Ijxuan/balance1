@@ -52,7 +52,8 @@
 
 	
 	#if use_new_gimbal==0
-float text_BOARD_INSTALL[3][3]= {   {0.0f, 1.0f, 0.0f},                    
+float text_BOARD_INSTALL[3][3]= {   
+	{0.0f, 1.0f, 0.0f},                    
     {-1.0f, 0.0f, 0.0f},                     
     {0.0f, 0.0f, 1.0f}  };
 
@@ -63,7 +64,8 @@ float text_BOARD_INSTALL[3][3]= {   {0.0f, -1.0f, 0.0f},
     {1.0f, 0.0f, 0.0f},                     
     {0.0f, 0.0f, -1.0f}  };
 */	
-float text_BOARD_INSTALL[3][3]= {   {0.0f, 1.0f, 0.0f},                    
+float text_BOARD_INSTALL[3][3]= {   
+	{0.0f, 1.0f, 0.0f},                    
     {-1.0f, 0.0f, 0.0f},                     
     {0.0f, 0.0f, 1.0f}  };	
 	#endif	
@@ -291,7 +293,7 @@ void INS_task(void const *pvParameters)
         accel_fliter_2[0] = accel_fliter_3[0];
 
         accel_fliter_3[0] = accel_fliter_2[0] * fliter_num[0] + accel_fliter_1[0] * fliter_num[1] + INS_accel[0] * fliter_num[2];
-
+//       这一刻的加速度 =       上一刻的加速度* 1.929      +上上时刻的加速度*-0.93178+这一时刻的原始值*  0.0023
         accel_fliter_1[1] = accel_fliter_2[1];
         accel_fliter_2[1] = accel_fliter_3[1];
 
@@ -653,7 +655,8 @@ void DMA2_Stream2_IRQHandler(void)
 }
 
 
-
+float g_for_C=0;//重力加速度在长边得分量
+float g_for_G=0;//重力加速度垂直于R标得分量
 
 void Updata_Hand_Euler_Gyro_Data(void)
 {
@@ -746,6 +749,9 @@ void Updata_Hand_Euler_Gyro_Data(void)
 	
 	DJIC_IMU.add_speed_C=accel_fliter_3[1];//长边加速度
 	DJIC_IMU.add_speed_G=accel_fliter_3[2];//重力加速度
+	
+	g_for_C=9.7*sin(INS_angle[2]);
+	g_for_G=9.7*cos(INS_angle[2]);
 	DJIC_IMU.add_speed_Q=DJIC_IMU.add_speed_C*cos(INS_angle[2]);
 }
 

@@ -18,6 +18,8 @@ void MIT_keep_BALENCE(void);                                            // �ؽ
 void update_gyro(void);
 void gyro_test(void);
 void engine_body_height_control(void);
+void MIT_c_get_xy_speed(float * x_speed_R,float * y_speed_R , float * x_speed_L,float * y_speed_L);
+void MIT_orque_TG(void);/*MIT目标力矩计算函数*/
 
 extern float angle_fai_1;    // ����ϵԭ�㴦����ˮƽ��ļн�(���)
 extern float angle_fai_2;    //(20,0)������ˮƽ��ļн�(���)
@@ -50,6 +52,10 @@ extern float A0_TEMP_zhen;     // ����
 extern float B0_TEMP_zhen;     // ����
 extern float C0_TEMP_zhen;     // ����
 
+extern float T1_Q ;					 // 坐标系原点处腿与水平面的夹角(顿角)
+extern float T2 ;					 // (20,0) E 点处腿与水平面的夹角(锐角)
+
+
 extern int cumulate_time_ms;        // �ۻ�ʱ��
 extern float cumulate_angle_change; // �ۻ��Ƕȱ仯
 extern float pitch_speed_new;       // �������pitch����ٶ�
@@ -65,5 +71,7 @@ extern float change_angle_total_speed_end; // �ۼ����ֵ
 extern float change_angle_total_angle; // ʵ�ʽǶȱ仯��-���ڶԱ�
 extern Ramp_Struct liftoff_SE;         // ��ظ߶�б��
 extern float height_text;
+
+extern float F_y_R;//右边腿的支撑力
 
 #endif

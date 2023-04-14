@@ -46,6 +46,12 @@ extern int TARGET_speed_RC;
 
 extern int target_speed_by_position;
 
+extern int i_qq;
+extern float new_speed_test;
+extern float speed_now_time_m_s;
+
+void speed_accel(void);
+void speed_accel_V2(void) ;
 
 //extern float TARGET_angle_YAW;
 

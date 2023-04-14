@@ -7,6 +7,7 @@
 #include "bsp_buzzer.h"
 #include "M3508.h"
 #include "LPF.h"
+#include "arm_math.h"//为了PI
 
 void MIT_PID_INIT(void)
 {
@@ -104,6 +105,10 @@ MIT_t MIT_A;
 MIT_t MIT_B;
 MIT_t MIT_C;
 MIT_t MIT_D;
+
+connecting_rod_t right_leg;//连杆机构
+connecting_rod_t Left_leg;
+
 
 float liftoff_R = 10;		// 右边离地高度
 float liftoff_L = 10;		// 左边离地高度
@@ -391,6 +396,7 @@ void MIT_controul(void)
 
 		mit_math_temp_2(R_X, R_Y); ///*平面五连杆逆解*/
 		get_tg_angle_by_WLG_IS();
+
 
 		MIT_B_controul();
 		MIT_A_controul();
