@@ -350,6 +350,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>\\GIMBAL\../Arithmetic/mit_math.c\sampling_interval_time</ItemText>
         </Ww>
+        <Ww>
+          <count>40</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>FPS_ALL,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>

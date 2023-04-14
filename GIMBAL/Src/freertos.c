@@ -1286,7 +1286,9 @@ void Robot_Control(void const *argument)
 	vTaskDelay(1000);
 	MIT_init_angle_read_from_flash();
 	Buzzer.mode = Three_times;
-
+R_Y=14.5;
+R_X=10;
+	
 	/* Infinite loop */
 	for (;;)
 	{

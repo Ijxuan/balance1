@@ -410,16 +410,16 @@ void engine_body_height_control(void)
 }
 
 /*MIT目标力矩计算函数*/
-float Y_k=1.0;//Y方向模拟的弹簧系数
-float Y_d=0.5;//Y方向模拟的阻尼系数
+float Y_k=25.0;//Y方向模拟的弹簧系数
+float Y_d=0.1;//Y方向模拟的阻尼系数
 float F_y_R=0;//右边腿的支撑力
 
 float TG_y=45.09;//右边腿的目标Y
 float TG_x=10;//右边腿的目标X
 
 float real_y=0;//右边腿的当前Y
-float temp_1_angle=0;//c测试
-float temp_2_angle=0;//测试
+//float temp_1_angle=0;//c测试
+//float temp_2_angle=0;//测试
 
 /*
 举例:x=10 y=45.09
@@ -460,12 +460,12 @@ F_y_R=Y_k*(TG_y-real_y)+Y_d*right_leg.y_speed;//C点的目标力矩
 right_leg.T_A= 0.16*sin(right_leg.fai_0-right_leg.fai_3)
 		*sin(right_leg.fai_1-right_leg.fai_2)
 		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_R*-1.0;
-		temp_1_angle=sin(right_leg.fai_0-right_leg.fai_3);
+//		temp_1_angle=sin(right_leg.fai_0-right_leg.fai_3);
 		
 right_leg.T_E= 0.16*sin(right_leg.fai_0-right_leg.fai_2)
 		*sin(right_leg.fai_3-right_leg.fai_4)
 		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_R*-1.0;
-				temp_2_angle=sin(right_leg.fai_0-right_leg.fai_2);
+//				temp_2_angle=sin(right_leg.fai_0-right_leg.fai_2);
 				
 }
 //计算得到 c点xy坐标的速度 指针调用
