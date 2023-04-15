@@ -252,6 +252,26 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
+															#if 0//6基本状态
+		
+	p=0;
+			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*100;//实际倾角 0-30
+			send_d_32[p++]=angle_qhq*200;//当前摆杆角度 0-15
+		
+			send_d_32[p++]=keep_BALENCE_by_MIT_RT*200;//目标摆杆角度  0-15 
+		
+			send_d_32[p++]=chassis_vx_real*3000;//当前轮速度	 0-1	       1
+			send_d_32[p++]=TARGET_SPEED_POSITION_V2*3000;//目标轮速度	0-1 	2
+		
+			send_d_32[p++]=LQRweiyi_PO_TG*3000;//目标位移
+			send_d_32[p++]=LQRweiyi_text*3000;//当前位移	7
+	p=0;
+			send_d_16[p++]=DJIC_IMU.total_pitch*1000;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif		
 														#if 0//加速度
 		
 	p=0;

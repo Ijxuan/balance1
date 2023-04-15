@@ -100,6 +100,7 @@ typedef struct
 
 float x_speed;
 float y_speed;
+float swing_link_SPEED;//摆杆长度变化的速度
 
 	float fai_0;//90-摆杆角度
 	float fai_1;//A点与x轴的夹角 钝角

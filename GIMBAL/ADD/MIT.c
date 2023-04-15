@@ -498,11 +498,11 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 	//	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
 	//			MIT_B.target_position_end=MIT_B.target_position;
 
-	if (MIT_B.target_position < MIT_B.MIT_TSZ - 3)
-		MIT_B.target_position_end = MIT_B.MIT_TSZ - 3;
+	if (MIT_B.target_position < MIT_B.MIT_TSZ + 3)
+		MIT_B.target_position_end = MIT_B.MIT_TSZ + 3;
 
-	if (MIT_B.target_position > MIT_B.MIT_TZG + 3)
-		MIT_B.target_position_end = MIT_B.MIT_TZG + 3;
+	if (MIT_B.target_position > MIT_B.MIT_TZG - 3)
+		MIT_B.target_position_end = MIT_B.MIT_TZG - 3;
 
 	// MIT_B_SPEED.Target=P_PID_bate(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
 	//
@@ -524,9 +524,22 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 	MIT_B.send_to_MIT_position = MIT_B.target_position_end / Angle_turn_Radian;
 	MIT_B.send_to_MIT_speed = MIT_B.target_speed / Angle_turn_Radian;
 	// CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
-
+	
+//	if (MIT_B.position_end > MIT_B.MIT_TZG + 3)
+//		MIT_B.send_to_MIT = MIT_B.MIT_TZG + 3;
+	MIT_B.send_to_MIT=right_leg.T_E;
+	if(MIT_B.ANGLE_JD > (MIT_B.MIT_TZG - 3) )
+	{
+		if(right_leg.T_E>0)//抬最高时应为负
+	MIT_B.send_to_MIT=right_leg.T_E* send_to_MIT_damping*-1.0;
+	}
+	if(MIT_B.ANGLE_JD < (MIT_B.MIT_TSZ + 3) )
+	{
+		if(right_leg.T_E<0)//腿伸直时应为正
+	MIT_B.send_to_MIT=right_leg.T_E* send_to_MIT_damping*-1.0;
+	}		
 //	CanComm_SendControlPara(MIT_B.send_to_MIT_position, MIT_B.send_to_MIT_speed, MIT_B.kp, MIT_B.kv, 0, MIT_B_SLAVE_ID);
-	// CanComm_SendControlPara(position_HD_text,speed_HD_text,kp_text,kv_text,send_to_MIT_text);
+// CanComm_SendControlPara(MIT_B.send_to_MIT_position,MIT_B.send_to_MIT_speed,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 }
 
 void MIT_A_controul(void)
@@ -590,13 +603,19 @@ void MIT_A_controul(void)
 	MIT_A.send_to_MIT_speed = MIT_A.target_speed / Angle_turn_Radian;
 
 MIT_A.send_to_MIT=right_leg.T_A* send_to_MIT_damping;
-	if(MIT_A.position_end> (MIT_A.MIT_TSZ - 3))
+	if(MIT_A.ANGLE_JD< (MIT_A.MIT_TZG + 3))
 	{
-		if(right_leg.T_A<0)
+		if(right_leg.T_A<0)//抬最高时应为正
 	MIT_A.send_to_MIT=right_leg.T_A* send_to_MIT_damping*-1.0;
+	}
+	if(MIT_B.ANGLE_JD > (MIT_A.MIT_TSZ - 3) )
+	{
+		if(right_leg.T_E>0)//腿伸直时应为负
+	MIT_B.send_to_MIT=right_leg.T_E* send_to_MIT_damping*-1.0;
 	}	
+	
 //	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, MIT_A.kp, MIT_A.kv, 0, MIT_A_SLAVE_ID);
-	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, 0, 0, 0, MIT_A_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, 0, 0, MIT_A.send_to_MIT, MIT_A_SLAVE_ID);
 }
 void MIT_C_controul(void)
 {
@@ -633,8 +652,22 @@ void MIT_C_controul(void)
 	MIT_C.send_to_MIT_position = MIT_C.target_position_end / Angle_turn_Radian;
 	MIT_C.send_to_MIT_speed = MIT_C.target_speed / Angle_turn_Radian;
 
+			MIT_C.send_to_MIT=Left_leg.T_A;
+
+	if(MIT_C.ANGLE_JD< (MIT_C.MIT_TZG + 3))
+	{
+		if(Left_leg.T_A<0)//抬最高时应为正
+	MIT_C.send_to_MIT=Left_leg.T_A* send_to_MIT_damping*-1.0;
+	}
+	if(MIT_C.ANGLE_JD > (MIT_C.MIT_TSZ - 3) )
+	{
+		if(Left_leg.T_E>0)//腿伸直时应为负
+	MIT_C.send_to_MIT=Left_leg.T_E* send_to_MIT_damping*-1.0;
+	}	
+	
 	// 抬最高是20  0.4
-//	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, MIT_C.kp, MIT_C.kv, 0, MIT_C_SLAVE_ID);
+	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, MIT_C.kp, MIT_C.kv, 0, MIT_C_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, 0, 0, MIT_C.send_to_MIT, MIT_C_SLAVE_ID);
 }
 void MIT_D_controul(void)
 {
@@ -678,8 +711,21 @@ void MIT_D_controul(void)
 	MIT_D.send_to_MIT_position = MIT_D.target_position_end / Angle_turn_Radian;
 	MIT_D.send_to_MIT_speed = MIT_D.target_speed / Angle_turn_Radian;
 
+		MIT_D.send_to_MIT=Left_leg.T_E;
+	if(MIT_D.ANGLE_JD > (MIT_D.MIT_TZG - 3) )
+	{
+		if(Left_leg.T_E>0)//抬最高时应为负
+	MIT_D.send_to_MIT=Left_leg.T_E* send_to_MIT_damping*-1.0;
+	}
+	if(MIT_D.ANGLE_JD < (MIT_D.MIT_TSZ + 3) )
+	{
+		if(Left_leg.T_E<0)//腿伸直时应为正
+	MIT_D.send_to_MIT=Left_leg.T_E* send_to_MIT_damping*-1.0;
+	}	
+	
 	// 抬最高是106.2  7
-	CanComm_SendControlPara(MIT_D.send_to_MIT_position, MIT_D.send_to_MIT_speed, MIT_D.kp, MIT_D.kv, 0, MIT_D_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_D.send_to_MIT_position, MIT_D.send_to_MIT_speed, MIT_D.kp, MIT_D.kv, 0, MIT_D_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_D.send_to_MIT_position, MIT_D.send_to_MIT_speed, MIT_D.kp, MIT_D.kv, 0, MIT_D_SLAVE_ID);
 }
 int send_to_MIT_L_or_R = 0;
 int run_MIT_ENTER_MOTO_MODE_times = 0;

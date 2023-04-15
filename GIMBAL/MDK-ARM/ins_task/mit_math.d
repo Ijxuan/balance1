@@ -69,3 +69,4 @@ ins_task\mit_math.o: ..\APP\MY_balance_CONTROL.h
 ins_task\mit_math.o: ..\ADD\Jump.h
 ins_task\mit_math.o: ..\bsp\boards\bsp_buzzer.h
 ins_task\mit_math.o: ../Inc/tim.h
+ins_task\mit_math.o: ..\ADD\LQR_TEST.h

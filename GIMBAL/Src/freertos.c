@@ -1282,8 +1282,8 @@ void Robot_Control(void const *argument)
 	vTaskDelay(1000);
 	vTaskDelay(1000);
 
-	vTaskDelay(1000);
-	vTaskDelay(1000);
+//	vTaskDelay(1000);
+//	vTaskDelay(1000);
 	MIT_init_angle_read_from_flash();
 	Buzzer.mode = Three_times;
 R_Y=14.5;
@@ -1397,12 +1397,19 @@ R_X=10;
 
 		mit_math_temp(MIT_A.ANGLE_JD - MIT_A.MIT_TZG - 29.54,
 					  MIT_B.MIT_TZG - MIT_B.ANGLE_JD - 29.54,
-					  &R_C_X_NOW, &R_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW
-		
-
+					  &R_C_X_NOW, &R_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW		
+		mit_math_temp(MIT_C.ANGLE_JD - MIT_C.MIT_TZG - 29.54,
+					  MIT_D.MIT_TZG - MIT_D.ANGLE_JD - 29.54,
+					  &L_C_X_NOW, &L_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW
+		//MIT_C.ANGLE_JD 20
+		swing_link_length_L=sqrt((L_C_X_NOW-10.0)*(L_C_X_NOW-10.0)+L_C_Y_NOW*L_C_Y_NOW);
+		//求摆杆长度 实时计算LQR参数要用到
 		
 		swing_link_length=sqrt((R_C_X_NOW-10.0)*(R_C_X_NOW-10.0)+R_C_Y_NOW*R_C_Y_NOW);
 		//求摆杆长度 实时计算LQR参数要用到
+		swing_link_length_R=swing_link_length;
+		
+		
 		MIT_orque_TG();
 		LQR_TEST_CON();
 		update_gyro(); // 由角度计算角速度

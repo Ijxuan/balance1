@@ -5,6 +5,7 @@
 #include "MY_balance_CONTROL.h"
 #include "math.h"
 #include "Jump.h"
+#include "LQR_TEST.h"
 
 /*平面五连杆逆解*/
 /*压缩状态149.5 锐角30.5*/
@@ -283,7 +284,7 @@ void MIT_keep_BALENCE()
 		// keep_BALENCE_by_MIT_RT=Ramp_Function(&MIT_BALENCE_GO_TO_TG);//斜坡赋值
 	}
 	keep_BALENCE_by_MIT_THETA_to_X = sin(keep_BALENCE_by_MIT_RT * PI / 180.0f) * R_C_Y_NOW;
-			keep_BALENCE_by_MIT_THETA_to_X=0;
+//			keep_BALENCE_by_MIT_THETA_to_X=0;
 
 	banlence_states_last_times = banlence_states_this_imes;
 }
@@ -410,14 +411,17 @@ void engine_body_height_control(void)
 }
 
 /*MIT目标力矩计算函数*/
-float Y_k=25.0;//Y方向模拟的弹簧系数
-float Y_d=0.1;//Y方向模拟的阻尼系数
+float Y_k=80.0;//Y方向模拟的弹簧系数
+float Y_d=-1.0;//Y方向模拟的阻尼系数
 float F_y_R=0;//右边腿的支撑力
+float F_y_L=0;//左边腿的支撑力
 
 float TG_y=45.09;//右边腿的目标Y
 float TG_x=10;//右边腿的目标X
 
 float real_y=0;//右边腿的当前Y
+float swing_link_length_R;//右腿摆长
+float swing_link_length_L;//左腿摆长
 //float temp_1_angle=0;//c测试
 //float temp_2_angle=0;//测试
 
@@ -452,10 +456,14 @@ right_leg.fai_4=angle_fai_2;
 right_leg.fai_3=PI-atan( (TG_y-16.0*sin(right_leg.fai_4)) /( 16.0*cos(right_leg.fai_4) +20.0-TG_x) );//检查一下
 //所有角度都准备好了	
 		
-		//计算XY的速度
-		MIT_c_get_xy_speed(&right_leg.x_speed,&right_leg.y_speed,&Left_leg.x_speed,&Left_leg.y_speed);	
-		real_y=R_C_Y_NOW;//实际Y高度
-F_y_R=Y_k*(TG_y-real_y)+Y_d*right_leg.y_speed;//C点的目标力矩
+		//计算XY的速度 计算摆杆速度
+		MIT_c_get_xy_speed(&right_leg.x_speed,&right_leg.y_speed,&Left_leg.x_speed,&Left_leg.y_speed
+		,&Left_leg.swing_link_SPEED,&right_leg.swing_link_SPEED);
+		
+		real_y=swing_link_length_R;//实际摆杆长度
+		
+F_y_R=Y_k*(TG_y-real_y)+Y_d*right_leg.swing_link_SPEED;//C点的目标力矩
+F_y_L=Y_k*(TG_y-swing_link_length_L)+Y_d*Left_leg.swing_link_SPEED;//C点的目标力矩
 		
 right_leg.T_A= 0.16*sin(right_leg.fai_0-right_leg.fai_3)
 		*sin(right_leg.fai_1-right_leg.fai_2)
@@ -465,6 +473,16 @@ right_leg.T_A= 0.16*sin(right_leg.fai_0-right_leg.fai_3)
 right_leg.T_E= 0.16*sin(right_leg.fai_0-right_leg.fai_2)
 		*sin(right_leg.fai_3-right_leg.fai_4)
 		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_R*-1.0;
+		
+Left_leg.T_A= 0.16*sin(right_leg.fai_0-right_leg.fai_3)
+		*sin(right_leg.fai_1-right_leg.fai_2)
+		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_L*-1.0;//左右腿目标一致时 可以这么写
+//		temp_1_angle=sin(right_leg.fai_0-right_leg.fai_3);
+		
+Left_leg.T_E= 0.16*sin(right_leg.fai_0-right_leg.fai_2)
+		*sin(right_leg.fai_3-right_leg.fai_4)
+		/sin(right_leg.fai_3-right_leg.fai_2)*F_y_L*-1.0;
+		
 //				temp_2_angle=sin(right_leg.fai_0-right_leg.fai_2);
 				
 }
@@ -474,18 +492,27 @@ int sampling_interval_time=20;//采样间隔时间 ms
 //速度单位为 cm 每秒
 //L1 16.0   L2 32.0   L3 32.0   L4 16.0
 // fai0=PI/2-sita
-void MIT_c_get_xy_speed(float * x_speed_R,float * y_speed_R , float * x_speed_L,float * y_speed_L)
+void MIT_c_get_xy_speed(float * x_speed_R,float * y_speed_R , float * x_speed_L,float * y_speed_L
+	,float * swing_link_speed_L,float * swing_link_speed_R)
 {
 static int sampling_i;
 	static float R_C_X_last=10;
 	static float R_C_Y_last=10;
-	sampling_i++;
+	static float swing_link_length_R_last=10;
+	static float swing_link_length_L_last=10;
+
+	sampling_i++; 
 	if(sampling_i>=sampling_interval_time)
 	{
 	*x_speed_R=(R_C_X_NOW-R_C_X_last)*1000.0f/sampling_interval_time;
 	*y_speed_R=(R_C_Y_NOW-R_C_Y_last)*1000.0f/sampling_interval_time;
+	* swing_link_speed_L=(swing_link_length_L-swing_link_length_L_last)*1000.0f/sampling_interval_time;
+	* swing_link_speed_R=(swing_link_length_R-swing_link_length_R_last)*1000.0f/sampling_interval_time;
+		
 		R_C_X_last=R_C_X_NOW;
 		R_C_Y_last=R_C_Y_NOW;
+		swing_link_length_R_last=swing_link_length_R;
+		swing_link_length_L_last=swing_link_length_L;
 		sampling_i=0;
 	}
 }

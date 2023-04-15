@@ -18,7 +18,8 @@ void MIT_keep_BALENCE(void);                                            // �ؽ
 void update_gyro(void);
 void gyro_test(void);
 void engine_body_height_control(void);
-void MIT_c_get_xy_speed(float * x_speed_R,float * y_speed_R , float * x_speed_L,float * y_speed_L);
+void MIT_c_get_xy_speed(float * x_speed_R,float * y_speed_R , float * x_speed_L,float * y_speed_L
+	,float * swing_link_speed_L,float * swing_link_speed_R);
 void MIT_orque_TG(void);/*MIT目标力矩计算函数*/
 
 extern float angle_fai_1;    // ����ϵԭ�㴦����ˮƽ��ļн�(���)
@@ -74,4 +75,6 @@ extern float height_text;
 
 extern float F_y_R;//右边腿的支撑力
 
+extern float swing_link_length_R;//右腿摆长
+extern float swing_link_length_L;//左腿摆长
 #endif
