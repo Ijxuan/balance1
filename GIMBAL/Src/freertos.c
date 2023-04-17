@@ -1030,169 +1030,7 @@ void Can2_Reivece(void const *argument)
 			//				//解包
 			//				IMU_Cal_Status_Reivece(CAN2_Rx_Structure);
 			//			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == TEST_MIT_MASTER_ID)
-			{
-				MIT_RC_TIMES++;
-				if (CAN2_Rx_Structure.CAN_RxMessageData[0] == TEST_MIT_SLAVE_ID)
-				{
-					for (int x = 0; x < 6; x++)
-					{
-						text_moto.MIT_RAW_DATA[x] = CAN2_Rx_Structure.CAN_RxMessageData[x];
-					}
-					text_moto.position = (CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
-
-					text_moto.velocity =
-						(((CAN2_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
-						 (CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
-
-					text_moto.current = (CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
-
-					text_moto.position_end = uint_to_float(text_moto.position, P_MIN, P_MAX, 16);
-					text_moto.ANGLE_JD = text_moto.position_end * Angle_turn_Radian;
-					// speed_i++;
-					// MIT_SPEED_BY_ANGLE_TEMP+=(text_moto.position-MIT_ANGLE_JD_LAST);
-					//			MIT_ANGLE_JD_LAST_LAST=MIT_ANGLE_JD_LAST;
-					// MIT_ANGLE_JD_LAST=	text_moto.position;
-					//
-					//			if(speed_i>i_for_speed)
-					//			{
-					//				MIT_SPEED_BY_ANGLE=MIT_SPEED_BY_ANGLE_TEMP;
-					//				MIT_SPEED_BY_ANGLE_TEMP=0;
-					//				speed_i=0;
-					//			}
-					MIT_SPEED_NEW = LPF_V2(&SPEED_MIT, text_moto.velocity) + 5;
-
-					text_moto.velocity_end = uint_to_float(MIT_SPEED_NEW, V_MIN, V_MAX, 12);
-					text_moto.SPEED_JD = text_moto.velocity_end * Angle_turn_Radian;
-
-					text_moto.current_end = uint_to_float(text_moto.current, T_MIN, T_MAX, 12);
-
-					MIT_RC_Process_TIMES++;
-				}
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_A_MASTER_ID)
-			{
-				if (CAN2_Rx_Structure.CAN_RxMessageData[0] == MIT_A_SLAVE_ID)
-				{
-					Get_FPS(&FPS_ALL.MIT_A.WorldTimes, &FPS_ALL.MIT_A.FPS);
-
-					for (int x = 0; x < 6; x++)
-					{
-						MIT_A.MIT_RAW_DATA[x] = CAN2_Rx_Structure.CAN_RxMessageData[x];
-					}
-					MIT_A.position = (CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
-
-					MIT_A.velocity =
-						(((CAN2_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
-						 (CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
-
-					MIT_A.current = (CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
-
-					MIT_A.position_end = uint_to_float(MIT_A.position, P_MIN, P_MAX, 16);
-					MIT_A.ANGLE_JD = MIT_A.position_end * Angle_turn_Radian;
-
-					MIT_A.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_A, MIT_A.velocity) + 5;
-
-					MIT_A.velocity_end = uint_to_float(MIT_A.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
-					MIT_A.SPEED_JD = MIT_A.velocity_end * Angle_turn_Radian;
-
-					MIT_A.current_end = uint_to_float(MIT_A.current, T_MIN, T_MAX, 12);
-				}
-				MIT_A.RC_TIMES++;
-			}
-
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_B_MASTER_ID)
-			{
-				if (CAN2_Rx_Structure.CAN_RxMessageData[0] == MIT_B_SLAVE_ID)
-				{
-					Get_FPS(&FPS_ALL.MIT_B.WorldTimes, &FPS_ALL.MIT_B.FPS);
-
-					for (int x = 0; x < 6; x++)
-					{
-						MIT_B.MIT_RAW_DATA[x] = CAN2_Rx_Structure.CAN_RxMessageData[x];
-					}
-					MIT_B.position = (CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
-
-					MIT_B.velocity =
-						(((CAN2_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
-						 (CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
-
-					MIT_B.current = (CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
-
-					MIT_B.position_end = uint_to_float(MIT_B.position, P_MIN, P_MAX, 16);
-					MIT_B.ANGLE_JD = MIT_B.position_end * Angle_turn_Radian;
-
-					MIT_B.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_B, MIT_B.velocity) + 5;
-
-					MIT_B.velocity_end = uint_to_float(MIT_B.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
-					MIT_B.SPEED_JD = MIT_B.velocity_end * Angle_turn_Radian;
-
-					MIT_B.current_end = uint_to_float(MIT_B.current, T_MIN, T_MAX, 12);
-				}
-				MIT_B.RC_TIMES++;
-			}
-
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_C_MASTER_ID)
-			{
-				if (CAN2_Rx_Structure.CAN_RxMessageData[0] == MIT_C_SLAVE_ID)
-				{
-					Get_FPS(&FPS_ALL.MIT_C.WorldTimes, &FPS_ALL.MIT_C.FPS);
-
-					for (int x = 0; x < 6; x++)
-					{
-						MIT_C.MIT_RAW_DATA[x] = CAN2_Rx_Structure.CAN_RxMessageData[x];
-					}
-					MIT_C.position = (CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
-
-					MIT_C.velocity =
-						(((CAN2_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
-						 (CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
-
-					MIT_C.current = (CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
-
-					MIT_C.position_end = uint_to_float(MIT_C.position, P_MIN, P_MAX, 16);
-					MIT_C.ANGLE_JD = MIT_C.position_end * Angle_turn_Radian;
-
-					MIT_C.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_C, MIT_C.velocity) + 5;
-
-					MIT_C.velocity_end = uint_to_float(MIT_C.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
-					MIT_C.SPEED_JD = MIT_C.velocity_end * Angle_turn_Radian;
-
-					MIT_C.current_end = uint_to_float(MIT_C.current, T_MIN, T_MAX, 12);
-				}
-				MIT_C.RC_TIMES++;
-			}
-			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == MIT_D_MASTER_ID)
-			{
-				if (CAN2_Rx_Structure.CAN_RxMessageData[0] == MIT_D_SLAVE_ID)
-				{
-					Get_FPS(&FPS_ALL.MIT_D.WorldTimes, &FPS_ALL.MIT_D.FPS);
-
-					for (int x = 0; x < 6; x++)
-					{
-						MIT_D.MIT_RAW_DATA[x] = CAN2_Rx_Structure.CAN_RxMessageData[x];
-					}
-					MIT_D.position = (CAN2_Rx_Structure.CAN_RxMessageData[2] | CAN2_Rx_Structure.CAN_RxMessageData[1] << 8);
-
-					MIT_D.velocity =
-						(((CAN2_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
-						 (CAN2_Rx_Structure.CAN_RxMessageData[3]) << 4);
-
-					MIT_D.current = (CAN2_Rx_Structure.CAN_RxMessageData[5] | (CAN2_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
-
-					MIT_D.position_end = uint_to_float(MIT_D.position, P_MIN, P_MAX, 16);
-					MIT_D.ANGLE_JD = MIT_D.position_end * Angle_turn_Radian;
-
-					MIT_D.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_D, MIT_D.velocity) + 5;
-
-					MIT_D.velocity_end = uint_to_float(MIT_D.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
-					MIT_D.SPEED_JD = MIT_D.velocity_end * Angle_turn_Radian;
-
-					MIT_D.current_end = uint_to_float(MIT_D.current, T_MIN, T_MAX, 12);
-				}
-				MIT_D.RC_TIMES++;
-			}
-		}
+	}
 	}
 	//    osDelay(1);
 	/* USER CODE END Can2_Reivece */
@@ -1238,29 +1076,194 @@ void CAN1_R(void const *argument)
 				M2006_getInfo(CAN1_Rx_Structure); //
 			}
 
-			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == GM6020_READID_START)
+//			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == GM6020_READID_START)
+//			{
+//				// 云台
+//				GM6020_Yaw_getInfo(CAN1_Rx_Structure);
+//			}
+
+//			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (GM6020_READID_START + 1))
+//			{
+//				// 云台的yaw轴
+//				GM6020_Pitch_getInfo(CAN1_Rx_Structure); // 6400-7160
+//			}
+
+//			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == GM6020_READID_START + 2)
+//			{
+//				// 云台
+//				GM6020_Yaw_getInfo(CAN1_Rx_Structure);
+//			}
+
+//			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == GM6020_READID_END)
+//			{
+//				// 云台的pitch轴3743-4557
+//				GM6020_Pitch_getInfo(CAN1_Rx_Structure); // 6400-7160
+//			}
+			
+						if (CAN1_Rx_Structure.CAN_RxMessage.StdId == TEST_MIT_MASTER_ID)
 			{
-				// 云台
-				GM6020_Yaw_getInfo(CAN1_Rx_Structure);
+				MIT_RC_TIMES++;
+				if (CAN1_Rx_Structure.CAN_RxMessageData[0] == TEST_MIT_SLAVE_ID)
+				{
+					for (int x = 0; x < 6; x++)
+					{
+						text_moto.MIT_RAW_DATA[x] = CAN1_Rx_Structure.CAN_RxMessageData[x];
+					}
+					text_moto.position = (CAN1_Rx_Structure.CAN_RxMessageData[2] | CAN1_Rx_Structure.CAN_RxMessageData[1] << 8);
+
+					text_moto.velocity =
+						(((CAN1_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
+						 (CAN1_Rx_Structure.CAN_RxMessageData[3]) << 4);
+
+					text_moto.current = (CAN1_Rx_Structure.CAN_RxMessageData[5] | (CAN1_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
+
+					text_moto.position_end = uint_to_float(text_moto.position, P_MIN, P_MAX, 16);
+					text_moto.ANGLE_JD = text_moto.position_end * Angle_turn_Radian;
+					// speed_i++;
+					// MIT_SPEED_BY_ANGLE_TEMP+=(text_moto.position-MIT_ANGLE_JD_LAST);
+					//			MIT_ANGLE_JD_LAST_LAST=MIT_ANGLE_JD_LAST;
+					// MIT_ANGLE_JD_LAST=	text_moto.position;
+					//
+					//			if(speed_i>i_for_speed)
+					//			{
+					//				MIT_SPEED_BY_ANGLE=MIT_SPEED_BY_ANGLE_TEMP;
+					//				MIT_SPEED_BY_ANGLE_TEMP=0;
+					//				speed_i=0;
+					//			}
+					MIT_SPEED_NEW = LPF_V2(&SPEED_MIT, text_moto.velocity) + 5;
+
+					text_moto.velocity_end = uint_to_float(MIT_SPEED_NEW, V_MIN, V_MAX, 12);
+					text_moto.SPEED_JD = text_moto.velocity_end * Angle_turn_Radian;
+
+					text_moto.current_end = uint_to_float(text_moto.current, T_MIN, T_MAX, 12);
+
+					MIT_RC_Process_TIMES++;
+				}
+			}
+			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == MIT_A_MASTER_ID)
+			{
+				if (CAN1_Rx_Structure.CAN_RxMessageData[0] == MIT_A_SLAVE_ID)
+				{
+					Get_FPS(&FPS_ALL.MIT_A.WorldTimes, &FPS_ALL.MIT_A.FPS);
+
+					for (int x = 0; x < 6; x++)
+					{
+						MIT_A.MIT_RAW_DATA[x] = CAN1_Rx_Structure.CAN_RxMessageData[x];
+					}
+					MIT_A.position = (CAN1_Rx_Structure.CAN_RxMessageData[2] | CAN1_Rx_Structure.CAN_RxMessageData[1] << 8);
+
+					MIT_A.velocity =
+						(((CAN1_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
+						 (CAN1_Rx_Structure.CAN_RxMessageData[3]) << 4);
+
+					MIT_A.current = (CAN1_Rx_Structure.CAN_RxMessageData[5] | (CAN1_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
+
+					MIT_A.position_end = uint_to_float(MIT_A.position, P_MIN, P_MAX, 16);
+					MIT_A.ANGLE_JD = MIT_A.position_end * Angle_turn_Radian;
+
+					MIT_A.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_A, MIT_A.velocity) + 5;
+
+					MIT_A.velocity_end = uint_to_float(MIT_A.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
+					MIT_A.SPEED_JD = MIT_A.velocity_end * Angle_turn_Radian;
+
+					MIT_A.current_end = uint_to_float(MIT_A.current, T_MIN, T_MAX, 12);
+				}
+				MIT_A.RC_TIMES++;
 			}
 
-			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (GM6020_READID_START + 1))
+			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == MIT_B_MASTER_ID)
 			{
-				// 云台的yaw轴
-				GM6020_Pitch_getInfo(CAN1_Rx_Structure); // 6400-7160
+				if (CAN1_Rx_Structure.CAN_RxMessageData[0] == MIT_B_SLAVE_ID)
+				{
+					Get_FPS(&FPS_ALL.MIT_B.WorldTimes, &FPS_ALL.MIT_B.FPS);
+
+					for (int x = 0; x < 6; x++)
+					{
+						MIT_B.MIT_RAW_DATA[x] = CAN1_Rx_Structure.CAN_RxMessageData[x];
+					}
+					MIT_B.position = (CAN1_Rx_Structure.CAN_RxMessageData[2] | CAN1_Rx_Structure.CAN_RxMessageData[1] << 8);
+
+					MIT_B.velocity =
+						(((CAN1_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
+						 (CAN1_Rx_Structure.CAN_RxMessageData[3]) << 4);
+
+					MIT_B.current = (CAN1_Rx_Structure.CAN_RxMessageData[5] | (CAN1_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
+
+					MIT_B.position_end = uint_to_float(MIT_B.position, P_MIN, P_MAX, 16);
+					MIT_B.ANGLE_JD = MIT_B.position_end * Angle_turn_Radian;
+
+					MIT_B.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_B, MIT_B.velocity) + 5;
+
+					MIT_B.velocity_end = uint_to_float(MIT_B.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
+					MIT_B.SPEED_JD = MIT_B.velocity_end * Angle_turn_Radian;
+
+					MIT_B.current_end = uint_to_float(MIT_B.current, T_MIN, T_MAX, 12);
+				}
+				MIT_B.RC_TIMES++;
 			}
 
-			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == GM6020_READID_START + 2)
+			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == MIT_C_MASTER_ID)
 			{
-				// 云台
-				GM6020_Yaw_getInfo(CAN1_Rx_Structure);
-			}
+				if (CAN1_Rx_Structure.CAN_RxMessageData[0] == MIT_C_SLAVE_ID)
+				{
+					Get_FPS(&FPS_ALL.MIT_C.WorldTimes, &FPS_ALL.MIT_C.FPS);
 
-			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == GM6020_READID_END)
-			{
-				// 云台的pitch轴3743-4557
-				GM6020_Pitch_getInfo(CAN1_Rx_Structure); // 6400-7160
+					for (int x = 0; x < 6; x++)
+					{
+						MIT_C.MIT_RAW_DATA[x] = CAN1_Rx_Structure.CAN_RxMessageData[x];
+					}
+					MIT_C.position = (CAN1_Rx_Structure.CAN_RxMessageData[2] | CAN1_Rx_Structure.CAN_RxMessageData[1] << 8);
+
+					MIT_C.velocity =
+						(((CAN1_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
+						 (CAN1_Rx_Structure.CAN_RxMessageData[3]) << 4);
+
+					MIT_C.current = (CAN1_Rx_Structure.CAN_RxMessageData[5] | (CAN1_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
+
+					MIT_C.position_end = uint_to_float(MIT_C.position, P_MIN, P_MAX, 16);
+					MIT_C.ANGLE_JD = MIT_C.position_end * Angle_turn_Radian;
+
+					MIT_C.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_C, MIT_C.velocity) + 5;
+
+					MIT_C.velocity_end = uint_to_float(MIT_C.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
+					MIT_C.SPEED_JD = MIT_C.velocity_end * Angle_turn_Radian;
+
+					MIT_C.current_end = uint_to_float(MIT_C.current, T_MIN, T_MAX, 12);
+				}
+				MIT_C.RC_TIMES++;
 			}
+			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == MIT_D_MASTER_ID)
+			{
+				if (CAN1_Rx_Structure.CAN_RxMessageData[0] == MIT_D_SLAVE_ID)
+				{
+					Get_FPS(&FPS_ALL.MIT_D.WorldTimes, &FPS_ALL.MIT_D.FPS);
+
+					for (int x = 0; x < 6; x++)
+					{
+						MIT_D.MIT_RAW_DATA[x] = CAN1_Rx_Structure.CAN_RxMessageData[x];
+					}
+					MIT_D.position = (CAN1_Rx_Structure.CAN_RxMessageData[2] | CAN1_Rx_Structure.CAN_RxMessageData[1] << 8);
+
+					MIT_D.velocity =
+						(((CAN1_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
+						 (CAN1_Rx_Structure.CAN_RxMessageData[3]) << 4);
+
+					MIT_D.current = (CAN1_Rx_Structure.CAN_RxMessageData[5] | (CAN1_Rx_Structure.CAN_RxMessageData[4] & 0xF) << 8);
+
+					MIT_D.position_end = uint_to_float(MIT_D.position, P_MIN, P_MAX, 16);
+					MIT_D.ANGLE_JD = MIT_D.position_end * Angle_turn_Radian;
+
+					MIT_D.MIT_SPEED_TEMP = LPF_V2(&SPEED_MIT_D, MIT_D.velocity) + 5;
+
+					MIT_D.velocity_end = uint_to_float(MIT_D.MIT_SPEED_TEMP, V_MIN, V_MAX, 12);
+					MIT_D.SPEED_JD = MIT_D.velocity_end * Angle_turn_Radian;
+
+					MIT_D.current_end = uint_to_float(MIT_D.current, T_MIN, T_MAX, 12);
+				}
+				MIT_D.RC_TIMES++;
+			}
+	
+			
 		}
 	}
 	/* USER CODE END CAN1_R */
@@ -1295,8 +1298,9 @@ R_X=10;
 
 		//		GM6020_SetVoltage(send_to_yaw,0 , 0, send_to_pitch); //云台  send_to_pitch
 		//		GM6020_SetVoltage(0,0 , 0, 0); //云台  send_to_pitch
-		keyBoard_WASD();
-		balance_control();
+		keyBoard_WASD();//键鼠控制
+		balance_control();//PID
+		LQR_TEST_CON();//LQR
 
 		if (send_to_tire_L > 15000)
 			send_to_tire_L = 15000;
@@ -1410,8 +1414,7 @@ R_X=10;
 		swing_link_length_R=swing_link_length;
 		
 		
-		MIT_orque_TG();
-		LQR_TEST_CON();
+//		MIT_orque_TG();
 		update_gyro(); // 由角度计算角速度
 		gyro_test();   // 积分角速度比较速度验证
 		speed_accel();

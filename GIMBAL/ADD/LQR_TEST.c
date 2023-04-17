@@ -728,12 +728,12 @@ if(x>450)
 x=450.0;//x取值的限制
 
 LQR_K1_REAL_TIME=-1.0;
-LQR_K2_REAL_TIME=  (5E-09) * x * x * x - (5E-06) * x * x + (0.0018) * x - 1.8558;
+LQR_K2_REAL_TIME=  (6E-09) * x * x * x - (7E-06) * x * x + (0.0028) * x - 2.0899;
 //LQR_K3_REAL_TIME= (1E-05)*x* x - 0.0252*x - 6.8288;//浮点运算精度不够了
 //LQR_K4_REAL_TIME= -1.0*4E-06*x*x - 0.0023*x - 1.3267;	
 	
-LQR_K3_REAL_TIME_xx=-0.0087*x - 6.3395;
-LQR_K4_REAL_TIME_xx=-0.002*x - 0.8555;	
+LQR_K3_REAL_TIME_xx=-0.0066*x - 7.9535;
+LQR_K4_REAL_TIME_xx=-0.0006*x - 1.8581;	
 
 
 }

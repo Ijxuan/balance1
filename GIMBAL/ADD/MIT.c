@@ -249,7 +249,7 @@ void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float
 	/* 通过CAN接口把buf中的内容发送出去 */
 	//    CanTransmit(buf, sizeof(buf));
 
-	CAN_SendData(&hcan2, CAN_ID_STD, id, buf);
+	CAN_SendData(&hcan1, CAN_ID_STD, id, buf);
 }
 
 float position_text = 0;	  // 目标角度
@@ -614,7 +614,7 @@ MIT_A.send_to_MIT=right_leg.T_A* send_to_MIT_damping;
 	MIT_B.send_to_MIT=right_leg.T_E* send_to_MIT_damping*-1.0;
 	}	
 	
-//	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, MIT_A.kp, MIT_A.kv, 0, MIT_A_SLAVE_ID);
+	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, MIT_A.kp, MIT_A.kv, 0, MIT_A_SLAVE_ID);
 //	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, 0, 0, MIT_A.send_to_MIT, MIT_A_SLAVE_ID);
 }
 void MIT_C_controul(void)
@@ -666,7 +666,7 @@ void MIT_C_controul(void)
 	}	
 	
 	// 抬最高是20  0.4
-	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, MIT_C.kp, MIT_C.kv, 0, MIT_C_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, MIT_C.kp, MIT_C.kv, 0, MIT_C_SLAVE_ID);
 //	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, 0, 0, MIT_C.send_to_MIT, MIT_C_SLAVE_ID);
 }
 void MIT_D_controul(void)
@@ -735,16 +735,16 @@ void ALL_MIT_ENTER_MOTO_MODE(void)
 	send_to_MIT_L_or_R++;
 	if (send_to_MIT_L_or_R % 2 == 0)
 	{
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_B_SLAVE_ID, buf);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_B_SLAVE_ID, buf);
 		//	vTaskDelay(1);
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_A_SLAVE_ID, buf);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_A_SLAVE_ID, buf);
 		//	vTaskDelay(1);
 	}
 	else
 	{
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_C_SLAVE_ID, buf);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_C_SLAVE_ID, buf);
 		//		vTaskDelay(1);
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_D_SLAVE_ID, buf);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_D_SLAVE_ID, buf);
 	}
 }
 void DISABLE_ALL_MIT(void) // 失能所有电机
@@ -753,21 +753,21 @@ void DISABLE_ALL_MIT(void) // 失能所有电机
 	send_to_MIT_L_or_R++;
 	if (send_to_MIT_L_or_R % 2 == 0)
 	{
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_B_SLAVE_ID, buf_1);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_B_SLAVE_ID, buf_1);
 		MIT_A.TX_TIMES++;
 		//		vTaskDelay(1);
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_A_SLAVE_ID, buf_1);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_A_SLAVE_ID, buf_1);
 		MIT_B.TX_TIMES++;
 
 		//	vTaskDelay(1);
 	}
 	else
 	{
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_C_SLAVE_ID, buf_1);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_C_SLAVE_ID, buf_1);
 		MIT_C.TX_TIMES++;
 
 		//		vTaskDelay(1);
-		CAN_SendData(&hcan2, CAN_ID_STD, MIT_D_SLAVE_ID, buf_1);
+		CAN_SendData(&hcan1, CAN_ID_STD, MIT_D_SLAVE_ID, buf_1);
 		MIT_D.TX_TIMES++;
 	}
 	MIT_B.target_position = MIT_B.ANGLE_JD;
