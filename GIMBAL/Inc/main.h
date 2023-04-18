@@ -272,6 +272,7 @@ extern int flash_read_times;//flash读取累计计时
 extern bool send_to_C;
 extern int send_to_C_times;//dr16发送次数
 extern bool open_CHASSIS_follow;//开启底盘跟随云台这个功能
+extern int CHASSIS_follow_times;//底盘跟随云台时间
 
 /* USER CODE END Private defines */
 

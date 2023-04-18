@@ -243,7 +243,7 @@ bool send_to_C;//DR16_遥控器_是否发送给C板
 int send_to_C_times;//dr16发送次数
 
 bool open_CHASSIS_follow=1;//开启底盘跟随云台这个功能
-
+int CHASSIS_follow_times=0;//底盘跟随云台时间
 /* USER CODE END 0 */
 
 /**

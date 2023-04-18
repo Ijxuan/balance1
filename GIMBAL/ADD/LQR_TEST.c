@@ -335,6 +335,11 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	if(open_CHASSIS_follow==1)
 	{
 		YAW_TG_by_gimbal();//底盘跟随
+		if(CHASSIS_follow_times<3000)//3000ms后开启底盘跟随云台
+		{
+			CHASSIS_follow_times++;
+			follow_angle=0;////底盘跟随云台不开启
+		}
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+ follow_angle;
 	}
 		TARGET_angle_speed_YAW = P_PID_bate(&change_direction_angle, TARGET_angle_YAW, DJIC_IMU.total_yaw);
@@ -349,6 +354,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	else
 	{
 		LQR_TARGET_position = milemeter_test.total_mile_truly_use;
+		CHASSIS_follow_times=0;////底盘跟随云台开启时间清零
 	}
 }
 
@@ -672,7 +678,7 @@ void LQR_target_position()
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now - 1;
 		}
 
-		if (fabs(DJIC_IMU.total_pitch) > 12.0f)
+		if (fabs(DJIC_IMU.total_pitch-angle_qhq) > 5.0f)//如果不靠摆杆补偿，实际的倾角大于5度
 		{
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 为平衡时将 当前位置 作为目标位置
 		}
