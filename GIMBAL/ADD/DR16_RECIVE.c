@@ -131,6 +131,7 @@ void DR16_Process(uint8_t *pData)
 		DR16.rc.ch3 = 0;
 	if (DR16.rc.ch4_DW <= 20 && DR16.rc.ch4_DW >= -20)
 		DR16.rc.ch4_DW = 0;
+send_to_C=1;
 	
 	
 	CH0_TOTAL+=DR16.rc.ch0;

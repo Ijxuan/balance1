@@ -114,3 +114,4 @@ ins_task\freertos.o: ..\ADD\LQR_TEST.h
 ins_task\freertos.o: ..\Arithmetic\mit_math.h
 ins_task\freertos.o: ..\Arithmetic\mit_math.h
 ins_task\freertos.o: ..\ADD\keyBoard_to_vjoy.h
+ins_task\freertos.o: ..\ADD\DR16_CAN2_SEND.h

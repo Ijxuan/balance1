@@ -8,6 +8,7 @@
 #include "mit_math.h"
 #include "math.h"
 #include "keyBoard_to_vjoy.h"
+#include "CHASSIS_follow.h"
 
 static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
 static void chassis_remote_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector);
@@ -320,6 +321,8 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 		send_to_tire_L = send_to_L_test; // 将LQR算出来的值赋给发送变量
 		send_to_tire_R = send_to_R_test;
 
+		if(open_CHASSIS_follow==0)
+	{
 		if (DR16.rc.ch0 != 0)
 		{
 			TARGET_angle_YAW = DJIC_IMU.total_yaw + DR16.rc.ch0 / 15.0;
@@ -328,7 +331,12 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 		{
 			TARGET_angle_YAW = TARGET_angle_YAW + DR16.mouse.x / 700.0;
 		}
-
+	}
+	if(open_CHASSIS_follow==1)
+	{
+		YAW_TG_by_gimbal();//底盘跟随
+	TARGET_angle_YAW=DJIC_IMU.total_yaw+ follow_angle;
+	}
 		TARGET_angle_speed_YAW = P_PID_bate(&change_direction_angle, TARGET_angle_YAW, DJIC_IMU.total_yaw);
 //		if (DW_FOR_ZX != 0) // 拨轮控制,控制速度
 //		{
@@ -649,7 +657,11 @@ void LQR_target_position()
 		{
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 记录松手瞬间的位置 作为目标位置
 		}
-
+		if(DR16.rc.ch0!=0)
+		{
+		chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 左右扭头自旋时的当前位置 作为目标位置
+			//也可以根据云台YAW轴6020的角度判断
+		}
 		DR16_rc_ch1_last_V2 = DR16.rc.ch1 + vjoy_TEST.ch_WS;
 		if ((chassis_move.chassis_position_tg - chassis_move.chassis_position_now) > 1) // 目标如果距离当前位置一米以上，则限制
 		{

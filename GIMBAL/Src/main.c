@@ -239,6 +239,11 @@ int MIT_RC_Process_TIMES=0;
 int calibration_times=0;//校准累计计时
 int flash_read_times=0;//flash读取累计计时
 
+bool send_to_C;//DR16_遥控器_是否发送给C板
+int send_to_C_times;//dr16发送次数
+
+bool open_CHASSIS_follow=1;//开启底盘跟随云台这个功能
+
 /* USER CODE END 0 */
 
 /**

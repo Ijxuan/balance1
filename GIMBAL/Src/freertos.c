@@ -63,6 +63,7 @@
 #include "LQR_TEST.h"
 #include "mit_math.h"
 #include "keyBoard_to_vjoy.h"
+#include "DR16_CAN2_SEND.h"
 
 /* USER CODE END Includes */
 
@@ -721,6 +722,7 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
  * @param  argument: Not used
  * @retval None
  */
+
 /* USER CODE END Header_test_task */
 __weak void test_task(void const *argument)
 {
@@ -731,6 +733,7 @@ __weak void test_task(void const *argument)
 	for (;;)
 	{
 		osDelay(1);
+
 	}
 	/* USER CODE END test_task */
 }
@@ -947,6 +950,13 @@ void IMU_Send(void const *argument)
 #if send_way == 0
 
 #endif
+				if (send_to_C == 1)//遥控器数据
+		{
+DR16_send_master_control();
+						send_to_C = 0;
+			send_to_C_times++;
+		}
+		
 		if (DR16.rc.s_left == 2)
 		{
 			if (DR16.rc.ch0 < -600 && DR16.rc.ch1 < -600 && DR16.rc.ch3 < -600 && DR16.rc.ch2 > 600)//内八
@@ -1024,6 +1034,11 @@ void Can2_Reivece(void const *argument)
 		{
 			CAN2_rc_times++;
 			can2_DR16_TIMES++;
+						if (CAN2_Rx_Structure.CAN_RxMessage.StdId == YAW_6020_SEND_ID)
+			{
+				// 云台
+				GM6020_Yaw_getInfo(CAN2_Rx_Structure);
+			}
 			// 陀螺仪校准指令
 			//			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == IMU_CAL_REIID)
 			//			{

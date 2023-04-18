@@ -60,7 +60,7 @@ void GM6020_Yaw_getInfo(CAN_Rx_TypeDef CAN_Rx_Structure)
 //		return;
 //	
 	int32_t EMID;
-	EMID = CAN_Rx_Structure.CAN_RxMessage.StdId - GM6020_READID_START;
+	EMID = 0;
 	
 	GM6020s[EMID].readAngle = (uint16_t)(CAN_Rx_Structure.CAN_RxMessageData[0] << 8 | CAN_Rx_Structure.CAN_RxMessageData[1]);
 	GM6020s[EMID].readSpeed = (int16_t)(CAN_Rx_Structure.CAN_RxMessageData[2] << 8 | CAN_Rx_Structure.CAN_RxMessageData[3]);

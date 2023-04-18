@@ -414,6 +414,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\MY_balance_CONTROL.c</FilePath>
             </File>
+            <File>
+              <FileName>CHASSIS_follow.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\CHASSIS_follow.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -553,6 +558,11 @@
               <FileName>Jump.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ADD\Jump.c</FilePath>
+            </File>
+            <File>
+              <FileName>DR16_CAN2_SEND.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\DR16_CAN2_SEND.c</FilePath>
             </File>
           </Files>
         </Group>
