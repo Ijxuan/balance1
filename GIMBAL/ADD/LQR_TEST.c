@@ -145,7 +145,7 @@ void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_
 	// 死区限制，因为遥控器可能存在差异 摇杆在中间，其值不为0
 	//    rc_deadband_limit(chassis_move_rc_to_vector->chassis_RC->rc.ch[CHASSIS_X_CHANNEL], vx_channel, CHASSIS_RC_DEADLINE);
 
-	vx_channel = DR16.rc.ch1 * -1;
+	vx_channel = DR16.rc.ch3 * -1;
 	vx_channel = 0;
 
 	get_speed_by_position_V1(); // 计算TARGET_SPEED_POSITION
@@ -551,7 +551,7 @@ void get_speed_by_position_V1()
 
 	TARGET_SPEED_POSITION = P_PID_bate(&LQR_SPEED_BY_POSITION, LQR_TARGET_position, milemeter_test.total_mile_truly_use) / 1000.0f * speed_damping_p;
 
-	if (DR16.rc.ch1 != 0) // 前进时更新目标位置
+	if (DR16.rc.ch3 != 0) // 前进时更新目标位置
 	{
 		LQR_TARGET_position = milemeter_test.total_mile_truly_use;
 		TARGET_SPEED_POSITION = 0;
@@ -620,20 +620,20 @@ double encoderToDistance(int encoderCount)
 
 void LQR_target_position()
 {
-	static int DR16_rc_ch1_last_V2;
+	static int DR16_rc_ch3_last_V2;
 
 	if (DR16.rc.s_right == 3 && DR16.rc.s_left == 3)
 	{
-		chassis_move.chassis_position_tg = chassis_move.chassis_position_tg + DR16.rc.ch1 / 660.0 / 1000.0f;
+		chassis_move.chassis_position_tg = chassis_move.chassis_position_tg + DR16.rc.ch3 / 660.0 / 1000.0f;
 		LQRweiyi_PO_TG = chassis_move.chassis_position_tg;
 
-		if (DR16.rc.ch1 == 0 && DR16_rc_ch1_last_V2 != 0)
+		if (DR16.rc.ch3 == 0 && DR16_rc_ch3_last_V2 != 0)
 		{
 //			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 记录松手瞬间的位置 作为目标位置
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_tg; // 记录松手瞬间的目标位置 位置 作为目标位置
 		}
 
-		DR16_rc_ch1_last_V2 = DR16.rc.ch1;
+		DR16_rc_ch3_last_V2 = DR16.rc.ch3;
 		if ((chassis_move.chassis_position_tg - chassis_move.chassis_position_now) > 1) // 目标如果距离当前位置一米以上，则限制
 		{
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now + 1;
@@ -650,10 +650,10 @@ void LQR_target_position()
 	}
 	else if (DR16.rc.s_right == 3 && DR16.rc.s_left == 1)
 	{
-		chassis_move.chassis_position_tg = chassis_move.chassis_position_tg + DR16.rc.ch1 / 660.0 / 1000.0f + vjoy_TEST.ch_WS / 100000.0;
+		chassis_move.chassis_position_tg = chassis_move.chassis_position_tg + DR16.rc.ch3 / 660.0 / 1000.0f + vjoy_TEST.ch_WS / 100000.0;
 		LQRweiyi_PO_TG = chassis_move.chassis_position_tg;
 
-		if ((DR16.rc.ch1 == 0 && DR16_rc_ch1_last_V2 != 0) || (vjoy_TEST.ch_WS == 0 && DR16_rc_ch1_last_V2 != 0))
+		if ((DR16.rc.ch1 == 0 && DR16_rc_ch3_last_V2 != 0) || (vjoy_TEST.ch_WS == 0 && DR16_rc_ch3_last_V2 != 0))
 		{
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 记录松手瞬间的位置 作为目标位置
 		}
@@ -662,7 +662,7 @@ void LQR_target_position()
 		chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 左右扭头自旋时的当前位置 作为目标位置
 			//也可以根据云台YAW轴6020的角度判断
 		}
-		DR16_rc_ch1_last_V2 = DR16.rc.ch1 + vjoy_TEST.ch_WS;
+		DR16_rc_ch3_last_V2 = DR16.rc.ch3 + vjoy_TEST.ch_WS;
 		if ((chassis_move.chassis_position_tg - chassis_move.chassis_position_now) > 1) // 目标如果距离当前位置一米以上，则限制
 		{
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now + 1;
@@ -685,7 +685,7 @@ void LQR_target_position()
 
 void get_speed_by_position_V2()
 {
-	TARGET_SPEED_POSITION_V2 = DR16.rc.ch1 / -660.0;
+	TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;
 	if (DR16.rc.s_right == 3 && DR16.rc.s_left == 1)
 	{
 		TARGET_SPEED_POSITION_V2 -= vjoy_TEST.ch_WS / 100.0f;

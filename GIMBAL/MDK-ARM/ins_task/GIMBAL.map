@@ -5872,7 +5872,7 @@ Image Symbol Table
     change_mode                              0x200003c0   Data           4  mit.o(.data)
     .data                                    0x200003c4   Section        8  mit_init.o(.data)
     .data                                    0x200003d0   Section      148  lqr_test.o(.data)
-    DR16_rc_ch1_last_V2                      0x20000460   Data           4  lqr_test.o(.data)
+    DR16_rc_ch3_last_V2                      0x20000460   Data           4  lqr_test.o(.data)
     .data                                    0x20000464   Section       40  keyboard_to_vjoy.o(.data)
     .data                                    0x2000048c   Section       16  jump.o(.data)
     .data                                    0x200004a0   Section      437  main.o(.data)
