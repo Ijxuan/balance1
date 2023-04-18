@@ -40,10 +40,10 @@ switch (jump_step)
 	break;
 	case 1:
 jump_height_R=0;
-if(DW_FOR_jump>200)//拨轮拨下
-{
-jump_step=2;//如果是第一步,就开始整个流程
-}	
+//if(DW_FOR_jump>200)//拨轮拨下
+//{
+//jump_step=2;//如果是第一步,就开始整个流程
+//}	
 jump_times=0;//时间清零
 	break;
 	case 2:

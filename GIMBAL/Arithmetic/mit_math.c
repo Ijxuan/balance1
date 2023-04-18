@@ -357,11 +357,11 @@ void engine_body_height_control(void)
 	{
 		liftoff_mode_T = 0;
 	}
-	if (DR16.rc.ch3 == 0) // 松手了,才可以换下一档
+	if (DR16.rc.ch4_DW == 0) // 松手了,才可以换下一档
 	{
 		change_mode_T = 0;
 	}
-	else if (DR16.rc.ch3 > 300)
+	else if (DR16.rc.ch4_DW < - 300)
 	{
 		if (change_mode_T == 0) // 没切换挡位,接下来执行换挡操作
 		{
@@ -371,7 +371,7 @@ void engine_body_height_control(void)
 			change_mode_T = 1; // 切换挡位后置1
 		}
 	}
-	else if (DR16.rc.ch3 < -300)
+	else if (DR16.rc.ch4_DW > 300)
 	{
 		if (change_mode_T == 0) // 没切换挡位,接下来执行换挡操作
 		{
