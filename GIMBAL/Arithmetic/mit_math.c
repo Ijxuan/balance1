@@ -157,11 +157,15 @@ void Accurately_contrul_text(void) ///*Í¨¹ýÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊ
 	engine_body_height_control();/*ÀëµØ¸ß¶È¾ö¶¨º¯Êý*/
 	jump_text();///*ÌøÔ¾¿ØÖÆº¯Êý
 
-	L_X = 10 + DR16.rc.ch2 / 660.0 * 10.0 + keep_BALENCE_by_MIT_THETA_to_X;
+//	L_X = 10 + DR16.rc.ch2 / 660.0 * 10.0 + keep_BALENCE_by_MIT_THETA_to_X;
+	L_X = 10 + keep_BALENCE_by_MIT_THETA_to_X;
+
 	// L_Y=24.33+DR16.rc.ch3/660.0*10.0;//ÎÞ¼«±ä¸ß
 	L_Y = engine_body_height_L+jump_height_L;
 
-	R_X = 10 - DR16.rc.ch2 / 660.0 * 10.0 - keep_BALENCE_by_MIT_THETA_to_X;
+//	R_X = 10 - DR16.rc.ch2 / 660.0 * 10.0 - keep_BALENCE_by_MIT_THETA_to_X;
+	R_X = 10 - keep_BALENCE_by_MIT_THETA_to_X;
+
 	// R_Y=24.33+DR16.rc.ch3/660.0*10.0;//ÎÞ¼«±ä¸ß
 	R_Y = engine_body_height_R+jump_height_R;
 

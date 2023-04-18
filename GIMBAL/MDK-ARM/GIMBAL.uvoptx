@@ -647,6 +647,16 @@
           <WinNumber>2</WinNumber>
           <ItemText>DJIC_IMU.total_yaw</ItemText>
         </Ww>
+        <Ww>
+          <count>44</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>disable_for_test</ItemText>
+        </Ww>
+        <Ww>
+          <count>45</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>DR16.rc.ch1</ItemText>
+        </Ww>
       </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>

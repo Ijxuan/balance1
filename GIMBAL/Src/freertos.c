@@ -807,7 +807,17 @@ void Debug(void const *argument)
 	{
 		debug_times++;
 		Get_FPS(&FPS_ALL.DEBUG.WorldTimes, &FPS_ALL.DEBUG.FPS);
-
+				if (debug_times % 10 == 0) // 永久失能检测
+				{
+				if (DR16.rc.s_left == 2&&DR16.rc.ch3<-600) //失能保护
+				{
+					disable_for_test=1;
+				}
+				if (DR16.rc.s_left == 2&&DR16.rc.ch3>-100) //失能保护
+				{
+					disable_for_test=0;
+				}	
+				}
 		if (debug_times % 2 == 0) // 上位机发送频率
 		{
 			NM_swj();
@@ -1326,12 +1336,16 @@ R_X=10;
 		if (send_to_tire_R < -15000)
 			send_to_tire_R = -15000;
 
-		if (DR16.rc.s_left == 2)
-		{
-			send_to_tire_R = 0;
-			send_to_tire_L = 0;
-		}
-
+if (DR16.rc.s_left == 2)
+{
+send_to_tire_R = 0;
+send_to_tire_L = 0;
+}
+if(disable_for_test==1)//disable_for_test如果等于1 那就不会使能轮电机
+{
+send_to_tire_R = 0;
+send_to_tire_L = 0;
+}
 		/*轮胎电机*/ M3508s1_setCurrent(0, 0, send_to_tire_R, send_to_tire_L); // send_to_SHOOT_L阻力大
 		// CAN2_SEND_TO_MIT();
 		//		M3508s1_setCurrent(0, send_to_2006, send_to_SHOOT_R, send_to_SHOOT_L);//send_to_SHOOT_L阻力大
@@ -1385,7 +1399,10 @@ R_X=10;
 			{
 				//		MIT_MODE(MIT_MODE_TEXT);//使能电机
 				{
+					if(disable_for_test==0)//disable_for_test如果等于1 那就不会使能关节电机
+					{
 					ALL_MIT_ENTER_MOTO_MODE(); // 使能所有电机
+					}
 					run_MIT_ENTER_MOTO_MODE_times++;
 					if (run_MIT_ENTER_MOTO_MODE_times > 4)
 					{
