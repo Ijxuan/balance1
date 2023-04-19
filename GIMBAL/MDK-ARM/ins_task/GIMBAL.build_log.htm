@@ -27,28 +27,14 @@ Project File Date:  04/18/2023
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'GIMBAL'
-compiling LQR_TEST.c...
-..\ADD\LQR_TEST.h(199): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\components\algorithm\user_lib.h(54): warning:  #47-D: incompatible redefinition of macro "rad_format"  (declared at line 105 of "..\ADD\LQR_TEST.h")
-  #define rad_format(Ang) loop_fp32_constrain((Ang), -PI, PI)
-..\APP\CHASSIS_follow.h(14): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ADD\LQR_TEST.c(226): warning:  #177-D: variable "i"  was declared but never referenced
-  	uint8_t i = 0;
-..\ADD\LQR_TEST.c(622): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	double distance = encoderCount * PI / 983073.58125;
-..\ADD\LQR_TEST.c(659): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		chassis_move.chassis_position_tg = chassis_move.chassis_position_tg + DR16.rc.ch3 / 660.0 / 1000.0f + vjoy_TEST.ch_WS / 100000.0;
-..\ADD\LQR_TEST.c(206): warning:  #177-D: function "chassis_balance_control"  was declared but never referenced
-  static void chassis_balance_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector)
-..\ADD\LQR_TEST.c(189): warning:  #177-D: function "chassis_down_control"  was declared but never referenced
-  static void chassis_down_control(fp32 *vx_set, fp32 *angle_set, chassis_move_t *chassis_move_rc_to_vector)
-..\ADD\LQR_TEST.c: 8 warnings, 0 errors
+compiling MIT.c...
+..\ADD\MIT.c(151): warning:  #177-D: function "CanTransmit"  was declared but never referenced
+  static void CanTransmit(uint8_t *buf, uint8_t len, uint32_t id)
+..\ADD\MIT.c: 1 warning, 0 errors
 linking...
-Program Size: Code=112440 RO-data=4580 RW-data=2588 ZI-data=59348  
+Program Size: Code=113940 RO-data=4576 RW-data=2592 ZI-data=59360  
 FromELF: creating hex file...
-"ins_task\GIMBAL.axf" - 0 Error(s), 8 Warning(s).
+"ins_task\GIMBAL.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

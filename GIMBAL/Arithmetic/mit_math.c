@@ -345,6 +345,8 @@ void gyro_test()
 /*离地高度决定函数*/
 Ramp_Struct liftoff_SE; // 离地高度斜坡
 float height_text = 20;
+ int liftoff_mode_T = 0;
+
 /*Y的取值范围：13.3-43.1*/
 void engine_body_height_control(void)
 {
@@ -355,12 +357,13 @@ void engine_body_height_control(void)
 
 	/*左手摇杆,换挡变高*/
 	/**/
-	static int liftoff_mode_T = 0;
 	static int change_mode_T = 0; // 是否切换了挡位,切换挡位后置1
 	if (DR16.rc.s_left == 2)
 	{
 		liftoff_mode_T = 0;
 	}
+	if(DR16.rc.s_left==3&&DR16.rc.s_right==2)//只在左中右下可以用拨轮控制腿的长度
+	{
 	if (DR16.rc.ch4_DW == 0) // 松手了,才可以换下一档
 	{
 		change_mode_T = 0;
@@ -385,13 +388,14 @@ void engine_body_height_control(void)
 			change_mode_T = 1; // 切换挡位后置1
 		}
 	}
+}
 	switch (liftoff_mode_T)
 	{
 	case 0:
 		liftoff_SE.Target_Value = 14.5;
 		break;
 	case 1:
-		liftoff_SE.Target_Value = 19;
+		liftoff_SE.Target_Value = height_text;
 		break;
 	case 2:
 		liftoff_SE.Target_Value = 25;
@@ -415,8 +419,8 @@ void engine_body_height_control(void)
 }
 
 /*MIT目标力矩计算函数*/
-float Y_k=80.0;//Y方向模拟的弹簧系数
-float Y_d=-1.0;//Y方向模拟的阻尼系数
+float Y_k=10.0;//Y方向模拟的弹簧系数
+float Y_d=-0.1;//Y方向模拟的阻尼系数
 float F_y_R=0;//右边腿的支撑力
 float F_y_L=0;//左边腿的支撑力
 

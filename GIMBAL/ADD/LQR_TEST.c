@@ -334,13 +334,23 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	}
 	if(open_CHASSIS_follow==1)
 	{
-		YAW_TG_by_gimbal();//底盘跟随
-		if(CHASSIS_follow_times<3000)//3000ms后开启底盘跟随云台
+		if(CHASSIS_follow_times<5000)//3000ms后开启底盘跟随云台
 		{
 			CHASSIS_follow_times++;
-			follow_angle=0;////底盘跟随云台不开启
+			
+		if(CHASSIS_follow_times>3000)
+		{
+		liftoff_mode_T=1;
+		}		
+		
+			follow_angle_real_use=0;////底盘跟随云台不开启
 		}
-	TARGET_angle_YAW=DJIC_IMU.total_yaw+ follow_angle;
+		else
+		{
+		YAW_TG_by_gimbal();//底盘跟随	
+		}
+
+	TARGET_angle_YAW=DJIC_IMU.total_yaw+ follow_angle_real_use;
 	}
 		TARGET_angle_speed_YAW = P_PID_bate(&change_direction_angle, TARGET_angle_YAW, DJIC_IMU.total_yaw);
 //		if (DW_FOR_ZX != 0) // 拨轮控制,控制速度

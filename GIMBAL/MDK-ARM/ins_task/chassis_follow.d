@@ -1,6 +1,5 @@
 ins_task\chassis_follow.o: ..\APP\CHASSIS_follow.c
 ins_task\chassis_follow.o: ..\APP\CHASSIS_follow.h
-ins_task\chassis_follow.o: ..\ADD\GM6020.h
 ins_task\chassis_follow.o: ../Inc/main.h
 ins_task\chassis_follow.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 ins_task\chassis_follow.o: ../Inc/stm32f4xx_hal_conf.h
@@ -52,6 +51,8 @@ ins_task\chassis_follow.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mp
 ins_task\chassis_follow.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 ins_task\chassis_follow.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 ins_task\chassis_follow.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+ins_task\chassis_follow.o: ..\Arithmetic\User_math.h
+ins_task\chassis_follow.o: ..\ADD\GM6020.h
 ins_task\chassis_follow.o: ..\bsp\boards\user_can.h
 ins_task\chassis_follow.o: ../Inc/can.h
 ins_task\chassis_follow.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h

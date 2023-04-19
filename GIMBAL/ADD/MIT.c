@@ -538,8 +538,8 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 		if(right_leg.T_E<0)//腿伸直时应为正
 	MIT_B.send_to_MIT=right_leg.T_E* send_to_MIT_damping*-1.0;
 	}		
-	CanComm_SendControlPara(MIT_B.send_to_MIT_position, MIT_B.send_to_MIT_speed, MIT_B.kp, MIT_B.kv, 0, MIT_B_SLAVE_ID);
-// CanComm_SendControlPara(MIT_B.send_to_MIT_position,MIT_B.send_to_MIT_speed,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_B.send_to_MIT_position, MIT_B.send_to_MIT_speed, MIT_B.kp, MIT_B.kv, 0, MIT_B_SLAVE_ID);
+ CanComm_SendControlPara(MIT_B.send_to_MIT_position,MIT_B.send_to_MIT_speed,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 }
 
 void MIT_A_controul(void)
@@ -608,14 +608,14 @@ MIT_A.send_to_MIT=right_leg.T_A* send_to_MIT_damping;
 		if(right_leg.T_A<0)//抬最高时应为正
 	MIT_A.send_to_MIT=right_leg.T_A* send_to_MIT_damping*-1.0;
 	}
-	if(MIT_B.ANGLE_JD > (MIT_A.MIT_TSZ - 3) )
+	if(MIT_A.ANGLE_JD > (MIT_A.MIT_TSZ - 3) )
 	{
-		if(right_leg.T_E>0)//腿伸直时应为负
-	MIT_B.send_to_MIT=right_leg.T_E* send_to_MIT_damping*-1.0;
+		if(right_leg.T_A>0)//腿伸直时应为负
+	MIT_A.send_to_MIT=right_leg.T_A* send_to_MIT_damping*-1.0;
 	}	
 	
-	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, MIT_A.kp, MIT_A.kv, 0, MIT_A_SLAVE_ID);
-//	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, 0, 0, MIT_A.send_to_MIT, MIT_A_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, MIT_A.kp, MIT_A.kv, 0, MIT_A_SLAVE_ID);
+	CanComm_SendControlPara(MIT_A.send_to_MIT_position, MIT_A.send_to_MIT_speed, 0, 0, MIT_A.send_to_MIT, MIT_A_SLAVE_ID);
 }
 void MIT_C_controul(void)
 {
@@ -724,8 +724,8 @@ void MIT_D_controul(void)
 	}	
 	
 	// 抬最高是106.2  7
-	CanComm_SendControlPara(MIT_D.send_to_MIT_position, MIT_D.send_to_MIT_speed, MIT_D.kp, MIT_D.kv, 0, MIT_D_SLAVE_ID);
 //	CanComm_SendControlPara(MIT_D.send_to_MIT_position, MIT_D.send_to_MIT_speed, MIT_D.kp, MIT_D.kv, 0, MIT_D_SLAVE_ID);
+//	CanComm_SendControlPara(MIT_D.send_to_MIT_position, MIT_D.send_to_MIT_speed, 0, 0, MIT_D.send_to_MIT, MIT_D_SLAVE_ID);
 }
 int send_to_MIT_L_or_R = 0;
 int run_MIT_ENTER_MOTO_MODE_times = 0;

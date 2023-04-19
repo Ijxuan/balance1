@@ -77,4 +77,6 @@ extern float F_y_R;//右边腿的支撑力
 
 extern float swing_link_length_R;//右腿摆长
 extern float swing_link_length_L;//左腿摆长
+extern  int liftoff_mode_T ;
+
 #endif

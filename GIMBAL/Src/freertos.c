@@ -64,6 +64,7 @@
 #include "mit_math.h"
 #include "keyBoard_to_vjoy.h"
 #include "DR16_CAN2_SEND.h"
+#include "CHASSIS_follow.h"
 
 /* USER CODE END Includes */
 
@@ -619,6 +620,9 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 	SPEED_MIT_D.LPF_K = 0.04;
 
 	SPEED_MIT.LPF_K = 0.04;
+	
+	CHASSIS_follow_xp.Absolute_Max=180;
+	CHASSIS_follow_xp.Rate=0.4;
 	// Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
 	/* USER CODE END Init */
@@ -1299,6 +1303,7 @@ void CAN1_R(void const *argument)
 uint8_t TRY[20]; // 匿名上位机发送数据
 
 int Driver_add = 32768;
+int Robot_Control_times = 0;
 
 void Robot_Control(void const *argument)
 {
@@ -1445,11 +1450,14 @@ send_to_tire_L = 0;
 		//求摆杆长度 实时计算LQR参数要用到
 		swing_link_length_R=swing_link_length;
 		
-		
-//		MIT_orque_TG();
+		Robot_Control_times++;
+		if(Robot_Control_times%4==0)
+		{
+		MIT_orque_TG();	
+		}
 		update_gyro(); // 由角度计算角速度
-		gyro_test();   // 积分角速度比较速度验证
-		speed_accel();
+//		gyro_test();   // 积分角速度比较速度验证
+//		speed_accel();
 		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 	}
 

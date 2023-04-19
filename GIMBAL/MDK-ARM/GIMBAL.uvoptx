@@ -425,6 +425,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>M3508s,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>55</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>height_text</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
@@ -656,6 +661,21 @@
           <count>45</count>
           <WinNumber>2</WinNumber>
           <ItemText>DR16.rc.ch1</ItemText>
+        </Ww>
+        <Ww>
+          <count>46</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>follow_angle_real_use</ItemText>
+        </Ww>
+        <Ww>
+          <count>47</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>follow_angle</ItemText>
+        </Ww>
+        <Ww>
+          <count>48</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>CHASSIS_follow_xp</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
