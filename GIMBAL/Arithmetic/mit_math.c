@@ -395,7 +395,7 @@ void engine_body_height_control(void)
 		liftoff_SE.Target_Value = 14.5;
 		break;
 	case 1:
-		liftoff_SE.Target_Value = height_text;
+		liftoff_SE.Target_Value = 19;
 		break;
 	case 2:
 		liftoff_SE.Target_Value = 25;

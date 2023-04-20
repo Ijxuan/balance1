@@ -334,11 +334,11 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	}
 	if(open_CHASSIS_follow==1)
 	{
-		if(CHASSIS_follow_times<5000)//3000ms后开启底盘跟随云台
+		if(CHASSIS_follow_times<6000)//5000ms后开启底盘跟随云台
 		{
 			CHASSIS_follow_times++;
 			
-		if(CHASSIS_follow_times>3000)
+		if(CHASSIS_follow_times>3000)//3000ms后站起来
 		{
 		liftoff_mode_T=1;
 		}		
@@ -353,11 +353,19 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+ follow_angle_real_use;
 	}
 		TARGET_angle_speed_YAW = P_PID_bate(&change_direction_angle, TARGET_angle_YAW, DJIC_IMU.total_yaw);
-//		if (DW_FOR_ZX != 0) // 拨轮控制,控制速度
-//		{
-//			TARGET_angle_speed_YAW = DW_FOR_ZX;
-//			TARGET_angle_YAW = DJIC_IMU.total_yaw;
-//		}
+		if (DR16.rc.ch2 != 0) // 拨轮控制,控制速度
+		{
+			TARGET_angle_speed_YAW = DR16.rc.ch2;
+			follow_angle_real_use=0;////底盘跟随云台不开启
+
+			TARGET_angle_YAW = DJIC_IMU.total_yaw;
+		}
+		else if(vjoy_TEST.ch_AD!=0)//键盘控制旋转速度
+		{
+		TARGET_angle_speed_YAW=vjoy_TEST.ch_AD ;
+		follow_angle_real_use=0;////底盘跟随云台不开启
+		TARGET_angle_YAW = DJIC_IMU.total_yaw;
+		}
 		send_to_tire_L += P_PID_bate(&change_direction_speed, TARGET_angle_speed_YAW, DJIC_IMU.Gyro_z);
 		send_to_tire_R += P_PID_bate(&change_direction_speed, TARGET_angle_speed_YAW, DJIC_IMU.Gyro_z);
 	}
@@ -426,7 +434,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 //}
 float chassis_vx_real=0;
 float chassis_speed_real=0;
-
+float REAL_BALANCE_ANGLE=3.0;
 static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 {
 	//    if (chassis_move_update == NULL)
@@ -455,7 +463,7 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	chassis_move_update->chassis_yaw =
 		rad_format((float)INS_angle[0]);
 	//	if(DR16.rc.ch1==0)
-	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi-0.0f/180.0f*PI);//重心补偿到1.5度平衡
+	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi+REAL_BALANCE_ANGLE/180.0f*PI);//重心补偿到1.5度平衡
 	//	else
 	//	{
 	//    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
@@ -702,8 +710,11 @@ void LQR_target_position()
 void get_speed_by_position_V2()
 {
 	TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;
-	if (DR16.rc.s_right == 3 && DR16.rc.s_left == 1)
+	if (DR16.rc.s_right == 3 )//左中
 	{
+		if(DR16.rc.ch3!=0)
+			TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;//优先遥控器控制
+		else if(vjoy_TEST.ch_WS!=0)
 		TARGET_SPEED_POSITION_V2 -= vjoy_TEST.ch_WS / 100.0f;
 	}
 	LQRweiyi_SPEED_TG = TARGET_SPEED_POSITION_V2;
@@ -755,15 +766,36 @@ x=120.0;
 if(x>450)
 x=450.0;//x取值的限制
 
-LQR_K1_REAL_TIME=-1.0;
-LQR_K2_REAL_TIME=  (6E-09) * x * x * x - (7E-06) * x * x + (0.0028) * x - 2.0899;
+LQR_K1_REAL_TIME=0;
+LQR_K2_REAL_TIME=  (2E-10) * x * x * x - (2E-07) * x * x + (7E-05) * x - 2.2612;
 //LQR_K3_REAL_TIME= (1E-05)*x* x - 0.0252*x - 6.8288;//浮点运算精度不够了
 //LQR_K4_REAL_TIME= -1.0*4E-06*x*x - 0.0023*x - 1.3267;	
 	
-LQR_K3_REAL_TIME_xx=-0.0066*x - 7.9535;
-LQR_K4_REAL_TIME_xx=-0.0006*x - 1.8581;	
+LQR_K3_REAL_TIME_xx=-0.0106*x - 11.736;
+LQR_K4_REAL_TIME_xx=-0.0026*x - 2.5449;	
+/*
+//
+-0.707106781
+-1.689469977
+-7.38503189
+-1.188470706
 
+-1.22474487139155
+-1.655190079
+-7.138504982
+-1.139992716
 
+-0.707106781
+-1.178686062
+-6.519553148
+-1.074337873
+
+-0.02236068
+-2.255149917
+-12.84257646
+-2.935861417
+
+*/
 }
 
 

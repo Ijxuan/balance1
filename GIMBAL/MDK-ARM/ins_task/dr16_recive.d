@@ -96,3 +96,4 @@ ins_task\dr16_recive.o: ..\Arithmetic\mit_math.h
 ins_task\dr16_recive.o: ..\Arithmetic\mit_math.h
 ins_task\dr16_recive.o: ..\ADD\keyBoard_to_vjoy.h
 ins_task\dr16_recive.o: ..\ADD\Jump.h
+ins_task\dr16_recive.o: ..\APP\CHASSIS_follow.h

@@ -1362,7 +1362,7 @@ send_to_tire_L = 0;
 			//	MIT_B_SPEED.Min_result=MIT_B_SPEED.Max_result=0;
 			//	MIT_C_SPEED.Min_result=MIT_C_SPEED.Max_result=0;
 			//	MIT_D_SPEED.Min_result=MIT_D_SPEED.Max_result=0;
-			if (send_to_MIT_damping < 0.01f)
+			if (send_to_MIT_damping < 0.5f)
 			{
 				if (MIT_MODE_TEXT != 2) // 还没有失能电机
 				{
@@ -1453,7 +1453,7 @@ send_to_tire_L = 0;
 		Robot_Control_times++;
 		if(Robot_Control_times%4==0)
 		{
-		MIT_orque_TG();	
+//		MIT_orque_TG();	
 		}
 		update_gyro(); // 由角度计算角速度
 //		gyro_test();   // 积分角速度比较速度验证

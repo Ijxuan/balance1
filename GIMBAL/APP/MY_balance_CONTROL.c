@@ -122,7 +122,7 @@ void balance_control(void)
 			send_to_tire_R = P_PID_bate(&TIRE_R_SPEED_pid, tire_R_TARGE_speed, M3508s[2].realSpeed);
 		}
 
-		if (DR16.rc.s_right == 10)
+		if (DR16.rc.s_right == 10)//PID调试
 		{
 			TARGET_speed = DR16.rc.ch1;
 			//	TARGET_angle_PITCH=DR16.rc.ch1/-6.6*TARGET_angle_PITCH_MAX;//遥控器直接控制倾斜角度

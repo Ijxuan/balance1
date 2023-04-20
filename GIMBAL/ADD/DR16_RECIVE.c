@@ -23,6 +23,7 @@
 #include "mit_math.h"
 #include "keyBoard_to_vjoy.h"
 #include "Jump.h"
+#include "CHASSIS_follow.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
@@ -253,6 +254,26 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
+																	#if 1//6基本状态
+		
+	p=0;
+			send_d_32[p++]=follow_angle;//实际倾角 0-30
+			send_d_32[p++]=follow_angle_real_use;//当前摆杆角度 0-15
+		
+			send_d_32[p++]=GM6020s[0].readAngle;//目标摆杆角度  0-15 
+		
+			send_d_32[p++]=DR16.rc.ch2;//当前轮速度	 0-1	       1
+			send_d_32[p++]=TARGET_SPEED_POSITION_V2*3000;//目标轮速度	0-1 	2
+		
+			send_d_32[p++]=LQRweiyi_PO_TG*3000;//目标位移
+			send_d_32[p++]=LQRweiyi_text*3000;//当前位移	7
+	p=0;
+			send_d_16[p++]=DJIC_IMU.total_pitch*1000;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+
+			send_d_16[p++]=0;//实际       	9
+			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
 															#if 0//6基本状态
 		
 	p=0;
@@ -314,7 +335,7 @@ void NM_swj(void)
 														//保留到小数点后四位558 320 660   bjTlta
 #endif		
 		
-												#if 1//力矩
+												#if 0//力矩
 		
 	p=0;
 			send_d_32[p++]=MIT_A.current_end*1000;//弧度值目标位置		1

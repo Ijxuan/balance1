@@ -15,7 +15,7 @@ void YAW_TG_by_gimbal()
 //	}
 	if(GM6020s[0].readAngle>7512)//特殊处理一下，不然会走优弧
 	{
-	follow_angle=(GM6020s[0].readAngle-8191+3417)*-0.0439506775729459;
+	follow_angle=(GM6020s[0].readAngle-8191+3417)*0.0439506775729459;
 	}
 	else
 	{

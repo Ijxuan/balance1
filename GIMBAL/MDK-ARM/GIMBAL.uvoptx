@@ -430,6 +430,31 @@
           <WinNumber>1</WinNumber>
           <ItemText>height_text</ItemText>
         </Ww>
+        <Ww>
+          <count>56</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>REAL_BALANCE_ANGLE</ItemText>
+        </Ww>
+        <Ww>
+          <count>57</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>INS_angle[2]</ItemText>
+        </Ww>
+        <Ww>
+          <count>58</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>GM6020s[0].readAngle,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>59</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>follow_angle</ItemText>
+        </Ww>
+        <Ww>
+          <count>60</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>follow_angle_real_use</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
