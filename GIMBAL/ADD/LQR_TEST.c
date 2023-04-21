@@ -335,7 +335,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	if(open_CHASSIS_follow==1)
 	{
 		YAW_TG_by_gimbal();//µ×ÅÌ¸úËæ	
-		if(CHASSIS_follow_times<8000)//5000msºó¿ªÆôµ×ÅÌ¸úËæÔÆÌ¨
+		if(CHASSIS_follow_times<6000)//5000msºó¿ªÆôµ×ÅÌ¸úËæÔÆÌ¨
 		{
 			CHASSIS_follow_times++;
 			
