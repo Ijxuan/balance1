@@ -343,7 +343,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 		{
 			follow_angle_real_use=0;////底盘跟随云台不开启
 		}
-		if(CHASSIS_follow_times>6000)//6000ms后站起来
+		if(CHASSIS_follow_times>5000)//5000ms后站起来
 		{
 		liftoff_mode_T=1;
 		}				
