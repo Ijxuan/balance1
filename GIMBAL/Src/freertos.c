@@ -622,7 +622,7 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 	SPEED_MIT.LPF_K = 0.04;
 	
 	CHASSIS_follow_xp.Absolute_Max=180;
-	CHASSIS_follow_xp.Rate=0.4;
+	CHASSIS_follow_xp.Rate=0.3;
 	// Vision_Control_Init();//卡尔曼参数初始化   TIRE_L_SPEED_pid   BALANCE_I
 
 	/* USER CODE END Init */

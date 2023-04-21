@@ -334,20 +334,24 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 	}
 	if(open_CHASSIS_follow==1)
 	{
-		if(CHASSIS_follow_times<6000)//5000ms后开启底盘跟随云台
+		YAW_TG_by_gimbal();//底盘跟随	
+		if(CHASSIS_follow_times<8000)//5000ms后开启底盘跟随云台
 		{
 			CHASSIS_follow_times++;
 			
-		if(CHASSIS_follow_times>3000)//3000ms后站起来
+		if(CHASSIS_follow_times<3000)//3000ms内底盘跟随不开启
+		{
+			follow_angle_real_use=0;////底盘跟随云台不开启
+		}
+		if(CHASSIS_follow_times>6000)//6000ms后站起来
 		{
 		liftoff_mode_T=1;
-		}		
+		}				
 		
-			follow_angle_real_use=0;////底盘跟随云台不开启
 		}
 		else
 		{
-		YAW_TG_by_gimbal();//底盘跟随	
+			
 		}
 
 	TARGET_angle_YAW=DJIC_IMU.total_yaw+ follow_angle_real_use;
@@ -360,7 +364,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 
 			TARGET_angle_YAW = DJIC_IMU.total_yaw;
 		}
-		else if(vjoy_TEST.ch_AD!=0)//键盘控制旋转速度
+		else if(abs(vjoy_TEST.ch_AD)>2)//键盘控制旋转速度
 		{
 		TARGET_angle_speed_YAW=vjoy_TEST.ch_AD ;
 		follow_angle_real_use=0;////底盘跟随云台不开启
@@ -767,13 +771,24 @@ if(x>450)
 x=450.0;//x取值的限制
 
 LQR_K1_REAL_TIME=0;
-LQR_K2_REAL_TIME=  (2E-10) * x * x * x - (2E-07) * x * x + (7E-05) * x - 2.2612;
+LQR_K2_REAL_TIME=  (1E-10) * x * x * x - (1E-07) * x * x + (5E-05) * x - 3.1811;
 //LQR_K3_REAL_TIME= (1E-05)*x* x - 0.0252*x - 6.8288;//浮点运算精度不够了
 //LQR_K4_REAL_TIME= -1.0*4E-06*x*x - 0.0023*x - 1.3267;	
 	
-LQR_K3_REAL_TIME_xx=-0.0106*x - 11.736;
-LQR_K4_REAL_TIME_xx=-0.0026*x - 2.5449;	
+LQR_K3_REAL_TIME_xx=-0.015*x - 11.983;
+LQR_K4_REAL_TIME_xx=-0.0042*x - 1.9927;	
 /*
+*/
+
+/*
+LQR_K1_REAL_TIME=0;
+LQR_K2_REAL_TIME= -3.1781;
+//LQR_K3_REAL_TIME= (1E-05)*x* x - 0.0252*x - 6.8288;//浮点运算精度不够了
+//LQR_K4_REAL_TIME= -1.0*4E-06*x*x - 0.0023*x - 1.3267;	
+	
+LQR_K3_REAL_TIME_xx=-13.3144;
+LQR_K4_REAL_TIME_xx=-2.7017;	
+
 //
 -0.707106781
 -1.689469977
@@ -795,6 +810,9 @@ LQR_K4_REAL_TIME_xx=-0.0026*x - 2.5449;
 -12.84257646
 -2.935861417
 
+-3.1781
+-13.3144
+-2.7017
 */
 }
 

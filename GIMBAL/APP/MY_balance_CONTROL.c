@@ -113,8 +113,8 @@ void balance_control(void)
 		if (DR16.rc.s_right == 2)
 		{
 
-			tire_L_TARGE_speed = DR16.rc.ch1 * 10 + DR16.rc.ch0 * 4;
-			tire_R_TARGE_speed = DR16.rc.ch1 * -10 + DR16.rc.ch0 * 4;
+			tire_L_TARGE_speed = DR16.rc.ch3 * 10 + DR16.rc.ch2 * 4;
+			tire_R_TARGE_speed = DR16.rc.ch3 * -10 + DR16.rc.ch2 * 4;
 			/*
 		tire_L_TARGE_speed=DR16.rc.ch1*10;
 		tire_R_TARGE_speed=DR16.rc.ch1*-10*1.45f;*/
