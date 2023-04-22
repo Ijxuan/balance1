@@ -129,14 +129,14 @@ void keyBoard_WASD()
 	else if (keyBoard_W.Press_static == Long_Press && keyBoard_S.Press_static != Long_Press) // 仅W长按
 	{
 		vjoy_ch_WS.Target_Value = 100;
-		vjoy_ch_WS.Rate = 0.05;
+		vjoy_ch_WS.Rate = 0.2;
 	}
 	else if (keyBoard_W.Press_static != Long_Press && keyBoard_S.Press_static == Long_Press) // 仅S长按
 	{
 		vjoy_ch_WS.Target_Value = -100;
-		vjoy_ch_WS.Rate = 0.05;
+		vjoy_ch_WS.Rate = 0.2;
 	}
-	else if (keyBoard_W.Press_static == Long_Press && keyBoard_S.Press_static == Long_Press) // 双长按 算误触 归零
+	else if (keyBoard_W.Press_static == Long_Press && keyBoard_S.Press_static == Long_Press) // WS双长按 算误触 归零
 	{
 		vjoy_ch_WS.Target_Value = 0;
 		vjoy_ch_WS.Rate = 1;
@@ -152,23 +152,23 @@ void keyBoard_WASD()
 
 	/////////////////////////////////////////////////////////////////
 
-	if (keyBoard_A.Press_static == No_Press && keyBoard_D.Press_static == No_Press) // ws都松开
+	if (keyBoard_A.Press_static == No_Press && keyBoard_D.Press_static == No_Press) // AD都松开
 	{
 		vjoy_ch_AD.Target_Value = 0;
 		vjoy_ch_AD.Rate = 0.5; // 快速归零 2秒
 	}
 
-	else if (keyBoard_A.Press_static == Long_Press && keyBoard_D.Press_static != Long_Press) // 仅W长按
+	else if (keyBoard_A.Press_static == Long_Press && keyBoard_D.Press_static != Long_Press) // 仅A长按
 	{
 		vjoy_ch_AD.Target_Value = -100;
-		vjoy_ch_AD.Rate = 0.1;
+		vjoy_ch_AD.Rate = 0.15;
 	}
-	else if (keyBoard_A.Press_static != Long_Press && keyBoard_D.Press_static == Long_Press) // 仅S长按
+	else if (keyBoard_A.Press_static != Long_Press && keyBoard_D.Press_static == Long_Press) // 仅D长按
 	{
 		vjoy_ch_AD.Target_Value = 100;
-		vjoy_ch_AD.Rate = 0.1;
+		vjoy_ch_AD.Rate = 0.15;
 	}
-	else if (keyBoard_A.Press_static == Long_Press && keyBoard_D.Press_static == Long_Press) // 双长按 算误触 归零
+	else if (keyBoard_A.Press_static == Long_Press && keyBoard_D.Press_static == Long_Press) // AD双长按 算误触 归零
 	{
 		vjoy_ch_AD.Target_Value = 0;
 		vjoy_ch_AD.Rate = 1;

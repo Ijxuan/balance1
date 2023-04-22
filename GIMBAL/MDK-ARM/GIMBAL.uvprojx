@@ -419,6 +419,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\CHASSIS_follow.c</FilePath>
             </File>
+            <File>
+              <FileName>ROW_balance.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\ROW_balance.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

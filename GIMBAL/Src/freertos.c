@@ -612,7 +612,12 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 						 //                          float alpha,
 						 500, -500,
 						 80, -80); // //MIT电机 位置环
-
+	P_PID_Parameter_Init(&keep_ROW_BALENCE, -1, 0, 0, 5, //-0.00001
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 3, -3,
+						 5, -5); // //MIT电机 位置环
+	
 	MIT_PID_INIT();
 	SPEED_MIT_A.LPF_K = 0.04;
 	SPEED_MIT_B.LPF_K = 0.04;
@@ -1180,7 +1185,7 @@ void CAN1_R(void const *argument)
 						MIT_A.MIT_RAW_DATA[x] = CAN1_Rx_Structure.CAN_RxMessageData[x];
 					}
 					MIT_A.position = (CAN1_Rx_Structure.CAN_RxMessageData[2] | CAN1_Rx_Structure.CAN_RxMessageData[1] << 8);
-
+					//
 					MIT_A.velocity =
 						(((CAN1_Rx_Structure.CAN_RxMessageData[4]) >> 4) |
 						 (CAN1_Rx_Structure.CAN_RxMessageData[3]) << 4);

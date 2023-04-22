@@ -6,6 +6,7 @@
 #include "math.h"
 #include "Jump.h"
 #include "LQR_TEST.h"
+#include "ROW_balance.h"
 
 /*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
 /*Ñ¹Ëõ×´Ì¬149.5 Èñ½Ç30.5*/
@@ -156,7 +157,7 @@ void Accurately_contrul_text(void) ///*Í¨¹ıÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊ
 	MIT_keep_BALENCE();///*Í¨¹ı¹Ø½Úµç»ú±£³Ö»úÌåË®Æ½µÄº¯Êı*/
 	engine_body_height_control();/*ÀëµØ¸ß¶È¾ö¶¨º¯Êı*/
 	jump_text();///*ÌøÔ¾¿ØÖÆº¯Êı
-
+	row_control();/*±£³Ö»úÌårowÖáË®Æ½*/
 //	L_X = 10 + DR16.rc.ch2 / 660.0 * 10.0 + keep_BALENCE_by_MIT_THETA_to_X;
 	L_X = 10 + keep_BALENCE_by_MIT_THETA_to_X;
 

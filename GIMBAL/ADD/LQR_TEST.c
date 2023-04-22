@@ -366,7 +366,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 		}
 		else if(abs(vjoy_TEST.ch_AD)>2)//键盘控制旋转速度
 		{
-		TARGET_angle_speed_YAW=vjoy_TEST.ch_AD ;
+		TARGET_angle_speed_YAW=vjoy_TEST.ch_AD*6.6 ;
 		follow_angle_real_use=0;////底盘跟随云台不开启
 		TARGET_angle_YAW = DJIC_IMU.total_yaw;
 		}
@@ -713,13 +713,13 @@ void LQR_target_position()
 
 void get_speed_by_position_V2()
 {
-	TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;
-	if (DR16.rc.s_right == 3 )//左中
+//	TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;
+	if (DR16.rc.s_right == 3 )//右中
 	{
 		if(DR16.rc.ch3!=0)
 			TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;//优先遥控器控制
-		else if(vjoy_TEST.ch_WS!=0)
-		TARGET_SPEED_POSITION_V2 -= vjoy_TEST.ch_WS / 100.0f;
+		else if(vjoy_TEST.ch_WS>=2)
+		TARGET_SPEED_POSITION_V2 = vjoy_TEST.ch_WS / -100.0f;
 	}
 	LQRweiyi_SPEED_TG = TARGET_SPEED_POSITION_V2;
 	if (TARGET_SPEED_POSITION_V2 > 1.0f)

@@ -5,7 +5,7 @@
 
 #define TIME_KeyMouse_Press 1 // 超过该时间视为 按下。
 // 在两者之间视为 单击
-#define TIME_KeyMouse_LongPress 30 // 超过该时间视为 长按
+#define TIME_KeyMouse_LongPress 20 // 超过该时间视为 长按
 
 typedef enum
 {

@@ -70,3 +70,4 @@ ins_task\mit_math.o: ..\ADD\Jump.h
 ins_task\mit_math.o: ..\bsp\boards\bsp_buzzer.h
 ins_task\mit_math.o: ../Inc/tim.h
 ins_task\mit_math.o: ..\ADD\LQR_TEST.h
+ins_task\mit_math.o: ..\APP\ROW_balance.h

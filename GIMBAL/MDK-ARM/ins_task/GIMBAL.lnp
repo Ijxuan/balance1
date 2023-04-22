@@ -4,6 +4,7 @@
 "ins_task\my_shoot_control.o"
 "ins_task\my_balance_control.o"
 "ins_task\chassis_follow.o"
+"ins_task\row_balance.o"
 "ins_task\my_incrementpid_bate.o"
 "ins_task\my_positionpid_bate.o"
 "ins_task\crc.o"
