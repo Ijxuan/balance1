@@ -1,5 +1,7 @@
 #include "ROW_balance.h"
 #include "my_positionPID_bate.h"
+#include "math.h"
+#include "mit_math.h"
 
 /*
 主要功能：
@@ -25,25 +27,41 @@ engine_body_height_L 目标
 DJIC_IMU.Row
 */
 float leg_L_change_row;
+float body_width=52.3;//车体宽度
+float real_engine_body_height;//真实机体高度
+
 void row_control()
 {
+leg_L_change_row=P_PID_bate(&keep_ROW_BALENCE,0,DJIC_IMU.Row);
 
 //if(R_C_Y_NOW<L_C_Y_NOW)
 //{
-//R_C_Y_NOW=14;//右腿是短的那边，右腿强制等于目标高度
+//engine_body_height_R=engine_body_height_tg;//右腿是短的那边，右腿强制等于目标高度
+//engine_body_height_L=engine_body_height_tg+leg_L_change_row;
+//	
 //}
 //else if(R_C_Y_NOW>L_C_Y_NOW)
 //{
-//L_C_Y_NOW=14;//左腿是短的那边，左腿强制等于目标高度
+//engine_body_height_L=engine_body_height_tg;//左腿是短的那边，左腿强制等于目标高度
+//engine_body_height_R=engine_body_height_tg-leg_L_change_row;
+
 //}
-engine_body_height_R=14;
-leg_L_change_row=P_PID_bate(&keep_ROW_BALENCE,0,DJIC_IMU.Row);
-engine_body_height_L=14+leg_L_change_row;
-	
+engine_body_height_L=leg_L_change_row/2.0f;
+engine_body_height_R=-leg_L_change_row/2.0f;;
+
+//engine_body_height_R=14-leg_L_change_row;
+//	engine_body_height_L=14;
+//	leg_L_change_row=L_C_Y_NOW+sin(DJIC_IMU.Row)*body_width;
+//	engine_body_height_R=14;
+
+//	engine_body_height_L=14+leg_L_change_row;
+
 }
 
+//void get_real_engine_body_height()
+//{
 
-
+//}
 
 
 

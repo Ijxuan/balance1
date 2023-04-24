@@ -498,10 +498,10 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 	//	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
 	//			MIT_B.target_position_end=MIT_B.target_position;
 
-	if (MIT_B.target_position < MIT_B.MIT_TSZ + 1)
+	if (MIT_B.target_position_end < MIT_B.MIT_TSZ + 1)
 		MIT_B.target_position_end = MIT_B.MIT_TSZ + 1;
 
-	if (MIT_B.target_position > MIT_B.MIT_TZG - 1)
+	if (MIT_B.target_position_end > MIT_B.MIT_TZG - 1)
 		MIT_B.target_position_end = MIT_B.MIT_TZG - 1;
 
 	// MIT_B_SPEED.Target=P_PID_bate(&MIT_B_POSITION,MIT_B.target_position,MIT_B.ANGLE_JD);
@@ -581,10 +581,10 @@ void MIT_A_controul(void)
 	}
 	//			MIT_A.target_position_end=MIT_A.target_position;
 
-	if (MIT_A.target_position > (MIT_A.MIT_TSZ - 1))
+	if (MIT_A.target_position_end > (MIT_A.MIT_TSZ - 1))
 		MIT_A.target_position_end = MIT_A.MIT_TSZ - 1;
 
-	if (MIT_A.target_position < (MIT_A.MIT_TZG + 1))
+	if (MIT_A.target_position_end < (MIT_A.MIT_TZG + 1))
 		MIT_A.target_position_end = MIT_A.MIT_TZG + 1;
 
 	// MIT_A_SPEED.Target=P_PID_bate(&MIT_A_POSITION,MIT_A.target_position,MIT_A.ANGLE_JD);
@@ -632,10 +632,10 @@ void MIT_C_controul(void)
 	{
 		Buzzer.mode = heaps_times;
 	}
-	if (MIT_C.target_position > MIT_C.MIT_TSZ - 1)
+	if (MIT_C.target_position_end > MIT_C.MIT_TSZ - 1)
 		MIT_C.target_position_end = MIT_C.MIT_TSZ - 1;
 
-	if (MIT_C.target_position < MIT_C.MIT_TZG + 1)
+	if (MIT_C.target_position_end < MIT_C.MIT_TZG + 1)
 		MIT_C.target_position_end = MIT_C.MIT_TZG + 1;
 
 	// MIT_C_SPEED.Target=P_PID_bate(&MIT_C_POSITION,MIT_C.target_position,MIT_C.ANGLE_JD);
@@ -691,14 +691,14 @@ void MIT_D_controul(void)
 	}
 	//		MIT_D.target_position_end=MIT_D.target_position;
 
-	if (MIT_D.target_position < MIT_D.MIT_TSZ + 1)
+	if (MIT_D.target_position_end < MIT_D.MIT_TSZ + 1)
 		MIT_D.target_position_end = MIT_D.MIT_TSZ + 1;
 
-	if (MIT_D.target_position > MIT_D.MIT_TZG - 1)
+	if (MIT_D.target_position_end > MIT_D.MIT_TZG - 1)
 		MIT_D.target_position_end = MIT_D.MIT_TZG - 1;
 
 	// MIT_D_SPEED.Target=P_PID_bate(&MIT_D_POSITION,MIT_D.target_position,MIT_D.ANGLE_JD);
-//	MIT_D.target_speed = P_PID_bate_V2(&MIT_D_POSITION, MIT_D.target_position_end, MIT_D.ANGLE_JD);
+	MIT_D.target_speed = P_PID_bate_V2(&MIT_D_POSITION, MIT_D.target_position_end, MIT_D.ANGLE_JD);
 
 	// MIT_D.send_to_MIT=P_PID_bate(&MIT_D_SPEED,MIT_D_SPEED.Target,MIT_D.SPEED_JD)/10.0f*send_to_MIT_damping;
 	// if(MIT_D.ANGLE_JD>MIT_D.MIT_TZG+1)MIT_D.send_to_MIT=0;

@@ -162,14 +162,21 @@ void Accurately_contrul_text(void) ///*Í¨¹ýÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊ
 	L_X = 10 + keep_BALENCE_by_MIT_THETA_to_X;
 
 	// L_Y=24.33+DR16.rc.ch3/660.0*10.0;//ÎÞ¼«±ä¸ß
-	L_Y = engine_body_height_L+jump_height_L;
-
+	L_Y =engine_body_height_tg + engine_body_height_L+jump_height_L;
+	if (L_Y > 43.1)
+		L_Y = 43.1;
+	if (L_Y < 13.3)
+		L_Y = 13.3;
+	
 //	R_X = 10 - DR16.rc.ch2 / 660.0 * 10.0 - keep_BALENCE_by_MIT_THETA_to_X;
 	R_X = 10 - keep_BALENCE_by_MIT_THETA_to_X;
 
 	// R_Y=24.33+DR16.rc.ch3/660.0*10.0;//ÎÞ¼«±ä¸ß
-	R_Y = engine_body_height_R+jump_height_R;
-
+	R_Y =engine_body_height_tg + engine_body_height_R+jump_height_R;
+	if (R_Y > 43.1)
+		R_Y = 43.1;
+	if (R_Y < 13.3)
+		R_Y = 13.3;
 	angle_qhq_pi = atan((10.0f - R_C_X_NOW) / R_C_Y_NOW);
 	angle_qhq = angle_qhq_pi * 180.0f / PI;
 #endif
@@ -289,7 +296,7 @@ void MIT_keep_BALENCE()
 		// keep_BALENCE_by_MIT_RT=Ramp_Function(&MIT_BALENCE_GO_TO_TG);//Ð±ÆÂ¸³Öµ
 	}
 	keep_BALENCE_by_MIT_THETA_to_X = sin(keep_BALENCE_by_MIT_RT * PI / 180.0f) * R_C_Y_NOW;
-//			keep_BALENCE_by_MIT_THETA_to_X=0;
+//			keep_BALENCE_by_MIT_THETA_to_X=0;/*Ê±ºò¿ªÆô¸Ä±ä°Ú¸Ë½Ç¶È±£³Ö»úÌåÆ½ºâµÄ¹¦ÄÜ*/
 
 	banlence_states_last_times = banlence_states_this_imes;
 }
@@ -347,6 +354,7 @@ void gyro_test()
 Ramp_Struct liftoff_SE; // ÀëµØ¸ß¶ÈÐ±ÆÂ
 float height_text = 20;
  int liftoff_mode_T = 0;
+float engine_body_height_tg =13;
 
 /*YµÄÈ¡Öµ·¶Î§£º13.3-43.1*/
 void engine_body_height_control(void)
@@ -407,16 +415,16 @@ void engine_body_height_control(void)
 	default:
 		break;
 	}
-	liftoff_SE.Current_Value = engine_body_height_R;
+	liftoff_SE.Current_Value = engine_body_height_tg;
 	liftoff_temp.Absolute_Max = 43;
-	engine_body_height_R = Ramp_Function(&liftoff_SE);
+	engine_body_height_tg = Ramp_Function(&liftoff_SE);
 
-	if (engine_body_height_R > 43.1)
-		engine_body_height_R = 43.1;
-	if (engine_body_height_R < 13.3)
-		engine_body_height_R = 13.3;
+//	if (engine_body_height_tg > 43.1)
+//		engine_body_height_tg = 43.1;
+//	if (engine_body_height_tg < 13.3)
+//		engine_body_height_tg = 13.3;
 
-	engine_body_height_L = engine_body_height_R;
+//	engine_body_height_L = engine_body_height_R;
 }
 
 /*MITÄ¿±êÁ¦¾Ø¼ÆËãº¯Êý*/

@@ -65,6 +65,7 @@
 #include "keyBoard_to_vjoy.h"
 #include "DR16_CAN2_SEND.h"
 #include "CHASSIS_follow.h"
+#include "ROW_balance.h"
 
 /* USER CODE END Includes */
 
@@ -612,11 +613,11 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 						 //                          float alpha,
 						 500, -500,
 						 80, -80); // //MIT电机 位置环
-	P_PID_Parameter_Init(&keep_ROW_BALENCE, -1, 0, 0, 5, //-0.00001
+	P_PID_Parameter_Init(&keep_ROW_BALENCE, -1.5, -0.01, 1, 10, //-0.00001
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
-						 3, -3,
-						 5, -5); // //MIT电机 位置环
+						 150, -150,
+						 10, -10); // //MIT电机 位置环
 	
 	MIT_PID_INIT();
 	SPEED_MIT_A.LPF_K = 0.04;
@@ -1447,6 +1448,8 @@ send_to_tire_L = 0;
 		mit_math_temp(MIT_C.ANGLE_JD - MIT_C.MIT_TZG - 29.54,
 					  MIT_D.MIT_TZG - MIT_D.ANGLE_JD - 29.54,
 					  &L_C_X_NOW, &L_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW
+		real_engine_body_height=(R_C_Y_NOW+L_C_Y_NOW)/2;
+
 		//MIT_C.ANGLE_JD 20
 		swing_link_length_L=sqrt((L_C_X_NOW-10.0)*(L_C_X_NOW-10.0)+L_C_Y_NOW*L_C_Y_NOW);
 		//求摆杆长度 实时计算LQR参数要用到

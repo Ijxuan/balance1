@@ -7,6 +7,7 @@
 
 //#include "User_math.h"
 extern float leg_L_change_row;
+extern float real_engine_body_height;//真实机体高度
 
 void row_control(void);
 

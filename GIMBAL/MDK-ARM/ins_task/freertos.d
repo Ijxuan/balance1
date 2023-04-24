@@ -116,3 +116,4 @@ ins_task\freertos.o: ..\Arithmetic\mit_math.h
 ins_task\freertos.o: ..\ADD\keyBoard_to_vjoy.h
 ins_task\freertos.o: ..\ADD\DR16_CAN2_SEND.h
 ins_task\freertos.o: ..\APP\CHASSIS_follow.h
+ins_task\freertos.o: ..\APP\ROW_balance.h

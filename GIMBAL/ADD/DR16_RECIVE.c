@@ -24,6 +24,7 @@
 #include "keyBoard_to_vjoy.h"
 #include "Jump.h"
 #include "CHASSIS_follow.h"
+#include "ROW_balance.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
@@ -254,7 +255,27 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-																	#if 1//6基本状态
+		#if 1//mit-row轴水平
+		
+	p=0;
+			send_d_32[p++]=DJIC_IMU.Row*100;//实际倾角 0-30
+		
+			send_d_32[p++]=leg_L_change_row*100;//当前摆杆角度 0-15
+		
+			send_d_32[p++]=engine_body_height_L*100;//目标摆杆角度  0-15 
+			send_d_32[p++]=L_C_Y_NOW*100;//当前轮速度	 0-1	       1
+			//目标长度 实际长度
+			send_d_32[p++]=keep_ROW_BALENCE.I_Output*100;//目标轮速度	0-1 	2
+			send_d_32[p++]=leg_L_change_row*100;//目标位移
+			send_d_32[p++]=MIT_D.target_speed*100;//当前位移	7
+	p=0;
+			send_d_16[p++]=MIT_D.SPEED_JD*100;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+
+			send_d_16[p++]=MIT_D.target_position_end*100;//实际       	9
+			send_d_16[p++]=MIT_D.ANGLE_JD*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+		#if 0//lqr-底盘跟随
 		
 	p=0;
 			send_d_32[p++]=follow_angle;//实际倾角 0-30
