@@ -151,7 +151,7 @@ float keep_BALENCE_by_MIT_THETA_to_X = 0; // 保持平衡用的机体与杠的夹角  转换成X
 
 void Accurately_contrul_text(void) ///*通过平面五连杆逆解获得目标角度精确控制测试*/
 {
-
+//目标Y将有三部分组成：目标机体高度（固定--斜坡增减）+ROW轴保持平衡的值（PID计算-时刻刷新）+跳跃伸长量（突变）
 #if use_MIT_change_focus == 0
 	/*keep_BALENCE_by_MIT_THETA_to_X*/
 	MIT_keep_BALENCE();///*通过关节电机保持机体水平的函数*/
