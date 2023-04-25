@@ -12,8 +12,11 @@ typedef float fp32;
 
 //m3508 rpm change to chassis speed
 //m3508转子转速(rpm)转化成底盘速度(m/s)的比例，c=pi*r/(30*k)，k为电机减速比
-#define CHASSIS_MOTOR_RPM_TO_VECTOR_SEN 0.00040490766f
+#define CHASSIS_MOTOR_RPM_TO_VECTOR_SEN 0.00043625960f
 //0.00004144660047
+//0.2513274122871832(0.08m轮胎半径)  /576.096  = 4.362596030647378e-4  
+//30*k=576.096
+
 
 //m3508 rpm change to motor angular velocity
 //m3508转子转速(rpm)转换为输出轴角速度(rad/s)的比例

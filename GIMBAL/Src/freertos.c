@@ -574,7 +574,7 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 															//						  float max_error, float min_error,
 															//                          float alpha,
 						 500, -500,
-						 16, -16); //
+						 25, -25); //
 
 	SPEED_L.LPF_K = 0.85;
 	SPEED_R.LPF_K = 0.85;
@@ -1368,21 +1368,21 @@ send_to_tire_L = 0;
 			//	MIT_B_SPEED.Min_result=MIT_B_SPEED.Max_result=0;
 			//	MIT_C_SPEED.Min_result=MIT_C_SPEED.Max_result=0;
 			//	MIT_D_SPEED.Min_result=MIT_D_SPEED.Max_result=0;
-			if (send_to_MIT_damping < 0.5f)
+			if (send_to_MIT_damping < 0.8f)
 			{
 				if (MIT_MODE_TEXT != 2) // 还没有失能电机
 				{
 					MIT_MODE_TEXT = 2; // 电机失能
 				}
-				DISABLE_ALL_MIT(); // 失能所有电机
+				DISABLE_ALL_MIT(); // 失能所有电机  至少运行两遍以上
 			}
 			else
 			{
 				send_to_MIT_damping -= 0.0005; // 2秒失能
-				if (liftoff_R > 3)
-				{
-					liftoff_R -= 0.01; // 将电机归位到起始点附近 一秒10度
-				}
+//				if (liftoff_R > 3)
+//				{
+//					liftoff_R -= 0.01; // 将电机归位到起始点附近 一秒10度
+//				}
 				MIT_controul(); // 系数衰减的同时,继续控制电机
 
 				//			SEND_TO_MIT_MAX.Target_Value=0;
@@ -1415,7 +1415,7 @@ send_to_tire_L = 0;
 					ALL_MIT_ENTER_MOTO_MODE(); // 使能所有电机
 					}
 					run_MIT_ENTER_MOTO_MODE_times++;
-					if (run_MIT_ENTER_MOTO_MODE_times > 4)
+					if (run_MIT_ENTER_MOTO_MODE_times > 1)//1 2
 					{
 						run_MIT_ENTER_MOTO_MODE_times = 0;
 						MIT_MODE_TEXT = 1;

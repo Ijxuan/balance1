@@ -238,30 +238,54 @@ int banlence_states_last_times = 0; // 上一时刻是否保持了平衡
 int if_use_Ramp_Function = 0; // 是否使用斜坡函数
 
 float keep_BALENCE_by_MIT_THETA = 0; // 保持平衡用的机体与杠的夹角
+/*准备将逻辑改成：当目标高度模式大于等于1时-》判断实际高度是否大于15-》再根据陀螺仪角度判断是不是在平衡状态
+全部满足即开启机体水平保持
 
+当机器人倒下时-不在平衡状态->(陀螺仪角度>15)-keep_BALENCE_by_MIT_THETA_to_X=0
+没伸腿->-keep_BALENCE_by_MIT_THETA_to_X=0
+初始化流程还没运行到伸腿这一步（liftoff_mode_T==0）--》keep_BALENCE_by_MIT_THETA_to_X=0
+
+特殊情况：liftoff_mode_T==1的情况下站起来：那么只要陀螺仪角度小于8就会开始开启流程（摆杆斜坡）
+*/
 void MIT_keep_BALENCE()
 {
-	if (fabs(DJIC_IMU.total_pitch) < 13.0f) // 只在平衡状态下生效
+	if(liftoff_mode_T>=1)
 	{
-		if (R_Y >= 15.0f)
-		{
-			P_PID_bate(&keep_BALENCE_by_MIT, 0, DJIC_IMU.total_pitch - angle_qhq);
+		if (real_engine_body_height >= 15.0f)
+		{	
+			if (fabs(DJIC_IMU.total_pitch) < 8.0f) // 只在平衡状态下生效
+			{	
+					P_PID_bate(&keep_BALENCE_by_MIT, 0, DJIC_IMU.total_pitch - angle_qhq);
+		banlence_states_this_imes = 1;
+		MIT_BALENCE_start.Rate=0.002;	//如果是开启这个功能，那么速度较慢	
+			}
+			else if (fabs(DJIC_IMU.total_pitch) > 15.0f) // 彻底不在平衡状态了
+			{
+			banlence_times = 0;
+			banlence_states_this_imes = 0;
+			keep_BALENCE_by_MIT.result = 0;
+			MIT_BALENCE_start.Rate=0.01;//如果是关闭这个功能，那么5倍速度
+			}
+			
 		}
 		else
 		{
-			keep_BALENCE_by_MIT.result = 0;
-		}
-		banlence_states_this_imes = 1;
-
-		banlence_times++;
-	}
-
-	if (fabs(DJIC_IMU.total_pitch) > 15.0f) // 彻底不在平衡状态了
-	{
-		banlence_times = 0;
 		banlence_states_this_imes = 0;
 		keep_BALENCE_by_MIT.result = 0;
+		MIT_BALENCE_start.Rate=0.01;//如果是关闭这个功能，那么5倍速度
+		}
+	
 	}
+		else
+		{
+			banlence_states_this_imes = 0;
+			keep_BALENCE_by_MIT.result = 0;
+			MIT_BALENCE_start.Rate=0.01;//如果是关闭这个功能，那么5倍速度
+		}
+
+		banlence_times++;
+
+
 
 	if (banlence_states_this_imes != banlence_states_last_times)
 	{
@@ -282,7 +306,7 @@ void MIT_keep_BALENCE()
 			if_use_Ramp_Function = 0; // 目标与当前小于0.1，不在使用斜坡函数
 		}
 	}
-	if (fabs(DJIC_IMU.total_pitch) < 13.0f && if_use_Ramp_Function == 0) // 只在平衡状态下生效  且已经经历了斜坡函数
+	if (fabs(DJIC_IMU.total_pitch) < 8.0f && if_use_Ramp_Function == 0) // 只在平衡状态下生效  且已经经历了斜坡函数
 	{
 		//		if(keep_BALENCE_by_MIT.result<=3.0f)
 		//		{

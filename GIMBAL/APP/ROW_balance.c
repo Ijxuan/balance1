@@ -49,9 +49,18 @@ leg_L_change_row=P_PID_bate(&keep_ROW_BALENCE,0,DJIC_IMU.Row);
 //engine_body_height_R=engine_body_height_tg-leg_L_change_row;
 
 //}
+	if(liftoff_mode_T>=1&&(real_engine_body_height >= 17.0f))
+	{
 engine_body_height_L=leg_L_change_row/2.0f;
 engine_body_height_R=-leg_L_change_row/2.0f;;
-
+	}
+	else
+	{
+	engine_body_height_L=engine_body_height_R=0;
+	keep_ROW_BALENCE.Error=0;
+	keep_ROW_BALENCE.I_Output=0;
+	keep_ROW_BALENCE.Integral=0;	
+	}
 //engine_body_height_R=14-leg_L_change_row;
 //	engine_body_height_L=14;
 //	leg_L_change_row=L_C_Y_NOW+sin(DJIC_IMU.Row)*body_width;
