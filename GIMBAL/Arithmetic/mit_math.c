@@ -27,8 +27,11 @@ float angle_fai_1_JD = 0; // ×ø±êÏµÔ­µã´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç) ½Ç¶ÈÖÆ
 float angle_fai_2 = 0;	  //(20,0)´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç)
 float angle_fai_2_JD = 0; //(20,0)´¦ÍÈÓëË®Æ½ÃæµÄ¼Ğ½Ç(Èñ½Ç) ½Ç¶ÈÖÆ
 
-float angle_qhq = 0;	// Ç°ºóÇãĞ±µÄ½Ç¶È
-float angle_qhq_pi = 0; // Ç°ºóÇãĞ±µÄ½Ç¶È »¡¶ÈÖÆ
+float angle_qhq_R = 0;	// Ç°ºóÇãĞ±µÄ½Ç¶È
+float angle_qhq_pi_R = 0; // Ç°ºóÇãĞ±µÄ½Ç¶È »¡¶ÈÖÆ
+
+float angle_qhq_L = 0;	// Ç°ºóÇãĞ±µÄ½Ç¶È
+float angle_qhq_pi_L = 0; // Ç°ºóÇãĞ±µÄ½Ç¶È »¡¶ÈÖÆ
 
 float C_x_now;
 float C_y_now;
@@ -177,8 +180,10 @@ void Accurately_contrul_text(void) ///*Í¨¹ıÆ½ÃæÎåÁ¬¸ËÄæ½â»ñµÃÄ¿±ê½Ç¶È¾«È·¿ØÖÆ²âÊ
 		R_Y = 43.1;
 	if (R_Y < 13.3)
 		R_Y = 13.3;
-	angle_qhq_pi = atan((10.0f - R_C_X_NOW) / R_C_Y_NOW);
-	angle_qhq = angle_qhq_pi * 180.0f / PI;
+	angle_qhq_pi_R = atan((10.0f - R_C_X_NOW) / R_C_Y_NOW);
+	angle_qhq_R = angle_qhq_pi_R * 180.0f / PI;
+	angle_qhq_pi_L = atan((10.0f - L_C_X_NOW) / L_C_Y_NOW);
+	angle_qhq_L = angle_qhq_pi_L * 180.0f / PI;
 #endif
 	/*Ò£¿ØÆ÷¿ØÖÆ
 	L_X=10+MIT_change_focus.result*PITCH_XR_K;
@@ -255,7 +260,7 @@ void MIT_keep_BALENCE()
 		{	
 			if (fabs(DJIC_IMU.total_pitch) < 8.0f) // Ö»ÔÚÆ½ºâ×´Ì¬ÏÂÉúĞ§
 			{	
-					P_PID_bate(&keep_BALENCE_by_MIT, 0, DJIC_IMU.total_pitch - angle_qhq);
+					P_PID_bate(&keep_BALENCE_by_MIT, 0, DJIC_IMU.total_pitch - angle_qhq_R);
 		banlence_states_this_imes = 1;
 		MIT_BALENCE_start.Rate=0.002;	//Èç¹ûÊÇ¿ªÆôÕâ¸ö¹¦ÄÜ£¬ÄÇÃ´ËÙ¶È½ÏÂı	
 			}
@@ -340,12 +345,12 @@ void update_gyro()
 	cumulate_i++;
 	if (cumulate_i >= cumulate_time_ms)
 	{
-		cumulate_angle_change = angle_qhq_pi - pitch_angle_last_time;	// ½Ç¶È±ä»¯Á¿
+		cumulate_angle_change = angle_qhq_pi_R - pitch_angle_last_time;	// ½Ç¶È±ä»¯Á¿
 		cumulate_angle_change_JD = cumulate_angle_change * 180.0f / PI; //_½Ç¶ÈÖÆ
 
 		pitch_speed_new = cumulate_angle_change * 1000.0f / cumulate_time_ms; // ¼ÆËã³öµÄpitchÖá½ÇËÙ¶È
 		pitch_speed_new_JD = pitch_speed_new * 180.0f / PI;					  //_½Ç¶ÈÖÆ
-		pitch_angle_last_time = angle_qhq_pi;
+		pitch_angle_last_time = angle_qhq_pi_R;
 		cumulate_i = 0;
 	}
 }
@@ -367,8 +372,8 @@ void gyro_test()
 	if (speed_to_angle_i >= speed_to_angle_time_ms)
 	{
 		change_angle_total_speed_end = change_angle_total_speed / speed_to_angle_time_ms * speed_to_angle_time_ms / 1000.0f;
-		change_angle_total_angle = angle_qhq_pi - last_angle_total_angle;
-		last_angle_total_angle = angle_qhq_pi;
+		change_angle_total_angle = angle_qhq_pi_R - last_angle_total_angle;
+		last_angle_total_angle = angle_qhq_pi_R;
 		speed_to_angle_i = 0;
 		change_angle_total_speed = 0;
 	}
@@ -481,7 +486,7 @@ void MIT_orque_TG()
 	TG_x=R_X;
 	TG_y=R_Y;
 mit_math_temp_2(TG_x, TG_y); ///*Æ½ÃæÎåÁ¬¸ËÄæ½â*/
-right_leg.fai_0=PI/2-angle_qhq_pi;
+right_leg.fai_0=PI/2-angle_qhq_pi_R;
 	
 right_leg.fai_1=angle_fai_1;
 		if(angle_fai_1<0)

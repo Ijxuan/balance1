@@ -12,16 +12,28 @@
 #define TEST_MIT_SLAVE_ID 0x09//测试用电机SLAVEid
 #define TEST_MIT_MASTER_ID 0x0A//测试用电机MASTERid
 
+//#define MIT_A_SLAVE_ID 0x01//测试用电机SLAVEid
+//#define MIT_A_MASTER_ID 0x02//测试用电机MASTERid
+
+//#define MIT_B_SLAVE_ID 0x03//测试用电机SLAVEid
+//#define MIT_B_MASTER_ID 0x04//测试用电机MASTERid
+
+//#define MIT_C_SLAVE_ID 0x05//测试用电机SLAVEid
+//#define MIT_C_MASTER_ID 0x06//测试用电机MASTERid
+
+//#define MIT_D_SLAVE_ID 0x07//测试用电机SLAVEid
+//#define MIT_D_MASTER_ID 0x08//测试用电机MASTERid
+
 #define MIT_A_SLAVE_ID 0x01//测试用电机SLAVEid
-#define MIT_A_MASTER_ID 0x02//测试用电机MASTERid
+#define MIT_A_MASTER_ID 0x05//测试用电机MASTERid
 
-#define MIT_B_SLAVE_ID 0x03//测试用电机SLAVEid
-#define MIT_B_MASTER_ID 0x04//测试用电机MASTERid
+#define MIT_B_SLAVE_ID 0x02//测试用电机SLAVEid
+#define MIT_B_MASTER_ID 0x06//测试用电机MASTERid
 
-#define MIT_C_SLAVE_ID 0x05//测试用电机SLAVEid
-#define MIT_C_MASTER_ID 0x06//测试用电机MASTERid
+#define MIT_C_SLAVE_ID 0x03//测试用电机SLAVEid
+#define MIT_C_MASTER_ID 0x07//测试用电机MASTERid
 
-#define MIT_D_SLAVE_ID 0x07//测试用电机SLAVEid
+#define MIT_D_SLAVE_ID 0x04//测试用电机SLAVEid
 #define MIT_D_MASTER_ID 0x08//测试用电机MASTERid
 // #define P_MIN -0.0f//测试电机位置限幅
 // #define P_MAX 98.0f
@@ -187,7 +199,9 @@ extern float R_C_Y_NOW;//此时此刻右轮的坐标（y轴）
 void MIT_MODE(uint8_t MODE);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float f_t,uint32_t id);
-//static uint16_t float_to_uint(float x, float x_min, float x_max, uint8_t bits);
+void CanComm_SendControlPara_CAN2(float f_p, float f_v, float f_kp, float f_kd, float f_t,uint32_t id);
+
+//static uint16_t float_to_uint(float x, float x_min, float x_max, uint8_t bits); 
 void MIT_controul(void);
 void speed_text_v(void);
 void MIT_PID_INIT(void);

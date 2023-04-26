@@ -252,6 +252,40 @@ void CanComm_SendControlPara(float f_p, float f_v, float f_kp, float f_kd, float
 	CAN_SendData(&hcan1, CAN_ID_STD, id, buf);
 }
 
+void CanComm_SendControlPara_CAN2(float f_p, float f_v, float f_kp, float f_kd, float f_t, uint32_t id)
+{
+	uint16_t p, v, kp, kd, t;
+	uint8_t buf[8];
+
+	/* 限制输入的参数在定义的范围内 */
+	LIMIT_MIN_MAX(f_p, P_MIN, P_MAX);
+	LIMIT_MIN_MAX(f_v, V_MIN, V_MAX);
+	LIMIT_MIN_MAX(f_kp, KP_MIN, KP_MAX);
+	LIMIT_MIN_MAX(f_kd, KD_MIN, KD_MAX);
+	LIMIT_MIN_MAX(f_t, T_MIN, T_MAX);
+
+	/* 根据协议，对float参数进行转换 */
+	p = float_to_uint(f_p, P_MIN, P_MAX, 16);
+	v = float_to_uint(f_v, V_MIN, V_MAX, 12);
+	kp = float_to_uint(f_kp, KP_MIN, KP_MAX, 12);
+	kd = float_to_uint(f_kd, KD_MIN, KD_MAX, 12);
+	t = float_to_uint(f_t, T_MIN, T_MAX, 12);
+
+	/* 根据传输协议，把数据转换为CAN命令数据字段 */
+	buf[0] = p >> 8;
+	buf[1] = p & 0xFF;
+	buf[2] = v >> 4;
+	buf[3] = ((v & 0xF) << 4) | (kp >> 8);
+	buf[4] = kp & 0xFF;
+	buf[5] = kd >> 4;
+	buf[6] = ((kd & 0xF) << 4) | (t >> 8);
+	buf[7] = t & 0xff;
+
+	/* 通过CAN接口把buf中的内容发送出去 */
+	//    CanTransmit(buf, sizeof(buf));
+
+	CAN_SendData(&hcan2, CAN_ID_STD, id, buf);
+}
 float position_text = 0;	  // 目标角度
 float position_text_TEMP = 0; // 目标角度
 
@@ -393,11 +427,8 @@ void MIT_controul(void)
 
 	if (L_OR_R % 2 == 0)
 	{
-
 		mit_math_temp_2(R_X, R_Y); ///*平面五连杆逆解*/
 		get_tg_angle_by_WLG_IS();
-
-
 		MIT_B_controul();
 		MIT_A_controul();
 	}
@@ -409,10 +440,9 @@ void MIT_controul(void)
 		// if(liftoff_L>90)liftoff_L=90;
 		// if(liftoff_L<1)liftoff_L=1;
 		mit_math_temp_2(L_X, L_Y); ///*平面五连杆逆解*/
-		get_tg_angle_by_WLG_IS();
-
+		get_tg_angle_by_WLG_IS();		
 		MIT_C_controul();
-		MIT_D_controul();
+		MIT_D_controul();	
 	}
 	/*
 	float torque_ref = controller->kp*(controller->p_des - controller->theta_mech) + controller->t_ff + controller->kd*(controller->v_des - controller->dtheta_mech);
@@ -667,7 +697,7 @@ void MIT_C_controul(void)
 	
 	// 抬最高是20  0.4
 	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, MIT_C.kp, MIT_C.kv, 0, MIT_C_SLAVE_ID);
-//	CanComm_SendControlPara(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, 0, 0, MIT_C.send_to_MIT, MIT_C_SLAVE_ID);
+//	CanComm_SendControlPara_CAN2(MIT_C.send_to_MIT_position, MIT_C.send_to_MIT_speed, 0, 0, MIT_C.send_to_MIT, MIT_C_SLAVE_ID);
 }
 void MIT_D_controul(void)
 {

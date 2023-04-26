@@ -1447,7 +1447,7 @@ send_to_tire_L = 0;
 					  &R_C_X_NOW, &R_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW		
 		mit_math_temp(MIT_C.ANGLE_JD - MIT_C.MIT_TZG - 29.54,
 					  MIT_D.MIT_TZG - MIT_D.ANGLE_JD - 29.54,
-					  &L_C_X_NOW, &L_C_Y_NOW); // 正解验算 得到  R_C_Y_NOW  R_C_X_NOW
+					  &L_C_X_NOW, &L_C_Y_NOW); // 正解验算 得到  L_C_Y_NOW  L_C_X_NOW
 		real_engine_body_height=(R_C_Y_NOW+L_C_Y_NOW)/2;
 
 		//MIT_C.ANGLE_JD 20

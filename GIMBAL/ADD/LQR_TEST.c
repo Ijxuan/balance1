@@ -467,7 +467,7 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	chassis_move_update->chassis_yaw =
 		rad_format((float)INS_angle[0]);
 	//	if(DR16.rc.ch1==0)
-	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi+REAL_BALANCE_ANGLE/180.0f*PI);//重心补偿到1.5度平衡
+	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi_R+REAL_BALANCE_ANGLE/180.0f*PI);//重心补偿到1.5度平衡
 	//	else
 	//	{
 	//    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
@@ -700,7 +700,7 @@ void LQR_target_position()
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now - 1;
 		}
 
-		if (fabs(DJIC_IMU.total_pitch-angle_qhq) > 5.0f)//如果不靠摆杆补偿，实际的倾角大于5度
+		if (fabs(DJIC_IMU.total_pitch-angle_qhq_R) > 5.0f)//如果不靠摆杆补偿，实际的倾角大于5度
 		{
 			chassis_move.chassis_position_tg = chassis_move.chassis_position_now; // 为平衡时将 当前位置 作为目标位置
 		}

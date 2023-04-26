@@ -41,8 +41,10 @@ extern Ramp_Struct MIT_BALENCE_start;
 extern Ramp_Struct MIT_BALENCE_GO_TO_TG;
 
 extern int if_use_Ramp_Function; // �Ƿ�ʹ��б�º���
-extern float angle_qhq;          // ǰ����б�ĽǶ�
-extern float angle_qhq_pi;       // ǰ����б�ĽǶ� ������
+extern float angle_qhq_R;          // ǰ����б�ĽǶ�
+extern float angle_qhq_pi_R;       // ǰ����б�ĽǶ� ������
+extern float angle_qhq_L;          // ǰ����б�ĽǶ�
+extern float angle_qhq_pi_L;       // ǰ����б�ĽǶ� ������
 extern float C_x_now;
 extern float C_y_now;
 

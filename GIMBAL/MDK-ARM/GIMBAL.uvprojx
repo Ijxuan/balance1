@@ -569,6 +569,11 @@
               <FileType>1</FileType>
               <FilePath>..\ADD\DR16_CAN2_SEND.c</FilePath>
             </File>
+            <File>
+              <FileName>MIT_enable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\MIT_enable.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

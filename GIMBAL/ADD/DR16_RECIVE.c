@@ -255,7 +255,27 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-		#if 1//mit-row轴水平
+				#if 1//YAW旋转
+		
+	p=0;
+			send_d_32[p++]=TARGET_angle_YAW*100;//实际倾角 0-30
+		
+			send_d_32[p++]=DJIC_IMU.total_yaw*100;//当前摆杆角度 0-15
+		
+			send_d_32[p++]=TARGET_angle_speed_YAW*100;//目标摆杆角度  0-15 
+			send_d_32[p++]=DJIC_IMU.Gyro_z*100;//当前轮速度	 0-1	       1
+			//目标长度 实际长度
+			send_d_32[p++]=angle_qhq_L*100;//左摆杆角 	2
+			send_d_32[p++]=angle_qhq_R*100;//右摆杆角
+			send_d_32[p++]=MIT_D.target_speed*100;//当前位移	7
+	p=0;
+			send_d_16[p++]=MIT_D.SPEED_JD*100;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+
+			send_d_16[p++]=MIT_D.target_position_end*100;//实际       	9
+			send_d_16[p++]=MIT_D.ANGLE_JD*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif
+		#if 0//mit-row轴水平
 		
 	p=0;
 			send_d_32[p++]=DJIC_IMU.Row*100;//实际倾角 0-30
@@ -298,8 +318,8 @@ void NM_swj(void)
 															#if 0//6基本状态
 		
 	p=0;
-			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*100;//实际倾角 0-30
-			send_d_32[p++]=angle_qhq*200;//当前摆杆角度 0-15
+			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq_R)*100;//实际倾角 0-30
+			send_d_32[p++]=angle_qhq_R*200;//当前摆杆角度 0-15
 		
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*200;//目标摆杆角度  0-15 
 		
@@ -388,7 +408,7 @@ void NM_swj(void)
 			send_d_32[p++]=Nm_L_test*1000;//当前摆角		2
 		
 			send_d_32[p++]=chassis_vx_real*100;//角度制 目标位置		3 实际速度 		
-			send_d_32[p++]=(INS_angle[2] - angle_qhq_pi)* Angle_turn_Radian*100;//里程计测试  	7
+			send_d_32[p++]=(INS_angle[2] - angle_qhq_pi_R)* Angle_turn_Radian*100;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=TARGET_SPEED_POSITION_V2*100;//测试用目标速度数值,必须为正值;//输出电压  实际    8
 
@@ -405,10 +425,10 @@ void NM_swj(void)
 			send_d_32[p++]=DR16.mouse.y;//角度制 目标位置		3 
 		
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//目标摆角		1
-			send_d_32[p++]=angle_qhq*100;//当前摆角		2
+			send_d_32[p++]=angle_qhq_R*100;//当前摆角		2
 		
 			send_d_32[p++]=MIT_B.target_position*100;//角度制 目标位置		3 		
-			send_d_32[p++]=(INS_angle[2] - angle_qhq_pi)* Angle_turn_Radian*100;//里程计测试  	7
+			send_d_32[p++]=(INS_angle[2] - angle_qhq_pi_R)* Angle_turn_Radian*100;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
 
@@ -447,7 +467,7 @@ void NM_swj(void)
 			send_d_32[p++]=DJIC_IMU.Gyro_z*10;//弧度值目标位置		1
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//弧度值当前位置		2
 		
-			send_d_32[p++]=angle_qhq*10;//角度制 目标位置		3 		
+			send_d_32[p++]=angle_qhq_R*10;//角度制 目标位置		3 		
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
@@ -499,15 +519,15 @@ void NM_swj(void)
 						#if 0//通过MIT保持机体平衡 数据重新确定
 		
 	p=0;
-			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*10;//弧度值目标位置		1
-			send_d_32[p++]=angle_qhq*10;//弧度值当前位置		2
+			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq_R)*10;//弧度值目标位置		1
+			send_d_32[p++]=angle_qhq_R*10;//弧度值当前位置		2
 		
 			send_d_32[p++]=DJIC_IMU.total_pitch*10;//角度制 目标位置		3 
 		
 			send_d_32[p++]=DJIC_IMU.Gyro_z*10;//弧度值目标位置		1
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//弧度值当前位置		2
 		
-			send_d_32[p++]=angle_qhq*10;//角度制 目标位置		3 		
+			send_d_32[p++]=angle_qhq_R*10;//角度制 目标位置		3 		
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8
@@ -519,15 +539,15 @@ void NM_swj(void)
 				#if 0//通过MIT保持机体平衡 正负号确定
 		
 	p=0;
-			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq)*10;//弧度值目标位置		1
-			send_d_32[p++]=angle_qhq*10;//弧度值当前位置		2
+			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq_R)*10;//弧度值目标位置		1
+			send_d_32[p++]=angle_qhq_R*10;//弧度值当前位置		2
 		
 			send_d_32[p++]=DJIC_IMU.total_pitch*10;//角度制 目标位置		3 
 		
 			send_d_32[p++]=keep_BALENCE_by_MIT.result*100;//弧度值目标位置		1
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*100;//弧度值当前位置		2
 		
-			send_d_32[p++]=angle_qhq*10;//角度制 目标位置		3 		
+			send_d_32[p++]=angle_qhq_R*10;//角度制 目标位置		3 		
 			send_d_32[p++]=keep_BALENCE_by_MIT_RT*10;//里程计测试  	7
 	p=0;
 			send_d_16[p++]=MIT_B_SPEED.Max_result;//测试用目标速度数值,必须为正值;//输出电压      8

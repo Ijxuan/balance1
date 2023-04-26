@@ -49,7 +49,7 @@ leg_L_change_row=P_PID_bate(&keep_ROW_BALENCE,0,DJIC_IMU.Row);
 //engine_body_height_R=engine_body_height_tg-leg_L_change_row;
 
 //}
-	if(liftoff_mode_T>=1&&(real_engine_body_height >= 17.0f))
+	if(liftoff_mode_T>=2&&(real_engine_body_height >= 17.0f))
 	{
 engine_body_height_L=leg_L_change_row/2.0f;
 engine_body_height_R=-leg_L_change_row/2.0f;;
