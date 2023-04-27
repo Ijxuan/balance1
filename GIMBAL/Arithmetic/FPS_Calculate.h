@@ -28,6 +28,8 @@ typedef struct
 	FPS_type PITCH_6020;
 	FPS_type CHASSIS_PLACE;
 	FPS_type DEBUG;
+	FPS_type L_3508;
+	FPS_type R_3508;
 
 	FPS_type MIT_A;
 	FPS_type MIT_B;

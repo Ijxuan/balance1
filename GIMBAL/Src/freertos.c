@@ -952,6 +952,12 @@ void Debug(void const *argument)
 }
 
 /* USER CODE BEGIN Header_IMU_Send */
+int MIT_A_FPS_1000ms;
+int MIT_B_FPS_1000ms;
+int MIT_C_FPS_1000ms;
+int MIT_D_FPS_1000ms;
+int run_times_for_fps;
+
 /**
  * @brief Function implementing the IMU_Send_Task thread.
  * @param argument: Not used
@@ -964,12 +970,27 @@ void IMU_Send(void const *argument)
 	portTickType xLastWakeTime;
 	xLastWakeTime = xTaskGetTickCount();
 	const TickType_t TimeIncrement = pdMS_TO_TICKS(2); // 每十毫秒强制进入总控制
+
 	/* Infinite loop */
 	for (;;)
 	{
+		run_times_for_fps++;
 #if send_way == 0
 
 #endif
+		if(run_times_for_fps>=500)
+		{
+			MIT_A_FPS_1000ms=MIT_A.RC_TIMES;
+			MIT_A.RC_TIMES=0;
+			MIT_B_FPS_1000ms=MIT_B.RC_TIMES;
+			MIT_B.RC_TIMES=0;
+			MIT_C_FPS_1000ms=MIT_C.RC_TIMES;
+			MIT_C.RC_TIMES=0;
+			MIT_D_FPS_1000ms=MIT_D.RC_TIMES;
+			MIT_D.RC_TIMES=0;
+		run_times_for_fps=0;
+			
+		}
 				if (send_to_C == 1)//遥控器数据
 		{
 DR16_send_master_control();
@@ -1058,6 +1079,8 @@ void Can2_Reivece(void const *argument)
 			{
 				// 云台
 				GM6020_Yaw_getInfo(CAN2_Rx_Structure);
+				Get_FPS(&FPS_ALL.YAW_6020.WorldTimes, &FPS_ALL.YAW_6020.FPS);
+
 			}
 			// 陀螺仪校准指令
 			//			if (CAN2_Rx_Structure.CAN_RxMessage.StdId == IMU_CAL_REIID)
@@ -1099,11 +1122,15 @@ void CAN1_R(void const *argument)
 			{
 				// 左摩擦轮的    ID1
 				M3508_getInfo(CAN1_Rx_Structure); //
+				Get_FPS(&FPS_ALL.R_3508.WorldTimes, &FPS_ALL.R_3508.FPS);
+
 			}
 			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (M3508_READID_START + 2))
 			{
 				// 右摩擦轮的	ID2
 				M3508_getInfo(CAN1_Rx_Structure); //
+				Get_FPS(&FPS_ALL.L_3508.WorldTimes, &FPS_ALL.L_3508.FPS);
+
 			}
 			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (M3508_READID_START + 1))
 			{
