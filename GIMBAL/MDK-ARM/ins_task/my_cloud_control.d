@@ -75,3 +75,10 @@ ins_task\my_cloud_control.o: ..\Arithmetic\User_math.h
 ins_task\my_cloud_control.o: ..\Arithmetic\User_typedef.h
 ins_task\my_cloud_control.o: ..\Arithmetic\FPS_Calculate.h
 ins_task\my_cloud_control.o: ..\Arithmetic\spinning_top_examine.h
+ins_task\my_cloud_control.o: ..\ADD\RM_JudgeSystem.h
+ins_task\my_cloud_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+ins_task\my_cloud_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ins_task\my_cloud_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+ins_task\my_cloud_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+ins_task\my_cloud_control.o: ../Inc/dma.h
+ins_task\my_cloud_control.o: ../Inc/gpio.h

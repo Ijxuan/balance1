@@ -244,6 +244,24 @@ int send_to_C_times;//dr16发送次数
 
 bool open_CHASSIS_follow=1;//开启底盘跟随云台这个功能
 int CHASSIS_follow_times=0;//底盘跟随云台时间
+
+/*
+机器人状态数据，10Hz 周期发送                              27(15)
+实时功率热量数据，50Hz 周期发送                            16(14)
+伤害状态数据，伤害发生后发送                               1
+实时射击数据，子弹发射后发送                               6
+子弹剩余发送数，空中机器人以及哨兵机器人发送，1Hz 周期发送   2
+*/
+bool send_to_C_JS_SHOOT;//裁判系统_发射数据_是否发送给C板  
+bool send_to_C_JS_HURT;//裁判系统_伤害数据_是否发送给C板
+bool send_to_C_JS_STATUS;//裁判系统_状态数据_是否发送给C板
+bool send_to_C_JS_HEAT=0;//裁判系统_状态数据_是否发送给C板
+
+int JS_SEND_times=0;//裁判系统发送次数
+int send_to_C_STATUS_times=0;//因为状态数据分4段发送,所以计数保险一点
+int JS_RC_times=0;///裁判系统接收次数
+
+
 /* USER CODE END 0 */
 
 /**

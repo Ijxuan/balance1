@@ -519,11 +519,11 @@ CanComm_SendControlPara(0,0,0,0,MIT_B.send_to_MIT,MIT_B_SLAVE_ID);
 	if (isnan(MIT_B.target_position) == 0)
 	{
 		MIT_B.target_position_end = MIT_B.target_position;
-		Buzzer.mode = Zero_times;
+//		Buzzer.mode = Zero_times;
 	}
 	else
 	{
-		Buzzer.mode = heaps_times;
+//		Buzzer.mode = heaps_times;
 	}
 	//	MIT_B.target_position=MIT_A.MIT_TZG-liftoff_R;
 	//			MIT_B.target_position_end=MIT_B.target_position;
@@ -603,11 +603,11 @@ void MIT_A_controul(void)
 	if (isnan(MIT_A.target_position) == 0)
 	{
 		MIT_A.target_position_end = MIT_A.target_position;
-		Buzzer.mode = Zero_times;
+//		Buzzer.mode = Zero_times;
 	}
 	else
 	{
-		Buzzer.mode = heaps_times;
+//		Buzzer.mode = heaps_times;
 	}
 	//			MIT_A.target_position_end=MIT_A.target_position;
 
@@ -656,11 +656,11 @@ void MIT_C_controul(void)
 	if (isnan(MIT_C.target_position) == 0)
 	{
 		MIT_C.target_position_end = MIT_C.target_position;
-		Buzzer.mode = Zero_times;
+//		Buzzer.mode = Zero_times;
 	}
 	else
 	{
-		Buzzer.mode = heaps_times;
+//		Buzzer.mode = heaps_times;
 	}
 	if (MIT_C.target_position_end > MIT_C.MIT_TSZ - 1)
 		MIT_C.target_position_end = MIT_C.MIT_TSZ - 1;
@@ -713,11 +713,11 @@ void MIT_D_controul(void)
 	if (isnan(MIT_D.target_position) == 0)
 	{
 		MIT_D.target_position_end = MIT_D.target_position;
-		Buzzer.mode = Zero_times;
+//		Buzzer.mode = Zero_times;
 	}
 	else
 	{
-		Buzzer.mode = heaps_times;
+//		Buzzer.mode = heaps_times;
 	}
 	//		MIT_D.target_position_end=MIT_D.target_position;
 

@@ -66,6 +66,9 @@
 #include "DR16_CAN2_SEND.h"
 #include "CHASSIS_follow.h"
 #include "ROW_balance.h"
+#include "MF9025.h"
+#include "RM_JudgeSystem.h"
+#include "CAN2_SEND_RM.h"
 
 /* USER CODE END Includes */
 
@@ -617,8 +620,12 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 						 //						  float max_error, float min_error,
 						 //                          float alpha,
 						 150, -150,
-						 10, -10); // //MIT电机 位置环
-	
+						 10, -10); // //MIT电机 位置环  
+	P_PID_Parameter_Init(&MF9025_SPEED,1.0, 0.15, 0,4000, //-0.00001
+						 //						  float max_error, float min_error,
+						 //                          float alpha,
+						 2000, -2000,
+						 2000, -2000); // //MIT电机 位置环  	
 	MIT_PID_INIT();
 	SPEED_MIT_A.LPF_K = 0.04;
 	SPEED_MIT_B.LPF_K = 0.04;
@@ -644,14 +651,22 @@ P_PID_V2_Init(&POSITION_v2,-2,0,0,7300,//-0.5  -0.15软
 	//	HAL_CAN_Start(&hcan1);
 
 	CAN2_Config();
-	// 视觉
+//	// 视觉
+//	__HAL_UART_CLEAR_IDLEFLAG(&huart6);
+
+//	__HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
+
+//	USART_RX_DMA_ENABLE(&huart6, Vision_DataBuff, Vision_BuffSize);
+//	ext_robot_hurt.data.hurt_type = 10; // 避免初始值为0误识别
+
+
+	//裁判系统
 	__HAL_UART_CLEAR_IDLEFLAG(&huart6);
 
 	__HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
 
-	USART_RX_DMA_ENABLE(&huart6, Vision_DataBuff, Vision_BuffSize);
-	ext_robot_hurt.data.hurt_type = 10; // 避免初始值为0误识别
-
+	USART_RX_DMA_ENABLE(&huart6, JudgeSystem_rxBuff, JUDGESYSTEM_PACKSIZE);
+	
 	// DJIC_IMU.pitch_turnCounts=-1;
 	// CAN2_Filter0 初始化 使能
 	//	  HAL_Delay(1000);
@@ -757,6 +772,10 @@ __weak void test_task(void const *argument)
 // fp32 voltage;
 uint8_t text_send[5];
 char text_e[5] = "A432B";
+#ifdef FREERTOS_TASK_TIME
+
+		char RunTimeInfo[400];		//保存任务运行时间信息
+#endif
 
 /* USER CODE END Header_Debug */
 void Debug(void const *argument)
@@ -997,6 +1016,32 @@ DR16_send_master_control();
 						send_to_C = 0;
 			send_to_C_times++;
 		}
+		if(send_to_C_JS_HURT==1)//伤害状态数据，伤害发生后发送
+		{
+			send_to_C_JS_HURT=0;
+			JS_send_HURT_control();
+		}
+		if (send_to_C_JS_SHOOT == 1)//实时射击数据，子弹发射后发送
+		{
+JS_send_SHOOT_control();
+			JS_SEND_times++;
+			send_to_C_JS_SHOOT=0;
+		}
+		if (send_to_C_JS_STATUS == 1)//裁判系统_状态数据_10Hz 周期发送
+		{
+			send_to_C_STATUS_times++;
+JS_send_STATUS_control();
+			send_to_C_JS_STATUS=0;
+		}
+		if(send_to_C_JS_HEAT == 1)
+		{
+			JS_send_HEAT_control();
+			send_to_C_JS_HEAT=0;
+		}
+
+		
+		
+		
 		
 		if (DR16.rc.s_left == 2)
 		{
@@ -1118,6 +1163,13 @@ void CAN1_R(void const *argument)
 
 		if (ExitQueue_Status == pdTRUE)
 		{
+			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == MF9025_READID_START)
+			{
+				// 左摩擦轮的    ID1
+				MF9025_getInfo(CAN1_Rx_Structure); //
+				Get_FPS(&FPS_ALL.L_9025.WorldTimes, &FPS_ALL.L_9025.FPS);
+
+			}
 			if (CAN1_Rx_Structure.CAN_RxMessage.StdId == (M3508_READID_START + 3))
 			{
 				// 左摩擦轮的    ID1
@@ -1492,7 +1544,23 @@ send_to_tire_L = 0;
 		}
 		update_gyro(); // 由角度计算角速度
 //		gyro_test();   // 积分角速度比较速度验证
-//		speed_accel();
+		speed_accel();
+		mf9025_tgg_speed=DR16.rc.ch1*1.0/660.0*4000;
+		P_PID_bate(&MF9025_SPEED,mf9025_tgg_speed,MF9025[0].realSpeed);
+		send_to_MF9025_TEST=MF9025_SPEED.result;
+		if (DR16.rc.s_left == 2||DR16.rc.s_left == 0)
+		{
+		send_to_MF9025_TEST=0;
+			mf9025_tgg_speed=0;
+		}
+			
+		if(send_to_MF9025_TEST>2000)
+		{send_to_MF9025_TEST=2000;}
+		if(send_to_MF9025_TEST<-2000)
+		{send_to_MF9025_TEST=-2000;}	
+MF9025_setTorque(send_to_MF9025_TEST,0,0,0);
+		
+		
 		vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
 	}
 

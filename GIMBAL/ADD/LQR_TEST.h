@@ -33,7 +33,7 @@ typedef float fp32;
 
 //chassis forward or back max speed
 //底盘运动过程最大前后运动速度
-#define NORMAL_MAX_CHASSIS_SPEED_X 1.0f
+#define NORMAL_MAX_CHASSIS_SPEED_X 1.5f
 
 
 //LQR feedback parameter
@@ -188,6 +188,7 @@ extern double swing_link_length;//摆杆长度-实际
 extern float chassis_vx_real;
 extern float chassis_speed_real;
 extern fp32 vx_set_channel;
+extern chassis_move_t chassis_move;
 
 void chassis_rc_to_control_vector(fp32 *vx_set, chassis_move_t *chassis_move_rc_to_vector);
 void LQR_TEST_CON(void);

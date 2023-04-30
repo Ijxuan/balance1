@@ -71,3 +71,12 @@ ins_task\my_shoot_control.o: ../Inc/tim.h
 ins_task\my_shoot_control.o: ..\APP\MY_CLOUD_CONTROL.h
 ins_task\my_shoot_control.o: ..\ADD\GM6020.h
 ins_task\my_shoot_control.o: ..\Arithmetic\spinning_top_examine.h
+ins_task\my_shoot_control.o: ..\ADD\RM_JudgeSystem.h
+ins_task\my_shoot_control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+ins_task\my_shoot_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+ins_task\my_shoot_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ins_task\my_shoot_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+ins_task\my_shoot_control.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+ins_task\my_shoot_control.o: ../Inc/dma.h
+ins_task\my_shoot_control.o: ../Inc/gpio.h
+ins_task\my_shoot_control.o: ..\Arithmetic\FPS_Calculate.h

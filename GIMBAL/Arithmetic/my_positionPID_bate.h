@@ -201,6 +201,7 @@ extern P_PID_t keep_BALENCE_by_MIT;//通过MIT保持机体平衡
 
 extern P_PID_t keep_ROW_BALENCE;//保持ROW轴平衡
 
+extern P_PID_t MF9025_SPEED;//新电机的PID
 
 #endif
 

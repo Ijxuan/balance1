@@ -154,6 +154,8 @@ extern volatile unsigned long long FreeRTOSRunTimeTicks;
                                                                         //vTaskGetRunTimeStats()
 #define FREERTOS_TASK_TIME	                                                                        
 */
+
+
 /* USER CODE END 1 */
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS

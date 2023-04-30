@@ -465,14 +465,14 @@
               <FilePath>..\Arithmetic\Vision_Control.c</FilePath>
             </File>
             <File>
-              <FileName>User_math.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Arithmetic\User_math.c</FilePath>
-            </File>
-            <File>
               <FileName>LPF.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ADD\LPF.c</FilePath>
+            </File>
+            <File>
+              <FileName>User_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arithmetic\User_math.c</FilePath>
             </File>
             <File>
               <FileName>mit_math.c</FileName>
@@ -573,6 +573,21 @@
               <FileName>MIT_enable.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ADD\MIT_enable.c</FilePath>
+            </File>
+            <File>
+              <FileName>MF9025.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\MF9025.c</FilePath>
+            </File>
+            <File>
+              <FileName>RM_JudgeSystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\RM_JudgeSystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>CAN2_SEND_RM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ADD\CAN2_SEND_RM.c</FilePath>
             </File>
           </Files>
         </Group>

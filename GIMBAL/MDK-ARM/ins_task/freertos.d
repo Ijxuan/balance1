@@ -117,3 +117,9 @@ ins_task\freertos.o: ..\ADD\keyBoard_to_vjoy.h
 ins_task\freertos.o: ..\ADD\DR16_CAN2_SEND.h
 ins_task\freertos.o: ..\APP\CHASSIS_follow.h
 ins_task\freertos.o: ..\APP\ROW_balance.h
+ins_task\freertos.o: ..\ADD\MF9025.h
+ins_task\freertos.o: ..\ADD\RM_JudgeSystem.h
+ins_task\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+ins_task\freertos.o: ../Inc/dma.h
+ins_task\freertos.o: ../Inc/gpio.h
+ins_task\freertos.o: ..\ADD\CAN2_SEND_RM.h

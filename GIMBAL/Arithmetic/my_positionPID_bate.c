@@ -77,6 +77,9 @@ P_PID_t LQR_SPEED_BY_POSITION;//LQR位置环算速度
 P_PID_t keep_BALENCE_by_MIT;//通过MIT保持机体平衡
 
 P_PID_t keep_ROW_BALENCE;//保持ROW轴平衡
+
+P_PID_t MF9025_SPEED;//新电机的PID
+
 int PID_YES=0;
 
 

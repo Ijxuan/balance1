@@ -1,4 +1,4 @@
-#include"CAN2_SEND.h"
+#include "CAN2_SEND.h"
 
 uint8_t SEND_MIT[8];  // 
 int CAN2_SEND_TIMES=0;

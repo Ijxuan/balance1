@@ -82,3 +82,11 @@ ins_task\vision.o: ../Drivers/CMSIS/Include/core_cm4.h
 ins_task\vision.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 ins_task\vision.o: ..\Arithmetic\User_math.h
 ins_task\vision.o: ..\Arithmetic\User_typedef.h
+ins_task\vision.o: ..\ADD\RM_JudgeSystem.h
+ins_task\vision.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+ins_task\vision.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ins_task\vision.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+ins_task\vision.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+ins_task\vision.o: ../Inc/dma.h
+ins_task\vision.o: ../Inc/tim.h
+ins_task\vision.o: ../Inc/gpio.h

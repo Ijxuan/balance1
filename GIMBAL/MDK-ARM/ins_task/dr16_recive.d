@@ -98,3 +98,4 @@ ins_task\dr16_recive.o: ..\ADD\keyBoard_to_vjoy.h
 ins_task\dr16_recive.o: ..\ADD\Jump.h
 ins_task\dr16_recive.o: ..\APP\CHASSIS_follow.h
 ins_task\dr16_recive.o: ..\APP\ROW_balance.h
+ins_task\dr16_recive.o: ..\ADD\MF9025.h

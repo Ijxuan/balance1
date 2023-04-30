@@ -274,6 +274,16 @@ extern int send_to_C_times;//dr16发送次数
 extern bool open_CHASSIS_follow;//开启底盘跟随云台这个功能
 extern int CHASSIS_follow_times;//底盘跟随云台时间
 
+
+extern bool send_to_C_JS_SHOOT;
+extern bool send_to_C_JS_HURT;//裁判系统_伤害数据_是否发送给C板
+extern bool send_to_C_JS_STATUS;//裁判系统_状态数据_是否发送给C板
+extern bool send_to_C_JS_HEAT;//裁判系统_热量数据_是否发送给C板
+
+extern int JS_SEND_times;//裁判系统发送次数
+extern int send_to_C_STATUS_times;//因为状态数据分4段发送,所以计数保险一点
+extern int JS_RC_times;//裁判系统接收次数
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

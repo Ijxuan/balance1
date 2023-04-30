@@ -59,3 +59,16 @@ ins_task\stm32f4xx_it.o: ..\ADD\Vision.h
 ins_task\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ins_task\stm32f4xx_it.o: ../Inc/usart.h
 ins_task\stm32f4xx_it.o: ..\Arithmetic\CRC.h
+ins_task\stm32f4xx_it.o: ..\ADD\RM_JudgeSystem.h
+ins_task\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+ins_task\stm32f4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+ins_task\stm32f4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ins_task\stm32f4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+ins_task\stm32f4xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+ins_task\stm32f4xx_it.o: ../Inc/dma.h
+ins_task\stm32f4xx_it.o: ../Inc/tim.h
+ins_task\stm32f4xx_it.o: ../Inc/gpio.h
+ins_task\stm32f4xx_it.o: ..\Arithmetic\my_positionPID_bate.h
+ins_task\stm32f4xx_it.o: ..\application\INS_task.h
+ins_task\stm32f4xx_it.o: ..\application\struct_typedef.h
+ins_task\stm32f4xx_it.o: ..\Arithmetic\FPS_Calculate.h

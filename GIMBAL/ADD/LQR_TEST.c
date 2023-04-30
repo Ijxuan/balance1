@@ -48,7 +48,8 @@ void LQR_TEST_CON()
 	// 底盘控制量设置
 	chassis_set_contorl(&chassis_move);
 
-LQR_parameter();//LQR参数刷新
+	//LQR参数刷新
+	LQR_parameter();
 
 	// chassis control LQR calculate
 	// 底盘控制LQR计算
@@ -717,18 +718,18 @@ void get_speed_by_position_V2()
 	if (DR16.rc.s_right == 3 )//右中
 	{
 		if(DR16.rc.ch3!=0)
-			TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -660.0;//优先遥控器控制
+			TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -330.0;//优先遥控器控制
 		else if(vjoy_TEST.ch_WS>=2)
-		TARGET_SPEED_POSITION_V2 = vjoy_TEST.ch_WS / -100.0f;
+		TARGET_SPEED_POSITION_V2 = vjoy_TEST.ch_WS / -50.0f;
 	}
 	LQRweiyi_SPEED_TG = TARGET_SPEED_POSITION_V2;
-	if (TARGET_SPEED_POSITION_V2 > 1.0f)
+	if (TARGET_SPEED_POSITION_V2 > 2.0f)
 	{
-		TARGET_SPEED_POSITION_V2 = 1;
+		TARGET_SPEED_POSITION_V2 = 2;
 	}
-	if (TARGET_SPEED_POSITION_V2 < -1.0f)
+	if (TARGET_SPEED_POSITION_V2 < -2.0f)
 	{
-		TARGET_SPEED_POSITION_V2 = -1;
+		TARGET_SPEED_POSITION_V2 = -2;
 	}
 	// if(fabs((double)DJIC_IMU.total_pitch)>=pitch_cut_off_angle)
 	//{

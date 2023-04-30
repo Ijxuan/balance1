@@ -8,6 +8,7 @@
 #include "calibrate_task.h"
 #include "MY_CLOUD_CONTROL.h"
 #include "spinning_top_examine.h"
+#include "RM_JudgeSystem.h"
 
 #define SHOOT_SPEED_HIGH 6700 //…‰ÀŸ ∏ﬂ
 

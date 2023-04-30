@@ -25,17 +25,18 @@
 #include "Jump.h"
 #include "CHASSIS_follow.h"
 #include "ROW_balance.h"
+#include "MF9025.h"
 
 //#include "GM6020_Motor.h"
 //#include "control.h"
 
 static int USART_Receive_DMA_NO_IT(UART_HandleTypeDef* huart, uint8_t* pData, uint32_t Size);
-ext_shoot_data_t ext_shoot_data;
-ext_robot_hurt_t ext_robot_hurt;     
-ext_game_robot_status_t ext_game_robot_state;//状态  剩余血量
-ext_power_heat_data_t ext_power_heat_data;//能量 热量
-ext_game_robot_HP_t ext_game_robot_HP;//场上所有机器人的血量
-ext_game_status_t      ext_game_status;//比赛阶段  准备 倒计时 开始......
+//ext_shoot_data_t ext_shoot_data;
+//ext_robot_hurt_t ext_robot_hurt;     
+//ext_game_robot_status_t ext_game_robot_state;//状态  剩余血量
+//ext_power_heat_data_t ext_power_heat_data;//能量 热量
+//ext_game_robot_HP_t ext_game_robot_HP;//场上所有机器人的血量
+//ext_game_status_t      ext_game_status;//比赛阶段  准备 倒计时 开始......
 uint8_t CHASSIS_place[8];
 uint8_t JSBuffer[8];
 
@@ -255,7 +256,47 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-				#if 1//YAW旋转
+						#if 1//新电机速度闭环
+		
+	p=0;
+			send_d_32[p++]=MF9025[0].realSpeed;//底盘电机数据-- //电机输出轴旋转速度
+		
+			send_d_32[p++]=mf9025_tgg_speed;//当前摆杆角度 0-15
+		
+			send_d_32[p++]=MF9025[0].real_torque_Current;//实际当前速度
+			send_d_32[p++]=send_to_MF9025_TEST;//预测当前速度
+			//目标长度 实际长度
+			send_d_32[p++]=angle_qhq_L*100;//左摆杆角 	2
+			send_d_32[p++]=angle_qhq_R*100;//右摆杆角
+			send_d_32[p++]=MIT_D.target_speed*100;//当前位移	7
+	p=0;
+			send_d_16[p++]=send_to_tire_L*100;//输出电压  实际    8
+
+			send_d_16[p++]=send_to_tire_R*100;//输出电压  实际    8
+			send_d_16[p++]=MIT_D.ANGLE_JD*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif	
+				#if 0//打滑时的测量值
+		
+	p=0;
+			send_d_32[p++]=chassis_move.motor_chassis[0].omg*100;//底盘电机数据-- //电机输出轴旋转速度
+		
+			send_d_32[p++]=chassis_move.motor_chassis[1].omg*100;//当前摆杆角度 0-15
+		
+			send_d_32[p++]=speed_now_time_m_s*100;//实际当前速度
+			send_d_32[p++]=new_speed_test*100;//预测当前速度
+			//目标长度 实际长度
+			send_d_32[p++]=angle_qhq_L*100;//左摆杆角 	2
+			send_d_32[p++]=angle_qhq_R*100;//右摆杆角
+			send_d_32[p++]=MIT_D.target_speed*100;//当前位移	7
+	p=0;
+			send_d_16[p++]=send_to_tire_L*100;//输出电压  实际    8
+
+			send_d_16[p++]=send_to_tire_R*100;//输出电压  实际    8
+			send_d_16[p++]=MIT_D.ANGLE_JD*100;//目标		10
+														//保留到小数点后四位558 320 660   bjTlta
+#endif		
+				#if 0//YAW旋转
 		
 	p=0;
 			send_d_32[p++]=TARGET_angle_YAW*100;//实际倾角 0-30

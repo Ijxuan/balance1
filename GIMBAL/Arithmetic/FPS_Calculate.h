@@ -31,6 +31,8 @@ typedef struct
 	FPS_type L_3508;
 	FPS_type R_3508;
 
+	FPS_type L_9025;
+	
 	FPS_type MIT_A;
 	FPS_type MIT_B;
 	FPS_type MIT_C;
