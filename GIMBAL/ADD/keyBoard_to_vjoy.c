@@ -123,18 +123,18 @@ void keyBoard_WASD()
 	if (keyBoard_W.Press_static == No_Press && keyBoard_S.Press_static == No_Press) // ws都松开
 	{
 		vjoy_ch_WS.Target_Value = 0;
-		vjoy_ch_WS.Rate = 0.5; // 快速归零 2秒
+		vjoy_ch_WS.Rate = 0.05; // 快速归零 2秒
 	}
 
 	else if (keyBoard_W.Press_static == Long_Press && keyBoard_S.Press_static != Long_Press) // 仅W长按
 	{
 		vjoy_ch_WS.Target_Value = 100;
-		vjoy_ch_WS.Rate = 0.2;
+		vjoy_ch_WS.Rate = 0.02;
 	}
 	else if (keyBoard_W.Press_static != Long_Press && keyBoard_S.Press_static == Long_Press) // 仅S长按
 	{
 		vjoy_ch_WS.Target_Value = -100;
-		vjoy_ch_WS.Rate = 0.2;
+		vjoy_ch_WS.Rate = 0.02;
 	}
 	else if (keyBoard_W.Press_static == Long_Press && keyBoard_S.Press_static == Long_Press) // WS双长按 算误触 归零
 	{

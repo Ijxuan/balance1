@@ -33,7 +33,7 @@ typedef float fp32;
 
 //chassis forward or back max speed
 //底盘运动过程最大前后运动速度
-#define NORMAL_MAX_CHASSIS_SPEED_X 1.5f
+#define NORMAL_MAX_CHASSIS_SPEED_X 0.8f
 
 
 //LQR feedback parameter

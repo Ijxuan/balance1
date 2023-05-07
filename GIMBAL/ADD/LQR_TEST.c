@@ -273,18 +273,18 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 */
 		// 左轮输出力矩
 		Nm_R_test = -(
-			LQR_K1 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) +
+			0 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) +
 			LQR_K2_REAL_TIME * (chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) +
 			LQR_K3_REAL_TIME_xx * chassis_move_control_loop->chassis_pitch -
 			LQR_K4_REAL_TIME_xx * (-chassis_move_control_loop->chassis_pitch_speed));
 
 		// 右轮输出力矩
-		Nm_L_test = (LQR_K1 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) +
+		Nm_L_test = (0 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) +
 					 LQR_K2_REAL_TIME * (chassis_move_control_loop->vx - chassis_move_control_loop->vx_set) +
 					 LQR_K3_REAL_TIME_xx * chassis_move_control_loop->chassis_pitch -
 					 LQR_K4_REAL_TIME_xx * (-chassis_move_control_loop->chassis_pitch_speed));
 		
-		K1_OUT=LQR_K1 * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) ;
+		K1_OUT=LQR_K1_REAL_TIME * (chassis_move_control_loop->chassis_position_tg - chassis_move_control_loop->chassis_position_now) ;
 		K2_OUT=	LQR_K2_REAL_TIME*(chassis_move_control_loop->vx - chassis_move_control_loop->vx_set);
 		 K3_OUT=	LQR_K3_REAL_TIME_xx*chassis_move_control_loop->chassis_pitch;
 		 K4_OUT=LQR_K4_REAL_TIME_xx*(-chassis_move_control_loop->chassis_pitch_speed) ;
@@ -346,7 +346,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 		}
 		if(CHASSIS_follow_times>5000)//5000ms后站起来
 		{
-		liftoff_mode_T=1;
+		liftoff_mode_T=0;
 		}				
 		
 		}
@@ -439,7 +439,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 //}
 float chassis_vx_real=0;
 float chassis_speed_real=0;
-float REAL_BALANCE_ANGLE=3.0;
+float REAL_BALANCE_ANGLE=0.0;
 static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 {
 	//    if (chassis_move_update == NULL)
@@ -468,7 +468,10 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	chassis_move_update->chassis_yaw =
 		rad_format((float)INS_angle[0]);
 	//	if(DR16.rc.ch1==0)
-	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi_R+REAL_BALANCE_ANGLE/180.0f*PI);//重心补偿到1.5度平衡
+	
+	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);//重心补偿到1.5度平衡
+	
+//	chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2] - angle_qhq_pi_R+REAL_BALANCE_ANGLE/180.0f*PI);//重心补偿到1.5度平衡
 	//	else
 	//	{
 	//    chassis_move_update->chassis_pitch = rad_format((float)INS_angle[2]);
@@ -719,17 +722,19 @@ void get_speed_by_position_V2()
 	{
 		if(DR16.rc.ch3!=0)
 			TARGET_SPEED_POSITION_V2 = DR16.rc.ch3 / -330.0;//优先遥控器控制
-		else if(vjoy_TEST.ch_WS>=2)
+		else if(abs(vjoy_TEST.ch_WS)>=2)
 		TARGET_SPEED_POSITION_V2 = vjoy_TEST.ch_WS / -50.0f;
+		else 
+		TARGET_SPEED_POSITION_V2=0;
 	}
 	LQRweiyi_SPEED_TG = TARGET_SPEED_POSITION_V2;
-	if (TARGET_SPEED_POSITION_V2 > 2.0f)
+	if (TARGET_SPEED_POSITION_V2 > 0.8f)
 	{
-		TARGET_SPEED_POSITION_V2 = 2;
+		TARGET_SPEED_POSITION_V2 = 0.8;
 	}
-	if (TARGET_SPEED_POSITION_V2 < -2.0f)
+	if (TARGET_SPEED_POSITION_V2 < -0.8f)
 	{
-		TARGET_SPEED_POSITION_V2 = -2;
+		TARGET_SPEED_POSITION_V2 = -0.8;
 	}
 	// if(fabs((double)DJIC_IMU.total_pitch)>=pitch_cut_off_angle)
 	//{

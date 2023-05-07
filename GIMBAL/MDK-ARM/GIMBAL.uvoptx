@@ -523,7 +523,7 @@
         <Ww>
           <count>74</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ext_game_robot_state</ItemText>
+          <ItemText>ext_game_robot_state,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>75</count>
@@ -544,6 +544,11 @@
           <count>78</count>
           <WinNumber>1</WinNumber>
           <ItemText>JudgeSystem_rxBuff</ItemText>
+        </Ww>
+        <Ww>
+          <count>79</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>send_to_C_STATUS_times,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -636,6 +641,26 @@
           <count>17</count>
           <WinNumber>2</WinNumber>
           <ItemText>MIT_D.kp</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>keyBoard_S</ItemText>
+        </Ww>
+        <Ww>
+          <count>19</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>vjoy_TEST.ch_WS</ItemText>
+        </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>angle_qhq_pi_R</ItemText>
+        </Ww>
+        <Ww>
+          <count>21</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>angle_qhq_R</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>

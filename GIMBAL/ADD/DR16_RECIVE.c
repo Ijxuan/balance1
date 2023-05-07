@@ -256,7 +256,7 @@ void NM_swj(void)
 	testdatatosend[_cnt++]=34;
 	if(1)
 	{
-						#if 1//新电机速度闭环
+						#if 0//新电机速度闭环
 		
 	p=0;
 			send_d_32[p++]=MF9025[0].realSpeed;//底盘电机数据-- //电机输出轴旋转速度
@@ -356,7 +356,7 @@ void NM_swj(void)
 			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif	
-															#if 0//6基本状态
+															#if 1//6基本状态
 		
 	p=0;
 			send_d_32[p++]=(DJIC_IMU.total_pitch-angle_qhq_R)*100;//实际倾角 0-30
@@ -370,10 +370,10 @@ void NM_swj(void)
 			send_d_32[p++]=LQRweiyi_PO_TG*3000;//目标位移
 			send_d_32[p++]=LQRweiyi_text*3000;//当前位移	7
 	p=0;
-			send_d_16[p++]=DJIC_IMU.total_pitch*1000;//测试用目标速度数值,必须为正值;//输出电压  实际    8
+			send_d_16[p++]=K2_OUT*1000;//测试用目标速度数值,必须为正值;//输出电压  实际    8
 
-			send_d_16[p++]=0;//实际       	9
-			send_d_16[p++]=if_use_Ramp_Function*100;//目标		10
+			send_d_16[p++]=K3_OUT*1000;//实际       	9
+			send_d_16[p++]=K4_OUT*1000;//目标		10
 														//保留到小数点后四位558 320 660   bjTlta
 #endif		
 														#if 0//加速度
